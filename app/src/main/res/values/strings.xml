@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">认证组件</string>
+    <string name="title_activity_index">认证方式</string>
+    <string name="title_activity_taobao">淘宝认证</string>
+    <string name="title_activity_verify_success">认证结果</string>
+    <string name="loading_data">正在加载数据...</string>
+</resources>
