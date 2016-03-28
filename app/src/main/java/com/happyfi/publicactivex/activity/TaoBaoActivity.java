@@ -1,12 +1,16 @@
 package com.happyfi.publicactivex.activity;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.happyfi.publicactivex.R;
 import com.happyfi.publicactivex.util.UrlUtil;
 
@@ -27,6 +31,9 @@ public class TaoBaoActivity extends BaseActivity {
 
     @ViewInject(R.id.taobao_web_view)
     private WebView webView;
+
+    private int runFlag = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +47,7 @@ public class TaoBaoActivity extends BaseActivity {
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setSupportZoom(true);
         webView.getSettings().setBuiltInZoomControls(true);
-        webView.loadUrl(UrlUtil.TaoBaoLoginUrl);
+        webView.loadUrl("https://h5.m.taobao.com/mtb/address.html");
         webView.setWebViewClient(new WebViewClient() {
 
             @Override
@@ -51,7 +58,7 @@ public class TaoBaoActivity extends BaseActivity {
                     startActivity(i);
                     finish();
                 }*/
-                // view.loadUrl(url);
+                view.loadUrl(url);
                 return true;
             }
 
@@ -60,32 +67,38 @@ public class TaoBaoActivity extends BaseActivity {
                 super.onPageFinished(view, url);
 
 
-                if(url.contains("https://login.m.etao.com/j.sso")){//login success
-                    view.loadUrl(UrlUtil.TaoBaoHostUrl);//enter host page
+                if (url.contains("https://h5.m.taobao.com/mtb/address.html")) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    view.loadUrl("javascript:window.local_obj.showSource(" + "document.getElementsByTagName('html')[0].innerHTML);");
+                    view.loadUrl(UrlUtil.TaoBaoHostUrl);
                 }
-          /*      try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-*/
-                if(url.contains(UrlUtil.TaoBaoHostUrl)){
-                    view.loadUrl("javascript:window.local_obj.showSource("+"document.getElementsByTagName('html')[0].innerHTML);");
-                   // view.loadUrl(UrlUtil.TaoBaoAddessUrl);//enter address page
+                if(url.contains(UrlUtil.TaoBaoHostUrl)&&runFlag == 0){
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    view.loadUrl("javascript:window.local_obj.showSource(" + "document.getElementsByTagName('html')[0].innerHTML);");
+                    runFlag = 1;
+                    view.loadUrl("https://h5.m.taobao.com/mlapp/olist.html?spm=a2141.7756461.2.6");
                 }
 
-            /*    try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-*/
-                if(url.contains(UrlUtil.TaoBaoAddessUrl)){
-                    view.loadUrl("javascript:window.local_obj.showSource("+"document.getElementsByTagName('html')[0].innerHTML);");
-
+                if (url.contains("https://h5.m.taobao.com/mlapp/olist.html?spm=a2141.7756461.2.6")) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    view.loadUrl("javascript:window.local_obj.showSource(" + "document.getElementsByClassName('order-list')[0].innerHTML);");
                 }
             }
+
         });
+
     }
 
     @Override
@@ -94,10 +107,11 @@ public class TaoBaoActivity extends BaseActivity {
         setTitle("淘宝认证");
     }
 
+
     final class InJavaScriptLocalObj {
         @JavascriptInterface
         public void showSource(String html) {
-            System.out.println("记录数据"+html);
+            System.out.println("记录数据" + html);
         }
     }
 
@@ -107,13 +121,13 @@ public class TaoBaoActivity extends BaseActivity {
         Matcher matcher1 = Pattern.compile(optionRegExp1).matcher(source);
 
         while (matcher1.find()) {
-            HashMap<String,String> map = new HashMap<String,String>();
+            HashMap<String, String> map = new HashMap<String, String>();
             String name = matcher1.group(1);
             String address = matcher1.group(2);
             String phone = matcher1.group(3);
-            map.put("name",name);
-            map.put("address",address);
-            map.put("phone",phone);
+            map.put("name", name);
+            map.put("address", address);
+            map.put("phone", phone);
             list.add(map);
         }
         return list;
