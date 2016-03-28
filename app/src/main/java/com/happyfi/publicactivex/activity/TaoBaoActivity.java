@@ -40,30 +40,50 @@ public class TaoBaoActivity extends BaseActivity {
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setSupportZoom(true);
         webView.getSettings().setBuiltInZoomControls(true);
-        webView.loadUrl(UrlUtil.TaoBaoUrl);
+        webView.loadUrl(UrlUtil.TaoBaoLoginUrl);
         webView.setWebViewClient(new WebViewClient() {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if(url.contains("login.m.etao.com/j.sso")){
+              /*  if(url.contains("login.m.etao.com/j.sso")){
                     Intent i = new Intent(TaoBaoActivity.this,VerifySuccessActivity.class);
                     i.putExtra("root","taobao");
                     startActivity(i);
                     finish();
-                }
-                view.loadUrl(url);
+                }*/
+                // view.loadUrl(url);
                 return true;
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                try {
+
+
+                if(url.contains("https://login.m.etao.com/j.sso")){//login success
+                    view.loadUrl(UrlUtil.TaoBaoHostUrl);//enter host page
+                }
+          /*      try {
                     Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                view.loadUrl("javascript:window.local_obj.showSource("+"document.getElementById('addressList').innerHTML);");
+*/
+                if(url.contains(UrlUtil.TaoBaoHostUrl)){
+                    view.loadUrl("javascript:window.local_obj.showSource("+"document.getElementsByTagName('html')[0].innerHTML);");
+                   // view.loadUrl(UrlUtil.TaoBaoAddessUrl);//enter address page
+                }
+
+            /*    try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+*/
+                if(url.contains(UrlUtil.TaoBaoAddessUrl)){
+                    view.loadUrl("javascript:window.local_obj.showSource("+"document.getElementsByTagName('html')[0].innerHTML);");
+
+                }
             }
         });
     }
@@ -75,9 +95,9 @@ public class TaoBaoActivity extends BaseActivity {
     }
 
     final class InJavaScriptLocalObj {
-         @JavascriptInterface
+        @JavascriptInterface
         public void showSource(String html) {
-            System.out.println("记录数据"+ getParaValue(html));
+            System.out.println("记录数据"+html);
         }
     }
 

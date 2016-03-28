@@ -5,7 +5,12 @@ package com.happyfi.publicactivex.util;
  */
 public class UrlUtil {
 
-    public static String TaoBaoUrl = "https://login.m.taobao.com/login.htm?tpl_redirect_url=http%3A%2F%2Fh5.m.taobao.com%2Fmtb%2Faddress.html%3Fspm%3Da2141.7756461.0.0%26qq-pf-to%3Dpcqq.c2c";
-    public static String JingDongUrl = "https://home.m.jd.com";
+    public static String TaoBaoLoginUrl = "https://login.m.taobao.com/login.htm";
+    public static String TaoBaoHostUrl = "http://h5.m.taobao.com/mlapp/mytaobao.html#mlapp-mytaobao";
+
+    public static String TaoBaoAddessUrl = "http://h5.m.taobao.com/mtb/address.html";
+//http://h5.m.taobao.com/mtb/address.html?spm=a2141.7756461.0.0
+
+    public static String JingDongUrl = "http://home.m.jd.com";
 
 }
