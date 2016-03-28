@@ -47,6 +47,7 @@ public class TaoBaoActivity extends BaseActivity {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if(url.contains("login.m.etao.com/j.sso")){
                     Intent i = new Intent(TaoBaoActivity.this,VerifySuccessActivity.class);
+                    i.putExtra("root","taobao");
                     startActivity(i);
                     finish();
                 }
