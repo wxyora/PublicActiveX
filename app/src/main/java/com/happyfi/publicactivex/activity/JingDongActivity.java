@@ -3,6 +3,7 @@ package com.happyfi.publicactivex.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -50,6 +51,7 @@ public class JingDongActivity extends BaseActivity {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.contains("home.m.jd.com/myJd/home.action")) {
                     Intent i = new Intent(JingDongActivity.this, VerifySuccessActivity.class);
+                    i.putExtra("root","jingdong");
                     startActivity(i);
                     finish();
                     url = "http://home.m.jd.com/address/addressList.action";
