@@ -1,5 +1,6 @@
 package com.happyfi.publicactivex.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.WebView;
 import android.widget.TextView;
@@ -8,6 +9,8 @@ import com.happyfi.publicactivex.R;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
+
+import java.util.Objects;
 
 @ContentView(R.layout.activity_verify_success)
 public class VerifySuccessActivity extends BaseActivity {
