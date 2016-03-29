@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -43,11 +44,12 @@ public class TaoBaoActivity extends BaseActivity {
         webView.getSettings().setSupportZoom(true);
         webView.getSettings().setDomStorageEnabled(true);
         webView.requestFocus();
+        webView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
         webView.getSettings().setUseWideViewPort(true);
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setSupportZoom(true);
         webView.getSettings().setBuiltInZoomControls(true);
-        webView.loadUrl("https://h5.m.taobao.com/mtb/address.html");
+        webView.loadUrl("https://login.m.taobao.com/login.htm");
         webView.setWebViewClient(new WebViewClient() {
 
             @Override
@@ -58,25 +60,60 @@ public class TaoBaoActivity extends BaseActivity {
                     startActivity(i);
                     finish();
                 }*/
-                view.loadUrl(url);
+                if(!url.contains("taobao://h5.m.taobao.com/awp")){
+                    view.loadUrl(url);
+                }
+
                 return true;
             }
 
+
+
             @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
+            public void onLoadResource(WebView view, String url) {
+                super.onLoadResource(view, url);
 
 
-                if (url.contains("https://h5.m.taobao.com/mtb/address.html")) {
+                if(url.contains("png_q90")){
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    view.loadUrl("javascript:window.local_obj.showSource(" + "document.getElementsByTagName('html')[0].innerHTML);");
-                    view.loadUrl(UrlUtil.TaoBaoHostUrl);
+                    view.loadUrl("javascript:window.local_obj.showSource(" + "document.getElementsByClassName('user-nick')[0].innerHTML);");
+                    view.loadUrl("https://h5.m.taobao.com/mtb/address.html");
                 }
-                if(url.contains(UrlUtil.TaoBaoHostUrl)&&runFlag == 0){
+
+                if(url.contains("https://h5.m.taobao.com/favicon.ico")){
+                   try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    view.loadUrl("javascript:window.local_obj.showSource(" + "document.getElementsByTagName('html')[0].innerHTML);");
+                    view.loadUrl("https://h5.m.taobao.com/mlapp/olist.html");
+                }
+
+                if(url.contains("https://h5.m.taobao.com/mlapp/favicon.png")){
+
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    view.loadUrl("javascript:window.local_obj.showSource(" + "document.getElementsByClassName('order-list')[0].innerHTML);");
+                   // view.loadUrl("https://h5.m.taobao.com/mlapp/olist.html");
+                }
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+               /* if (url.contains("https://h5.m.taobao.com/mtb/address.html")) {
+                    view.loadUrl("javascript:window.local_obj.showSource(" + "document.getElementsByTagName('html')[0].innerHTML);");
+                   // view.loadUrl(UrlUtil.TaoBaoHostUrl);
+                }*/
+                /*if(url.contains(UrlUtil.TaoBaoHostUrl)&&runFlag == 0){
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
@@ -85,16 +122,16 @@ public class TaoBaoActivity extends BaseActivity {
                     view.loadUrl("javascript:window.local_obj.showSource(" + "document.getElementsByTagName('html')[0].innerHTML);");
                     runFlag = 1;
                     view.loadUrl("https://h5.m.taobao.com/mlapp/olist.html?spm=a2141.7756461.2.6");
-                }
+                }*/
 
-                if (url.contains("https://h5.m.taobao.com/mlapp/olist.html?spm=a2141.7756461.2.6")) {
+              /*  if (url.contains("https://h5.m.taobao.com/mlapp/olist.html?spm=a2141.7756461.2.6")) {
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     view.loadUrl("javascript:window.local_obj.showSource(" + "document.getElementsByClassName('order-list')[0].innerHTML);");
-                }
+                }*/
             }
 
         });
