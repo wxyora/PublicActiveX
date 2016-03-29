@@ -73,7 +73,7 @@ public class TaoBaoActivity extends BaseActivity {
             public void onLoadResource(WebView view, String url) {
                 super.onLoadResource(view, url);
 
-
+                //获取等级
                 if(url.contains("png_q90")){
                     try {
                         Thread.sleep(500);
@@ -83,7 +83,7 @@ public class TaoBaoActivity extends BaseActivity {
                     view.loadUrl("javascript:window.local_obj.showSource(" + "document.getElementsByClassName('user-nick')[0].innerHTML);");
                     view.loadUrl("https://h5.m.taobao.com/mtb/address.html");
                 }
-
+                //获取收获地址
                 if(url.contains("https://h5.m.taobao.com/favicon.ico")){
                    try {
                         Thread.sleep(500);
@@ -91,9 +91,14 @@ public class TaoBaoActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                     view.loadUrl("javascript:window.local_obj.showSource(" + "document.getElementsByTagName('html')[0].innerHTML);");
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     view.loadUrl("https://h5.m.taobao.com/mlapp/olist.html");
                 }
-
+                //获取订单列表
                 if(url.contains("https://h5.m.taobao.com/mlapp/favicon.png")){
 
                     try {
