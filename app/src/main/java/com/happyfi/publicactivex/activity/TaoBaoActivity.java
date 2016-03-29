@@ -34,6 +34,7 @@ public class TaoBaoActivity extends BaseActivity {
     private WebView webView;
 
     private int runFlag = 0;
+    private boolean runOneTime = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +99,22 @@ public class TaoBaoActivity extends BaseActivity {
                     }
                     view.loadUrl("https://h5.m.taobao.com/mlapp/olist.html");
                 }
+
+                //获取订单详情
+                if(url.contains("https://gw.alicdn.com/tps/i2")){
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    view.loadUrl("javascript:window.local_obj.showSource(" + "document.getElementsByClassName('order-box order-message')[0].innerHTML);");
+
+
+                }
+
+
                 //获取订单列表
-                if(url.contains("https://h5.m.taobao.com/mlapp/favicon.png")){
+                if(url.contains("https://h5.m.taobao.com/mlapp/favicon.png")&&runOneTime==false){
 
                     try {
                         Thread.sleep(500);
@@ -107,7 +122,9 @@ public class TaoBaoActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                     view.loadUrl("javascript:window.local_obj.showSource(" + "document.getElementsByClassName('order-list')[0].innerHTML);");
-                   // view.loadUrl("https://h5.m.taobao.com/mlapp/olist.html");
+
+                    view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId=1749316022573844");
+                    runOneTime = true;
                 }
             }
 
