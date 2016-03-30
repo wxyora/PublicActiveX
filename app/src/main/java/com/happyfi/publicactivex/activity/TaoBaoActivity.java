@@ -12,8 +12,6 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -180,7 +178,19 @@ public class TaoBaoActivity extends BaseActivity {
             }
             this.orderList = orderList1;
         } else if (dataType.equals("orderDetail")) {
-            System.out.println("记录数据" + dataType + html);
+            HashMap<String, String> map = new HashMap<String, String>();
+            String optionRegExp1 = "<div class=\"state-cont\"> <p class=\"h\">(.*?)</p>";
+            String createTimeRegExp1 = "创建时间:(.*?)</p>";
+            Matcher matcher1 = Pattern.compile(optionRegExp1).matcher(html);
+            Matcher matcher2 = Pattern.compile(createTimeRegExp1).matcher(html);
+            while (matcher1.find()&&matcher2.find()) {
+                String sendStatus = matcher1.group(1);
+                String createTime = matcher2.group(1);
+                map.put("sendStatus",sendStatus);
+                map.put("createTime",createTime);
+                list.add(map);
+            }
+            System.out.println("记录数据" + dataType + list);
         }
         return null;
     }
