@@ -12,6 +12,8 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -25,7 +27,8 @@ public class TaoBaoActivity extends BaseActivity {
 
     private int runFlag = 0;
     private boolean runOneTime = false;
-    private List<String> orderList;
+    private ArrayList<String> orderList = new ArrayList<String>();
+    private int orderCount = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,21 +92,17 @@ public class TaoBaoActivity extends BaseActivity {
                     }
                     view.loadUrl("https://h5.m.taobao.com/mlapp/olist.html");
                 }
-                int i = 1;
+
                 //获取订单详情
-                if (url.contains("https://gw.alicdn.com/tps/i2")) {
+                if (url.contains("https://api.m.taobao.com/h5/mtop.order.querydetail")&&orderCount<orderList.size()) {
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('order-box order-message')[0].innerHTML,'orderDetail');");
-                    view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId="+orderList.get(i));
-                    if(i>orderList.size()){
-                        return;
-                    }else{
-                        i++;
-                    }
+                    view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'orderDetail');");
+                    view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId="+orderList.get(orderCount));
+                    orderCount++;
                 }
                 //获取订单列表
                 if (url.contains("https://h5.m.taobao.com/mlapp/favicon.png") && runOneTime == false) {
@@ -113,9 +112,25 @@ public class TaoBaoActivity extends BaseActivity {
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    //获取到订单编号list
                     view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('scroll-content')[0].innerHTML,'orderList');");
 
-                    view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId="+orderList.get(0));
+                    while(1==1){
+                        if(orderList.size()!=0){
+
+                           /* Collections.sort(orderList, new Comparator<String>() {
+                                @Override
+                                public int compare(String lhs, String rhs) {
+                                    return new Double((String) rhs).compareTo(new Double((String) lhs));
+                                }
+                            });*/
+                            view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId="+orderList.get(0));
+                            break;
+                        }else{
+                            continue;
+                        }
+                    }
+
                     runOneTime = true;
                 }
             }
@@ -127,20 +142,6 @@ public class TaoBaoActivity extends BaseActivity {
 
         });
 
-    }
-
-    @Override
-    public void initTitle() {
-        setLeftBack();
-        setTitle("淘宝认证");
-    }
-
-
-    final class InJavaScriptLocalObj {
-        @JavascriptInterface
-        public void showSource(String html, String dataType) {
-            getParaValue(html, dataType);
-        }
     }
 
     public List<HashMap<String, String>> getParaValue(String html, String dataType) {
@@ -170,21 +171,34 @@ public class TaoBaoActivity extends BaseActivity {
             }
             System.out.println("记录数据" + dataType + list);
         } else if (dataType.equals("orderList")) {
-            List<String> orderList = new ArrayList<String>();
+            ArrayList<String> orderList1 = new ArrayList<String>();
             String optionRegExp1 = "module (\\d*)_1 item";
             Matcher matcher1 = Pattern.compile(optionRegExp1).matcher(html);
             while (matcher1.find()) {
                 String orderNo = matcher1.group(1);
-                orderList.add(orderNo.substring(0,orderNo.length()-1));
+                orderList1.add(orderNo.substring(0,orderNo.length()-1));
             }
-            this.orderList = orderList;
+            this.orderList = orderList1;
         } else if (dataType.equals("orderDetail")) {
             System.out.println("记录数据" + dataType + html);
         }
-
         return null;
     }
 
+
+    @Override
+    public void initTitle() {
+        setLeftBack();
+        setTitle("淘宝认证");
+    }
+
+
+    final class InJavaScriptLocalObj {
+        @JavascriptInterface
+        public void showSource(String html, String dataType) {
+            getParaValue(html, dataType);
+        }
+    }
 
 
 }
