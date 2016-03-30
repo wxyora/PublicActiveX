@@ -25,6 +25,7 @@ public class TaoBaoActivity extends BaseActivity {
 
     private int runFlag = 0;
     private boolean runOneTime = false;
+    private List<String> orderList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,7 +89,7 @@ public class TaoBaoActivity extends BaseActivity {
                     }
                     view.loadUrl("https://h5.m.taobao.com/mlapp/olist.html");
                 }
-
+                int i = 1;
                 //获取订单详情
                 if (url.contains("https://gw.alicdn.com/tps/i2")) {
                     try {
@@ -97,10 +98,13 @@ public class TaoBaoActivity extends BaseActivity {
                         e.printStackTrace();
                     }
                     view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('order-box order-message')[0].innerHTML,'orderDetail');");
-
+                    view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId="+orderList.get(i));
+                    if(i>orderList.size()){
+                        return;
+                    }else{
+                        i++;
+                    }
                 }
-
-
                 //获取订单列表
                 if (url.contains("https://h5.m.taobao.com/mlapp/favicon.png") && runOneTime == false) {
 
@@ -111,7 +115,7 @@ public class TaoBaoActivity extends BaseActivity {
                     }
                     view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('scroll-content')[0].innerHTML,'orderList');");
 
-                    view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId=1749316022573844");
+                    view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId="+orderList.get(0));
                     runOneTime = true;
                 }
             }
@@ -119,29 +123,6 @@ public class TaoBaoActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-               /* if (url.contains("https://h5.m.taobao.com/mtb/address.html")) {
-                    view.loadUrl("javascript:window.local_obj.showSource(" + "document.getElementsByTagName('html')[0].innerHTML);");
-                   // view.loadUrl(UrlUtil.TaoBaoHostUrl);
-                }*/
-                /*if(url.contains(UrlUtil.TaoBaoHostUrl)&&runFlag == 0){
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    view.loadUrl("javascript:window.local_obj.showSource(" + "document.getElementsByTagName('html')[0].innerHTML);");
-                    runFlag = 1;
-                    view.loadUrl("https://h5.m.taobao.com/mlapp/olist.html?spm=a2141.7756461.2.6");
-                }*/
-
-              /*  if (url.contains("https://h5.m.taobao.com/mlapp/olist.html?spm=a2141.7756461.2.6")) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    view.loadUrl("javascript:window.local_obj.showSource(" + "document.getElementsByClassName('order-list')[0].innerHTML);");
-                }*/
             }
 
         });
@@ -173,6 +154,7 @@ public class TaoBaoActivity extends BaseActivity {
                 map.put("level", level.substring(6,level.length()));
                 list.add(map);
             }
+            System.out.println("记录数据" + dataType + list);
         } else if (dataType.equals("addressList")) {
             String optionRegExp1 = "<li data-username=\"(.*?)\" data-address=\"(.*?)\".*?<label name=\"phone-num\" style=\"float: right\">(.*?)</label>";
             Matcher matcher1 = Pattern.compile(optionRegExp1).matcher(html);
@@ -186,19 +168,20 @@ public class TaoBaoActivity extends BaseActivity {
                 map.put("phone", phone);
                 list.add(map);
             }
+            System.out.println("记录数据" + dataType + list);
         } else if (dataType.equals("orderList")) {
+            List<String> orderList = new ArrayList<String>();
             String optionRegExp1 = "module (\\d*)_1 item";
             Matcher matcher1 = Pattern.compile(optionRegExp1).matcher(html);
             while (matcher1.find()) {
-                HashMap<String, String> map = new HashMap<String, String>();
                 String orderNo = matcher1.group(1);
-                map.put(orderNo, orderNo);
-                list.add(map);
+                orderList.add(orderNo.substring(0,orderNo.length()-1));
             }
+            this.orderList = orderList;
         } else if (dataType.equals("orderDetail")) {
             System.out.println("记录数据" + dataType + html);
         }
-        System.out.println("记录数据" + dataType + list);
+
         return null;
     }
 
