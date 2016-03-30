@@ -20,6 +20,7 @@ public class IndexActivity extends BaseActivity {
     @Event(R.id.taobao_verify_id)
     private void TaoBaoOnClick(View view) {
         startActivity(new Intent(IndexActivity.this,TaoBaoActivity.class));
+       // finish();
     }
 
     @Event(R.id.jingdong_verify_id)
