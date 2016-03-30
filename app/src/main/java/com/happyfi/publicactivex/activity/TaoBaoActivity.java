@@ -7,10 +7,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.happyfi.publicactivex.R;
+import com.happyfi.publicactivex.util.ChangeCharset;
+import com.happyfi.publicactivex.util.LoadingDialog;
 
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,11 +30,11 @@ public class TaoBaoActivity extends BaseActivity {
     private boolean runOneTime = false;
     private ArrayList<String> orderList = new ArrayList<String>();
     private int orderCount = 1;
-
+    private LoadingDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //setContentView(R.layout.activity_taobao);
+        dialog = new LoadingDialog(getApplicationContext());
         webView.getSettings().setJavaScriptEnabled(true);
         webView.addJavascriptInterface(new InJavaScriptLocalObj(), "local_obj");
         webView.getSettings().setSupportZoom(true);
@@ -47,19 +50,19 @@ public class TaoBaoActivity extends BaseActivity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-              /*  if(url.contains("login.m.etao.com/j.sso")){
-                    Intent i = new Intent(TaoBaoActivity.this,VerifySuccessActivity.class);
+                if(url.contains("login.m.etao.com/j.sso")){
+
+                  //  dialog.show();
+                    /*Intent i = new Intent(TaoBaoActivity.this,VerifySuccessActivity.class);
                     i.putExtra("root","taobao");
                     startActivity(i);
-                    finish();
-                }*/
+                    finish();*/
+                }
                 if (!url.contains("taobao://h5.m.taobao.com/awp")) {
                     view.loadUrl(url);
                 }
-
                 return true;
             }
-
 
             @Override
             public void onLoadResource(WebView view, String url) {
@@ -102,9 +105,9 @@ public class TaoBaoActivity extends BaseActivity {
                     view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId="+orderList.get(orderCount));
                     orderCount++;
                 }
+
                 //获取订单列表
                 if (url.contains("https://h5.m.taobao.com/mlapp/favicon.png") && runOneTime == false) {
-
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
@@ -112,34 +115,22 @@ public class TaoBaoActivity extends BaseActivity {
                     }
                     //获取到订单编号list
                     view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('scroll-content')[0].innerHTML,'orderList');");
-
                     while(1==1){
                         if(orderList.size()!=0){
-
-                           /* Collections.sort(orderList, new Comparator<String>() {
-                                @Override
-                                public int compare(String lhs, String rhs) {
-                                    return new Double((String) rhs).compareTo(new Double((String) lhs));
-                                }
-                            });*/
                             view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId="+orderList.get(0));
                             break;
                         }else{
                             continue;
                         }
                     }
-
                     runOneTime = true;
                 }
             }
-
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
             }
-
         });
-
     }
 
     public List<HashMap<String, String>> getParaValue(String html, String dataType) {
@@ -182,7 +173,15 @@ public class TaoBaoActivity extends BaseActivity {
             String optionRegExp1 = "<div class=\"state-cont\"> <p class=\"h\">(.*?)</p>";
             String createTimeRegExp1 = "创建时间:(.*?)</p>";
             Matcher matcher1 = Pattern.compile(optionRegExp1).matcher(html);
-            Matcher matcher2 = Pattern.compile(createTimeRegExp1).matcher(html);
+            Matcher matcher2 = null;
+            try {
+                matcher2 = Pattern.compile(createTimeRegExp1).matcher(new ChangeCharset().toUTF_8(html));
+                Thread.sleep(500);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             while (matcher1.find()&&matcher2.find()) {
                 String sendStatus = matcher1.group(1);
                 String createTime = matcher2.group(1);
@@ -195,13 +194,11 @@ public class TaoBaoActivity extends BaseActivity {
         return null;
     }
 
-
     @Override
     public void initTitle() {
         setLeftBack();
         setTitle("淘宝认证");
     }
-
 
     final class InJavaScriptLocalObj {
         @JavascriptInterface
@@ -209,6 +206,4 @@ public class TaoBaoActivity extends BaseActivity {
             getParaValue(html, dataType);
         }
     }
-
-
 }
