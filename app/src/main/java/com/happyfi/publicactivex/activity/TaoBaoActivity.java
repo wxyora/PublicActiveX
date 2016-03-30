@@ -1,5 +1,6 @@
 package com.happyfi.publicactivex.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
@@ -95,13 +96,18 @@ public class TaoBaoActivity extends BaseActivity {
                 }
 
                 //获取订单详情
-                if (url.contains("https://api.m.taobao.com/h5/mtop.order.querydetail")&&orderCount<orderList.size()) {
+                if (url.contains("https://api.m.taobao.com/h5/mtop.order.querydetail")&&orderCount<orderList.size()&&orderCount<10) {
                     try {
-                        Thread.sleep(500);
+                        Thread.sleep(800);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'orderDetail');");
+                    try {
+                        Thread.sleep(800);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId="+orderList.get(orderCount));
                     orderCount++;
                 }
@@ -176,19 +182,19 @@ public class TaoBaoActivity extends BaseActivity {
             Matcher matcher2 = null;
             try {
                 matcher2 = Pattern.compile(createTimeRegExp1).matcher(new ChangeCharset().toUTF_8(html));
-                Thread.sleep(500);
+               // Thread.sleep(500);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
-            while (matcher1.find()&&matcher2.find()) {
+            while (matcher1.find()) {
                 String sendStatus = matcher1.group(1);
-                String createTime = matcher2.group(1);
-                map.put("sendStatus",sendStatus);
-                map.put("createTime",createTime);
-                list.add(map);
+                map.put("sendStatus", sendStatus);
             }
+            while (matcher2.find()) {
+                String createTime = matcher2.group(1);
+                map.put("createTime", createTime);
+            }
+            list.add(map);
             System.out.println("记录数据" + dataType + list);
         }
         return null;
@@ -199,6 +205,8 @@ public class TaoBaoActivity extends BaseActivity {
         setLeftBack();
         setTitle("淘宝认证");
     }
+
+
 
     final class InJavaScriptLocalObj {
         @JavascriptInterface
