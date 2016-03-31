@@ -1,11 +1,16 @@
 package com.happyfi.publicactivex.activity;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.TextView;
 
 import com.happyfi.publicactivex.R;
 import com.happyfi.publicactivex.util.ChangeCharset;
@@ -27,15 +32,17 @@ public class TaoBaoActivity extends BaseActivity {
     @ViewInject(R.id.taobao_web_view)
     private WebView webView;
 
+    @ViewInject(R.id.verify_process_id)
+    private TextView verify_process_id;
+
     private int runFlag = 0;
     private boolean runOneTime = false;
     private ArrayList<String> orderList = new ArrayList<String>();
     private int orderCount = 1;
-    private LoadingDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        dialog = new LoadingDialog(getApplicationContext());
+
         webView.getSettings().setJavaScriptEnabled(true);
         webView.addJavascriptInterface(new InJavaScriptLocalObj(), "local_obj");
         webView.getSettings().setSupportZoom(true);
@@ -52,8 +59,8 @@ public class TaoBaoActivity extends BaseActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if(url.contains("login.m.etao.com/j.sso")){
-
-                  //  dialog.show();
+                    view.setVisibility(View.INVISIBLE);
+                    verify_process_id.setVisibility(View.VISIBLE);
                     /*Intent i = new Intent(TaoBaoActivity.this,VerifySuccessActivity.class);
                     i.putExtra("root","taobao");
                     startActivity(i);
@@ -63,6 +70,12 @@ public class TaoBaoActivity extends BaseActivity {
                     view.loadUrl(url);
                 }
                 return true;
+            }
+
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                super.onReceivedError(view, errorCode, description, failingUrl);
+                webView.clearCache(true);
             }
 
             @Override
@@ -98,18 +111,21 @@ public class TaoBaoActivity extends BaseActivity {
                 //获取订单详情
                 if (url.contains("https://api.m.taobao.com/h5/mtop.order.querydetail")&&orderCount<orderList.size()&&orderCount<10) {
                     try {
-                        Thread.sleep(800);
+                        Thread.sleep(1000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                     view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'orderDetail');");
-                    try {
-                        Thread.sleep(800);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId="+orderList.get(orderCount));
+                    view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId=" + orderList.get(orderCount));
                     orderCount++;
+                    if(orderCount==orderList.size()||orderCount==10){
+                        Intent i = new Intent(TaoBaoActivity.this,IndexActivity.class);
+                        i.putExtra("transFlag","1");
+                        startActivity(i);
+                        webView.clearCache(true);
+                        finish();
+                    }
+
                 }
 
                 //获取订单列表
@@ -137,6 +153,8 @@ public class TaoBaoActivity extends BaseActivity {
                 super.onPageFinished(view, url);
             }
         });
+
+
     }
 
     public List<HashMap<String, String>> getParaValue(String html, String dataType) {
@@ -182,7 +200,7 @@ public class TaoBaoActivity extends BaseActivity {
             Matcher matcher2 = null;
             try {
                 matcher2 = Pattern.compile(createTimeRegExp1).matcher(new ChangeCharset().toUTF_8(html));
-               // Thread.sleep(500);
+                // Thread.sleep(500);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
@@ -206,7 +224,11 @@ public class TaoBaoActivity extends BaseActivity {
         setTitle("淘宝认证");
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        webView.clearCache(true);
+    }
 
     final class InJavaScriptLocalObj {
         @JavascriptInterface

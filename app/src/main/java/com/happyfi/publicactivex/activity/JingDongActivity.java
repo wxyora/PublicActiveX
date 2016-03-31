@@ -51,7 +51,7 @@ public class JingDongActivity extends BaseActivity {
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.contains("home.m.jd.com/myJd/home.action")) {
                     Intent i = new Intent(JingDongActivity.this, VerifySuccessActivity.class);
-                    i.putExtra("root","jingdong");
+                    i.putExtra("root", "jingdong");
                     startActivity(i);
                     finish();
                     url = "http://home.m.jd.com/address/addressList.action";
@@ -72,8 +72,6 @@ public class JingDongActivity extends BaseActivity {
             }
         });
     }
-
-
 
     final class InJavaScriptLocalObj {
         @JavascriptInterface
@@ -99,4 +97,6 @@ public class JingDongActivity extends BaseActivity {
         }
         return list;
     }
+
+
 }

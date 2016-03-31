@@ -1,6 +1,5 @@
 package com.happyfi.publicactivex.util;
-import java.util.Timer;
-import java.util.TimerTask;
+
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
@@ -12,6 +11,9 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 
 import com.happyfi.publicactivex.R;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class LoadingDialog extends Dialog {
