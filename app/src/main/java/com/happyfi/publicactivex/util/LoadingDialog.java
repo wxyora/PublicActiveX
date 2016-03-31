@@ -20,7 +20,7 @@ public class LoadingDialog extends Dialog {
 
     protected static final String TAG = "LoadingDialog";
     // 动画间隔
-    private static final int DURATION = 800;
+    private static final int DURATION = 600;
     // 前景图片
     private ImageView img_front;
     // 定时器，用来不断的播放动画
@@ -62,14 +62,14 @@ public class LoadingDialog extends Dialog {
         animationL2R.setRepeatCount(1);
         //设置重复模式为逆运动
         animationL2R.setRepeatMode(Animation.REVERSE);
-        // 执行间隔任务，开始间隔是0，每隔DURATION * 2执行一次
+        // 执行间隔任务，开始间隔是0，每隔DURATION * 1执行一次
         animationTimer.schedule(new TimerTask() {
 
             @Override
             public void run() {
                 handler.sendEmptyMessage(1);
             }
-        }, 0, DURATION * 2);
+        }, 0, DURATION * 1);
 
     }
 

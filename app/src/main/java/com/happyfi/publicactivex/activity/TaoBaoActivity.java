@@ -39,10 +39,12 @@ public class TaoBaoActivity extends BaseActivity {
     private boolean runOneTime = false;
     private ArrayList<String> orderList = new ArrayList<String>();
     private int orderCount = 1;
+    private LoadingDialog loadingDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        loadingDialog = new LoadingDialog(TaoBaoActivity.this);
+        loadingDialog.show();
         webView.getSettings().setJavaScriptEnabled(true);
         webView.addJavascriptInterface(new InJavaScriptLocalObj(), "local_obj");
         webView.getSettings().setSupportZoom(true);
@@ -151,6 +153,9 @@ public class TaoBaoActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
+                if(url.contains("login.m.taobao.com/login.htm")){
+                    loadingDialog.dismiss();
+                }
             }
         });
 
@@ -200,7 +205,6 @@ public class TaoBaoActivity extends BaseActivity {
             Matcher matcher2 = null;
             try {
                 matcher2 = Pattern.compile(createTimeRegExp1).matcher(new ChangeCharset().toUTF_8(html));
-                // Thread.sleep(500);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
