@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -74,9 +75,9 @@ public class TaoBaoActivity extends BaseActivity {
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if(url.contains("login.m.etao.com/j.sso")){
-                    view.setVisibility(View.INVISIBLE);
-                    verify_process_id.setVisibility(View.VISIBLE);
+                if (url.contains("login.m.etao.com/j.sso")) {
+                    //view.setVisibility(View.INVISIBLE);
+                    //verify_process_id.setVisibility(View.VISIBLE);
                     /*Intent i = new Intent(TaoBaoActivity.this,VerifySuccessActivity.class);
                     i.putExtra("root","taobao");
                     startActivity(i);
@@ -124,28 +125,6 @@ public class TaoBaoActivity extends BaseActivity {
                     view.loadUrl("https://h5.m.taobao.com/mlapp/olist.html");
                 }
 
-                //获取订单详情
-                if (url.contains("https://api.m.taobao.com/h5/mtop.order.querydetail")&&orderCount<3) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('order-box order-message')[0].innerHTML,"+orderCount+");");
-                    view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId=" + orderList.get(orderList.size()));
-                    orderCount++;
-                    if(orderCount==3){
-                        dicUserInfo.setAddressArray(addressArray);
-                        dicUserInfo.setOrderArray(orderArray);
-                        System.out.print(dicUserInfo);
-                        Intent i = new Intent(TaoBaoActivity.this,IndexActivity.class);
-                        i.putExtra("transFlag","1");
-                        startActivity(i);
-                        webView.clearCache(true);
-                        finish();
-                    }
-
-                }
 
                 //获取订单列表
                 if (url.contains("https://h5.m.taobao.com/mlapp/favicon.png") && runOneTime == false) {
@@ -156,23 +135,81 @@ public class TaoBaoActivity extends BaseActivity {
                     }
                     //获取到订单编号list
                     view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('scroll-content')[0].innerHTML,'orderList');");
-                    while(1==1){
-                        if(orderList.size()!=0){
-                            view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId="+orderList.get(0));
+                    while (1 == 1) {
+                        if (orderArray.size() > 0) {
+                            String qq = "https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId=" + orderArray.get(0).getOrderId();
+                            view.loadUrl(qq);
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
                             break;
-                        }else{
+                        } else {
                             continue;
                         }
                     }
                     runOneTime = true;
                 }
+
+               /* //获取订单详情
+                if (url.contains("https://api.m.taobao.com/h5/mtop.order.querydetail") && orderCount < 2) {
+                    view.onResume();
+                   *//*
+                    if (orderCount == 1) {
+                       // view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'firstOrder');");
+                    }*//*
+                   *//* if(orderCount ==2) {
+                        view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'lastOrder');");
+                    }
+
+                    view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId="+orderArray.get(orderArray.size()-1).getOrderId());*//*
+
+                   *//* orderCount++;
+                    if (orderCount == 3) {
+                        dicUserInfo.setAddressArray(addressArray);
+                        dicUserInfo.setOrderArray(orderArray);
+                        System.out.print("****************************************************" + dicUserInfo);
+                        System.out.print(dicUserInfo);
+                        Intent i = new Intent(TaoBaoActivity.this, IndexActivity.class);
+                        i.putExtra("transFlag", "1");
+                        startActivity(i);
+                        webView.clearCache(true);
+                        finish();
+                    }
+*//*
+                }
+*/
             }
+
+
+
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                if(url.contains("login.m.taobao.com/login.htm")){
+                if (url.contains("login.m.taobao.com/login.htm")) {
                     loadingDialog.dismiss();
                 }
+            }
+
+
+        });
+
+        webView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                if(view.getUrl().contains("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId=")){
+                    if(newProgress==100){
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'firstOrder');");
+                    }else{
+                    }
+                }
+
             }
         });
 
@@ -213,19 +250,36 @@ public class TaoBaoActivity extends BaseActivity {
                 dicOrder.setState(matcher1.group(1));
                 orderArray.add(dicOrder);
             }
-        } else if (dataType.equals("1")) {
+        } else if (dataType.equals("firstOrder")) {
             String createTimeRegExp1 = "创建时间:(.*?)</p>";
-            Matcher matcher2 = null;
+            Matcher matcher = null;
             try {
-                matcher2 = Pattern.compile(createTimeRegExp1).matcher(new ChangeCharset().toUTF_8(html));
+                matcher = Pattern.compile(createTimeRegExp1).matcher(new ChangeCharset().toUTF_8(html));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            while (matcher2.find()) {
-                String createTime = matcher2.group(1);
+            while (matcher.find()) {
+                String createTime = matcher.group(1);
                 orderArray.get(0).setCreateTime(createTime);
+
+
+                dicUserInfo.setAddressArray(addressArray);
+                dicUserInfo.setOrderArray(orderArray);
+                System.out.print("****************************************************" + dicUserInfo);
+                System.out.print(dicUserInfo);
+
+
+
+
+
+                Intent i = new Intent(TaoBaoActivity.this, IndexActivity.class);
+                i.putExtra("transFlag", "1");
+                startActivity(i);
+                webView.clearCache(true);
+                finish();
+
             }
-        }else if (dataType.equals("2")) {
+        }else if (dataType.equals("lastOrder")) {
             String createTimeRegExp1 = "创建时间:(.*?)</p>";
             Matcher matcher2 = null;
             try {
@@ -235,7 +289,7 @@ public class TaoBaoActivity extends BaseActivity {
             }
             while (matcher2.find()) {
                 String createTime = matcher2.group(1);
-                orderArray.get(orderArray.size()).setCreateTime(createTime);
+                orderArray.get(orderArray.size()-1).setCreateTime(createTime);
             }
         }
     }
