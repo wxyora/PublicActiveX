@@ -131,11 +131,11 @@ public class TaoBaoActivity extends BaseActivity {
                     while (1 == 1) {
                         if (orderArray.size() > 0) {
                             view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId=" + orderArray.get(0).getOrderId());
-                            try {
+                           /* try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
-                            }
+                            }*/
                             break;
                         } else {
                             continue;
