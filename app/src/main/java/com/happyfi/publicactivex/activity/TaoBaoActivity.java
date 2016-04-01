@@ -131,11 +131,11 @@ public class TaoBaoActivity extends BaseActivity {
                     while (1 == 1) {
                         if (orderArray.size() > 0) {
                             view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId=" + orderArray.get(0).getOrderId());
-                           /* try {
+                            try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
-                            }*/
+                            }
                             break;
                         } else {
                             continue;
@@ -168,7 +168,6 @@ public class TaoBaoActivity extends BaseActivity {
                                 e.printStackTrace();
                             }
                             view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'firstOrder');");
-
                             view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId="+orderArray.get(orderArray.size()-1).getOrderId());
                         }else{
                             try {
