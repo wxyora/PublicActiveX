@@ -171,6 +171,11 @@ public class TaoBaoActivity extends BaseActivity {
         webView.setWebChromeClient(new WebChromeClient(){
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
+                if (view.getUrl().contains("login.m.taobao.com/login.htm")) {
+                    if(newProgress==100){
+                        loadingDialog.dismiss();
+                    }
+                }
                 if(view.getUrl().contains("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId=")){
                     if(newProgress==100){
                         if(runFlag == 0){
