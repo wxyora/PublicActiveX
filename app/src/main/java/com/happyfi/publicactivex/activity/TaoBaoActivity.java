@@ -2,6 +2,8 @@ package com.happyfi.publicactivex.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -47,7 +49,19 @@ public class TaoBaoActivity extends BaseActivity {
 
     private List<DicAddress> addressArray;
     private List<DicOrder> orderArray;
+    private Handler mHandler = new Handler(){
 
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:
+                    findData1();
+                    break;
+                case 2:
+                    findData2();
+                    break;
+            }
+        };
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,11 +145,11 @@ public class TaoBaoActivity extends BaseActivity {
                     while (1 == 1) {
                         if (orderArray.size() > 0) {
                             view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId=" + orderArray.get(0).getOrderId());
-                            try {
+                            /*try {
                                 Thread.sleep(1000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
-                            }
+                            }*/
                             break;
                         } else {
                             continue;
@@ -152,8 +166,6 @@ public class TaoBaoActivity extends BaseActivity {
                     loadingDialog.dismiss();
                 }
             }
-
-
         });
 
         webView.setWebChromeClient(new WebChromeClient(){
@@ -162,34 +174,54 @@ public class TaoBaoActivity extends BaseActivity {
                 if(view.getUrl().contains("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId=")){
                     if(newProgress==100){
                         if(runFlag == 0){
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'firstOrder');");
-                            view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId="+orderArray.get(orderArray.size()-1).getOrderId());
+                            new Thread(new Runnable(){
+                                public void run(){
+                                    try {
+                                        Thread.sleep(500);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Message msg = new Message();
+                                    msg.what = 1;
+                                    mHandler.sendMessage(msg); //告诉主线程执行任务
+                                }
+                            }).start();
                         }else{
-                            try {
-                                Thread.sleep(1000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'lastOrder');");
-                        }
-                        try {
-                            Thread.sleep(500);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
+                            new Thread(new Runnable(){
+                                public void run(){
+                                    try {
+                                        Thread.sleep(500);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    Message msg = new Message();
+                                    msg.what = 2;
+                                    mHandler.sendMessage(msg); //告诉主线程执行任务
+                                }
+                            }).start();
                         }
                         runFlag ++;
-                    }else{
                     }
                 }
             }
         });
+    }
+
+    private void findData1(){
+        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('order-box order-message')[0].innerHTML,'firstOrder');");
+        webView.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId="+orderArray.get(orderArray.size()-1).getOrderId());
+    }
+
+    private void findData2(){
+        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('order-box order-message')[0].innerHTML,'lastOrder');");
+    }
 
 
+    final class InJavaScriptLocalObj {
+        @JavascriptInterface
+        public void showSource(String html, String dataType) {
+            getParaValue(html, dataType);
+        }
     }
 
     public void getParaValue(String html, String dataType) {
@@ -262,7 +294,7 @@ public class TaoBaoActivity extends BaseActivity {
             Intent i = new Intent(TaoBaoActivity.this, IndexActivity.class);
             i.putExtra("transFlag", "1");
             startActivity(i);
-           // webView.clearCache(true);
+            // webView.clearCache(true);
             finish();
         }
     }
@@ -277,12 +309,5 @@ public class TaoBaoActivity extends BaseActivity {
     protected void onStop() {
         super.onStop();
         webView.clearCache(true);
-    }
-
-    final class InJavaScriptLocalObj {
-        @JavascriptInterface
-        public void showSource(String html, String dataType) {
-            getParaValue(html, dataType);
-        }
     }
 }
