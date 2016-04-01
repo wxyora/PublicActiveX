@@ -260,27 +260,39 @@ public class TaoBaoActivity extends BaseActivity {
         } else if (dataType.equals("firstOrder")) {
             String createTimeRegExp1 = "创建时间:(.*?)</p>";
             Matcher matcher = null;
-            try {
-                matcher = Pattern.compile(createTimeRegExp1).matcher(new ChangeCharset().toUTF_8(html));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+            String createTime = "";
+            if(html.contains("没有该订单相关的信息")){
+                createTime = "没有订单详情";
+            }else{
+                try {
+                    matcher = Pattern.compile(createTimeRegExp1).matcher(new ChangeCharset().toUTF_8(html));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                while (matcher.find()) {
+                    createTime = matcher.group(1);
+                }
             }
-            while (matcher.find()) {
-                String createTime = matcher.group(1);
-                orderArray.get(0).setCreateTime(createTime);
-            }
+            orderArray.get(0).setCreateTime(createTime);
+
         }else if (dataType.equals("lastOrder")) {
             String createTimeRegExp1 = "创建时间:(.*?)</p>";
             Matcher matcher = null;
-            try {
-                matcher = Pattern.compile(createTimeRegExp1).matcher(new ChangeCharset().toUTF_8(html));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
+            String createTime = "";
+            if(html.contains("没有该订单相关的信息")){
+                createTime = "没有订单详情";
+            }else{
+                try {
+                    matcher = Pattern.compile(createTimeRegExp1).matcher(new ChangeCharset().toUTF_8(html));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                while (matcher.find()) {
+                    createTime = matcher.group(1);
+                }
             }
-            while (matcher.find()) {
-                String createTime = matcher.group(1);
-                orderArray.get(orderArray.size()-1).setCreateTime(createTime);
-            }
+            orderArray.get(orderArray.size()-1).setCreateTime(createTime);
+
             dicUserInfo.setAddressArray(addressArray);
             dicUserInfo.setOrderArray(orderArray);
             JSONObject json = new  JSONObject();
