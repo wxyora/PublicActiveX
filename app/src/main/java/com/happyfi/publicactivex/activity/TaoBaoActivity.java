@@ -177,7 +177,7 @@ public class TaoBaoActivity extends BaseActivity {
                             new Thread(new Runnable(){
                                 public void run(){
                                     try {
-                                        Thread.sleep(500);
+                                        Thread.sleep(1000);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
@@ -208,12 +208,12 @@ public class TaoBaoActivity extends BaseActivity {
     }
 
     private void findData1(){
-        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('order-box order-message')[0].innerHTML,'firstOrder');");
+        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'firstOrder');");
         webView.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId="+orderArray.get(orderArray.size()-1).getOrderId());
     }
 
     private void findData2(){
-        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('order-box order-message')[0].innerHTML,'lastOrder');");
+        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'lastOrder');");
     }
 
 
