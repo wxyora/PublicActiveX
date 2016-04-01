@@ -1,5 +1,4 @@
 package com.happyfi.publicactivex.activity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -46,7 +45,6 @@ public class TaoBaoActivity extends BaseActivity {
     private List<DicAddress> addressArray;
     private List<DicOrder> orderArray;
     private Handler mHandler = new Handler(){
-
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
@@ -134,13 +132,12 @@ public class TaoBaoActivity extends BaseActivity {
                     }).start();
                 }
 
-
                 //获取订单列表
                 if (url.contains("https://h5.m.taobao.com/mlapp/favicon.png") && runOneTime == false) {
                     new Thread(new Runnable(){
                         public void run(){
                             try {
-                                Thread.sleep(500);
+                                Thread.sleep(1000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -233,9 +230,6 @@ public class TaoBaoActivity extends BaseActivity {
             }
         }
     }
-
-
-
 
     final class InJavaScriptLocalObj {
         @JavascriptInterface
