@@ -1,10 +1,7 @@
 package com.happyfi.publicactivex.activity;
 
-import android.app.Dialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -13,6 +10,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.happyfi.publicactivex.R;
 import com.happyfi.publicactivex.model.DicAddress;
 import com.happyfi.publicactivex.model.DicOrder;
@@ -20,6 +18,7 @@ import com.happyfi.publicactivex.model.DicUserInfo;
 import com.happyfi.publicactivex.util.ChangeCharset;
 import com.happyfi.publicactivex.util.LoadingDialog;
 
+import org.json.JSONObject;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
@@ -49,8 +48,6 @@ public class TaoBaoActivity extends BaseActivity {
     private List<DicAddress> addressArray;
     private List<DicOrder> orderArray;
 
-   /* private DicAddress dicAddress;
-    private DicOrder dicOrder;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,12 +73,8 @@ public class TaoBaoActivity extends BaseActivity {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.contains("login.m.etao.com/j.sso")) {
-                    //view.setVisibility(View.INVISIBLE);
-                    //verify_process_id.setVisibility(View.VISIBLE);
-                    /*Intent i = new Intent(TaoBaoActivity.this,VerifySuccessActivity.class);
-                    i.putExtra("root","taobao");
-                    startActivity(i);
-                    finish();*/
+                    view.setVisibility(View.INVISIBLE);
+                    verify_process_id.setVisibility(View.VISIBLE);
                 }
                 if (!url.contains("taobao://h5.m.taobao.com/awp")) {
                     view.loadUrl(url);
@@ -151,38 +144,7 @@ public class TaoBaoActivity extends BaseActivity {
                     }
                     runOneTime = true;
                 }
-
-               /* //获取订单详情
-                if (url.contains("https://api.m.taobao.com/h5/mtop.order.querydetail") && orderCount < 2) {
-                    view.onResume();
-                   *//*
-                    if (orderCount == 1) {
-                       // view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'firstOrder');");
-                    }*//*
-                   *//* if(orderCount ==2) {
-                        view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'lastOrder');");
-                    }
-
-                    view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId="+orderArray.get(orderArray.size()-1).getOrderId());*//*
-
-                   *//* orderCount++;
-                    if (orderCount == 3) {
-                        dicUserInfo.setAddressArray(addressArray);
-                        dicUserInfo.setOrderArray(orderArray);
-                        System.out.print("****************************************************" + dicUserInfo);
-                        System.out.print(dicUserInfo);
-                        Intent i = new Intent(TaoBaoActivity.this, IndexActivity.class);
-                        i.putExtra("transFlag", "1");
-                        startActivity(i);
-                        webView.clearCache(true);
-                        finish();
-                    }
-*//*
-                }
-*/
             }
-
-
 
             @Override
             public void onPageFinished(WebView view, String url) {
@@ -201,15 +163,25 @@ public class TaoBaoActivity extends BaseActivity {
                 if(view.getUrl().contains("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId=")){
                     if(newProgress==100){
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'firstOrder');");
+                        if(runFlag == 0){
+                            view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'firstOrder');");
+                            view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId="+orderArray.get(orderArray.size()-1).getOrderId());
+                        }else{
+                            view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'lastOrder');");
+                        }
+                        try {
+                            Thread.sleep(500);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        runFlag ++;
                     }else{
                     }
                 }
-
             }
         });
 
@@ -221,10 +193,9 @@ public class TaoBaoActivity extends BaseActivity {
             String optionRegExp1 = "<p class=\"(.*?)\" id=\"J_myNick\">(.*?)</p> <p class=\"(.*?)\"></p>";
             Matcher matcher1 = Pattern.compile(optionRegExp1).matcher(html);
             while (matcher1.find()) {
-                HashMap<String, String> map = new HashMap<String, String>();
                 String level = matcher1.group(3);
-                map.put("level", level.substring(6, level.length()));
-                dicUserInfo.setLevel(level);
+                dicUserInfo.setLevel(level.substring(6, level.length()));
+                dicUserInfo.setUserId("230125198802393894");
             }
         } else if (dataType.equals("addressList")) {
             String optionRegExp1 = "<li data-username=\"(.*?)\" data-address=\"(.*?)\".*?<label name=\"phone-num\" style=\"float: right\">(.*?)</label>";
@@ -261,36 +232,34 @@ public class TaoBaoActivity extends BaseActivity {
             while (matcher.find()) {
                 String createTime = matcher.group(1);
                 orderArray.get(0).setCreateTime(createTime);
-
-
-                dicUserInfo.setAddressArray(addressArray);
-                dicUserInfo.setOrderArray(orderArray);
-                System.out.print("****************************************************" + dicUserInfo);
-                System.out.print(dicUserInfo);
-
-
-
-
-
-                Intent i = new Intent(TaoBaoActivity.this, IndexActivity.class);
-                i.putExtra("transFlag", "1");
-                startActivity(i);
-                webView.clearCache(true);
-                finish();
-
             }
         }else if (dataType.equals("lastOrder")) {
             String createTimeRegExp1 = "创建时间:(.*?)</p>";
-            Matcher matcher2 = null;
+            Matcher matcher = null;
             try {
-                matcher2 = Pattern.compile(createTimeRegExp1).matcher(new ChangeCharset().toUTF_8(html));
+                matcher = Pattern.compile(createTimeRegExp1).matcher(new ChangeCharset().toUTF_8(html));
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-            while (matcher2.find()) {
-                String createTime = matcher2.group(1);
+            while (matcher.find()) {
+                String createTime = matcher.group(1);
                 orderArray.get(orderArray.size()-1).setCreateTime(createTime);
             }
+            dicUserInfo.setAddressArray(addressArray);
+            dicUserInfo.setOrderArray(orderArray);
+            JSONObject json = new  JSONObject();
+            String dicUserInfoJson = JSON.toJSONString(dicUserInfo,true);
+
+            //调用网络接口上传数据
+            System.out.println("****************************************************");
+            System.out.println(dicUserInfoJson);
+            System.out.println("****************************************************");
+            //根据接口返回数据进行路由
+            Intent i = new Intent(TaoBaoActivity.this, IndexActivity.class);
+            i.putExtra("transFlag", "1");
+            startActivity(i);
+           // webView.clearCache(true);
+            finish();
         }
     }
 
