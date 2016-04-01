@@ -11,7 +11,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
-
 import com.alibaba.fastjson.JSON;
 import com.happyfi.publicactivex.R;
 import com.happyfi.publicactivex.model.DicAddress;
@@ -19,11 +18,9 @@ import com.happyfi.publicactivex.model.DicOrder;
 import com.happyfi.publicactivex.model.DicUserInfo;
 import com.happyfi.publicactivex.util.ChangeCharset;
 import com.happyfi.publicactivex.util.LoadingDialog;
-
 import org.json.JSONObject;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
-
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,7 +43,6 @@ public class TaoBaoActivity extends BaseActivity {
     private int orderCount = 1;
     private LoadingDialog loadingDialog;
     private DicUserInfo dicUserInfo;
-
     private List<DicAddress> addressArray;
     private List<DicOrder> orderArray;
     private Handler mHandler = new Handler(){
@@ -58,6 +54,12 @@ public class TaoBaoActivity extends BaseActivity {
                     break;
                 case 2:
                     findData2();
+                    break;
+                case 3:
+                    findData3();
+                    break;
+                case 4:
+                    findData4();
                     break;
             }
         };
@@ -118,43 +120,35 @@ public class TaoBaoActivity extends BaseActivity {
                 }
                 //获取收获地址
                 if (url.contains("https://h5.m.taobao.com/favicon.ico")) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'addressList');");
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    view.loadUrl("https://h5.m.taobao.com/mlapp/olist.html");
+                    new Thread(new Runnable(){
+                        public void run(){
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            Message msg = new Message();
+                            msg.what = 3;
+                            mHandler.sendMessage(msg); //告诉主线程执行任务
+                        }
+                    }).start();
                 }
 
 
                 //获取订单列表
                 if (url.contains("https://h5.m.taobao.com/mlapp/favicon.png") && runOneTime == false) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    //获取到订单编号list
-                    view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('scroll-content')[0].innerHTML,'orderList');");
-                    while (1 == 1) {
-                        if (orderArray.size() > 0) {
-                            view.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId=" + orderArray.get(0).getOrderId());
-                            /*try {
-                                Thread.sleep(1000);
+                    new Thread(new Runnable(){
+                        public void run(){
+                            try {
+                                Thread.sleep(500);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
-                            }*/
-                            break;
-                        } else {
-                            continue;
+                            }
+                            Message msg = new Message();
+                            msg.what = 4;
+                            mHandler.sendMessage(msg); //告诉主线程执行任务
                         }
-                    }
+                    }).start();
                     runOneTime = true;
                 }
             }
@@ -168,6 +162,7 @@ public class TaoBaoActivity extends BaseActivity {
             }
         });
 
+        //获取订单详情中的交易时间
         webView.setWebChromeClient(new WebChromeClient(){
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
@@ -220,6 +215,26 @@ public class TaoBaoActivity extends BaseActivity {
     private void findData2(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'lastOrder');");
     }
+
+    private void findData3(){
+        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'addressList');");
+        webView.loadUrl("https://h5.m.taobao.com/mlapp/olist.html");
+    }
+
+    private void findData4(){
+        //获取到订单编号list
+        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('scroll-content')[0].innerHTML,'orderList');");
+        while (1 == 1) {
+            if (orderArray.size() > 0) {
+                webView.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId=" + orderArray.get(0).getOrderId());
+                break;
+            } else {
+                continue;
+            }
+        }
+    }
+
+
 
 
     final class InJavaScriptLocalObj {
