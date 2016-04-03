@@ -60,6 +60,9 @@ public class TaoBaoActivity extends BaseActivity {
                     findData4();
                     break;
                 case 5:
+                    findData5();
+                    break;
+                case 6:
                     cleanCache();
                     break;
 
@@ -110,49 +113,6 @@ public class TaoBaoActivity extends BaseActivity {
             @Override
             public void onLoadResource(WebView view, String url) {
                 super.onLoadResource(view, url);
-
-                //获取等级
-                if (url.contains("png_q90")) {
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    view.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('user-nick')[0].innerHTML,'userLevel');");
-                    view.loadUrl("https://h5.m.taobao.com/mtb/address.html");
-                }
-                //获取收获地址
-                if (url.contains("https://h5.m.taobao.com/favicon.ico")) {
-                    new Thread(new Runnable(){
-                        public void run(){
-                            try {
-                                Thread.sleep(500);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            Message msg = new Message();
-                            msg.what = 3;
-                            mHandler.sendMessage(msg); //告诉主线程执行任务
-                        }
-                    }).start();
-                }
-
-                //获取订单列表
-                if (url.contains("https://h5.m.taobao.com/mlapp/favicon.png") && runOneTime == false) {
-                    new Thread(new Runnable(){
-                        public void run(){
-                            try {
-                                Thread.sleep(2000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            Message msg = new Message();
-                            msg.what = 4;
-                            mHandler.sendMessage(msg); //告诉主线程执行任务
-                        }
-                    }).start();
-                    runOneTime = true;
-                }
             }
 
             @Override
@@ -168,12 +128,65 @@ public class TaoBaoActivity extends BaseActivity {
         webView.setWebChromeClient(new WebChromeClient(){
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if (view.getUrl().contains("login.m.taobao.com/login.htm")) {
+                if (view.getUrl().contains("login.m.taobao.com/login.html")) {
                     if(newProgress==100){
                         loadingDialog.dismiss();
                     }
                 }
-                if(view.getUrl().contains("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId=")){
+                //获取等级
+                if (view.getUrl().contains("h5.m.taobao.com/mlapp/mytaobao.html")) {
+                    if(newProgress==100){
+                        new Thread(new Runnable(){
+                            public void run(){
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                Message msg = new Message();
+                                msg.what = 1;
+                                mHandler.sendMessage(msg); //告诉主线程执行任务
+                            }
+                        }).start();
+
+                    }
+
+                }
+                //获取收获地址
+                if (view.getUrl().contains("h5.m.taobao.com/mtb/address.html")) {
+                    if(newProgress==100) {
+                        new Thread(new Runnable() {
+                            public void run() {
+                                try {
+                                    Thread.sleep(1000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                Message msg = new Message();
+                                msg.what = 2;
+                                mHandler.sendMessage(msg); //告诉主线程执行任务
+                            }
+                        }).start();
+                    }
+                }
+                //获取订单列表
+                if (view.getUrl().contains("h5.m.taobao.com/mlapp/olist.html")) {
+                    if(newProgress==100) {
+                        new Thread(new Runnable() {
+                            public void run() {
+                                try {
+                                    Thread.sleep(3000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                Message msg = new Message();
+                                msg.what = 3;
+                                mHandler.sendMessage(msg); //告诉主线程执行任务
+                            }
+                        }).start();
+                    }
+                }
+                if(view.getUrl().contains("h5.m.taobao.com/mlapp/odetail.html")){
                     if(newProgress==100){
                         if(runFlag == 0){
                             new Thread(new Runnable(){
@@ -184,7 +197,7 @@ public class TaoBaoActivity extends BaseActivity {
                                         e.printStackTrace();
                                     }
                                     Message msg = new Message();
-                                    msg.what = 1;
+                                    msg.what = 4;
                                     mHandler.sendMessage(msg); //告诉主线程执行任务
                                 }
                             }).start();
@@ -192,12 +205,12 @@ public class TaoBaoActivity extends BaseActivity {
                             new Thread(new Runnable(){
                                 public void run(){
                                     try {
-                                        Thread.sleep(500);
+                                        Thread.sleep(1000);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
                                     Message msg = new Message();
-                                    msg.what = 2;
+                                    msg.what = 5;
                                     mHandler.sendMessage(msg); //告诉主线程执行任务
                                 }
                             }).start();
@@ -209,21 +222,21 @@ public class TaoBaoActivity extends BaseActivity {
         });
     }
 
-    private void findData1(){
+    private void findData4(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'firstOrder');");
         webView.loadUrl("https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId="+orderArray.get(orderArray.size()-1).getOrderId());
     }
 
-    private void findData2(){
+    private void findData5(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'lastOrder');");
     }
 
-    private void findData3(){
+    private void findData2(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'addressList');");
         webView.loadUrl("https://h5.m.taobao.com/mlapp/olist.html");
     }
 
-    private void findData4(){
+    private void findData3(){
         //获取到订单编号list
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('scroll-content')[0].innerHTML,'orderList');");
         while (1 == 1) {
@@ -235,6 +248,12 @@ public class TaoBaoActivity extends BaseActivity {
             }
         }
     }
+
+    private void findData1(){
+        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('user-nick')[0].innerHTML,'userLevel');");
+        webView.loadUrl("https://h5.m.taobao.com/mtb/address.html");
+    }
+
 
     private void cleanCache(){
         webView.clearCache(true);
@@ -335,7 +354,7 @@ public class TaoBaoActivity extends BaseActivity {
             new Thread(new Runnable(){
                 public void run(){
                     Message msg = new Message();
-                    msg.what = 5;
+                    msg.what = 6;
                     mHandler.sendMessage(msg); //告诉主线程执行任务
                 }
             }).start();
