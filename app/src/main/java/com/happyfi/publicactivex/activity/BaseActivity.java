@@ -1,6 +1,7 @@
 package com.happyfi.publicactivex.activity;
 
 import android.app.ProgressDialog;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -93,6 +94,16 @@ public abstract class BaseActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE){
+
+        }else{
+
+        }
     }
 
     public abstract void initTitle();

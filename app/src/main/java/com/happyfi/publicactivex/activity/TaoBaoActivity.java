@@ -1,6 +1,7 @@
 package com.happyfi.publicactivex.activity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -376,5 +377,12 @@ public class TaoBaoActivity extends BaseActivity {
     protected void onStop() {
         super.onStop();
         webView.clearCache(true);
+    }
+
+
+    @Override
+    public void setLeftBack() {
+        super.setLeftBack();
+        cleanCache();
     }
 }
