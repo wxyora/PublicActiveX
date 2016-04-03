@@ -10,7 +10,8 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.TextView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import com.alibaba.fastjson.JSON;
 import com.happyfi.publicactivex.R;
 import com.happyfi.publicactivex.model.DicAddress;
@@ -35,8 +36,13 @@ public class TaoBaoActivity extends BaseActivity {
     @ViewInject(R.id.taobao_web_view)
     private WebView webView;
 
-    @ViewInject(R.id.verify_process_id)
-    private TextView verify_process_id;
+    @ViewInject(R.id.verify_progress_id)
+    private ProgressBar verify_progress_id;
+
+    @ViewInject(R.id.ll_progress_id)
+    private LinearLayout ll_progress_id;
+
+
     private int runFlag = 0;
     private LoadingDialog loadingDialog;
     private DicUserInfo dicUserInfo;
@@ -89,12 +95,11 @@ public class TaoBaoActivity extends BaseActivity {
         webView.getSettings().setBuiltInZoomControls(true);
         webView.loadUrl(UrlUtil.TaoBaoLoginUrl);
         webView.setWebViewClient(new WebViewClient() {
-
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.contains("login.m.etao.com/j.sso")) {
                     view.setVisibility(View.INVISIBLE);
-                    verify_process_id.setVisibility(View.VISIBLE);
+                    ll_progress_id.setVisibility(View.VISIBLE);
                 }
                 if (!url.contains("taobao://h5.m.taobao.com/awp")) {
                     view.loadUrl(url);
@@ -220,17 +225,20 @@ public class TaoBaoActivity extends BaseActivity {
 
     private void findData1(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('user-nick')[0].innerHTML,'userLevel');");
+        verify_progress_id.setProgress(30);
         webView.loadUrl(UrlUtil.TaoBaoAddressUrl);
     }
 
     private void findData2(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'addressList');");
+        verify_progress_id.setProgress(60);
         webView.loadUrl(UrlUtil.TaoBaoOListUrl);
     }
 
     private void findData3(){
         //获取到订单编号list
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('scroll-content')[0].innerHTML,'orderList');");
+        verify_progress_id.setProgress(80);
         while (1 == 1) {
             if (orderArray.size() > 0) {
                 webView.loadUrl(UrlUtil.TaoBaoDetailUrl + orderArray.get(0).getOrderId());
@@ -243,11 +251,13 @@ public class TaoBaoActivity extends BaseActivity {
 
     private void findData4(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'firstOrder');");
+        verify_progress_id.setProgress(90);
         webView.loadUrl(UrlUtil.TaoBaoDetailUrl + orderArray.get(orderArray.size() - 1).getOrderId());
     }
 
     private void findData5(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'lastOrder');");
+        verify_progress_id.setProgress(100);
     }
 
     private void cleanCache(){
