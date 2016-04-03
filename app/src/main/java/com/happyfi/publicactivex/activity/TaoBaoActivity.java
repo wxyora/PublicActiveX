@@ -59,6 +59,10 @@ public class TaoBaoActivity extends BaseActivity {
                 case 4:
                     findData4();
                     break;
+                case 5:
+                    cleanCache();
+                    break;
+
             }
         };
     };
@@ -70,6 +74,7 @@ public class TaoBaoActivity extends BaseActivity {
         addressArray = new ArrayList<DicAddress>();
         orderArray = new ArrayList<DicOrder>();
         loadingDialog = new LoadingDialog(TaoBaoActivity.this);
+        loadingDialog.setCanceledOnTouchOutside(false);
         loadingDialog.show();
         webView.getSettings().setJavaScriptEnabled(true);
         webView.addJavascriptInterface(new InJavaScriptLocalObj(), "local_obj");
@@ -137,7 +142,7 @@ public class TaoBaoActivity extends BaseActivity {
                     new Thread(new Runnable(){
                         public void run(){
                             try {
-                                Thread.sleep(1000);
+                                Thread.sleep(2000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
@@ -231,6 +236,13 @@ public class TaoBaoActivity extends BaseActivity {
         }
     }
 
+    private void cleanCache(){
+        webView.clearCache(true);
+    }
+
+
+
+
     final class InJavaScriptLocalObj {
         @JavascriptInterface
         public void showSource(String html, String dataType) {
@@ -320,7 +332,13 @@ public class TaoBaoActivity extends BaseActivity {
             Intent i = new Intent(TaoBaoActivity.this, IndexActivity.class);
             i.putExtra("transFlag", "1");
             startActivity(i);
-            // webView.clearCache(true);
+            new Thread(new Runnable(){
+                public void run(){
+                    Message msg = new Message();
+                    msg.what = 5;
+                    mHandler.sendMessage(msg); //告诉主线程执行任务
+                }
+            }).start();
             finish();
         }
     }
