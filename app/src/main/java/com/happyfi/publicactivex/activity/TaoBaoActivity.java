@@ -223,20 +223,22 @@ public class TaoBaoActivity extends BaseActivity {
         });
     }
 
+    //获取用户等级
     private void findData1(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('user-nick')[0].innerHTML,'userLevel');");
         verify_progress_id.setProgress(30);
         webView.loadUrl(UrlUtil.TaoBaoAddressUrl);
     }
 
+    //获取收货地址
     private void findData2(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'addressList');");
         verify_progress_id.setProgress(60);
         webView.loadUrl(UrlUtil.TaoBaoOListUrl);
     }
 
+    //获取订单列表
     private void findData3(){
-        //获取到订单编号list
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('scroll-content')[0].innerHTML,'orderList');");
         verify_progress_id.setProgress(80);
         while (1 == 1) {
@@ -249,17 +251,20 @@ public class TaoBaoActivity extends BaseActivity {
         }
     }
 
+    //获取首单详情
     private void findData4(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'firstOrder');");
         verify_progress_id.setProgress(90);
         webView.loadUrl(UrlUtil.TaoBaoDetailUrl + orderArray.get(orderArray.size() - 1).getOrderId());
     }
 
+    //获取最后一单详情
     private void findData5(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'lastOrder');");
         verify_progress_id.setProgress(100);
     }
 
+    //清理webview缓存
     private void cleanCache(){
         webView.clearCache(true);
     }
@@ -273,21 +278,21 @@ public class TaoBaoActivity extends BaseActivity {
 
     public void getParaValue(String html, String dataType) {
         if (dataType.equals("userLevel")) {
-            String optionRegExp1 = "<p class=\"(.*?)\" id=\"J_myNick\">(.*?)</p> <p class=\"(.*?)\"></p>";
-            Matcher matcher1 = Pattern.compile(optionRegExp1).matcher(html);
-            while (matcher1.find()) {
-                String level = matcher1.group(3);
+            String optionRegExp = "<p class=\"(.*?)\" id=\"J_myNick\">(.*?)</p> <p class=\"(.*?)\"></p>";
+            Matcher matcher = Pattern.compile(optionRegExp).matcher(html);
+            while (matcher.find()) {
+                String level = matcher.group(3);
                 dicUserInfo.setLevel(level.substring(6, level.length()));
                 dicUserInfo.setUserId("230125198802393894");
             }
         } else if (dataType.equals("addressList")) {
-            String optionRegExp1 = "<li data-username=\"(.*?)\" data-address=\"(.*?)\".*?<label name=\"phone-num\" style=\"float: right\">(.*?)</label>";
-            Matcher matcher1 = Pattern.compile(optionRegExp1).matcher(html);
-            while (matcher1.find()) {
+            String optionRegExp = "<li data-username=\"(.*?)\" data-address=\"(.*?)\".*?<label name=\"phone-num\" style=\"float: right\">(.*?)</label>";
+            Matcher matcher = Pattern.compile(optionRegExp).matcher(html);
+            while (matcher.find()) {
                 HashMap<String, String> map = new HashMap<String, String>();
-                String name = matcher1.group(1);
-                String address = matcher1.group(2);
-                String phone = matcher1.group(3);
+                String name = matcher.group(1);
+                String address = matcher.group(2);
+                String phone = matcher.group(3);
                 DicAddress dicAddress = new DicAddress();
                 dicAddress.setName(name);
                 dicAddress.setPhone(phone);
@@ -295,24 +300,24 @@ public class TaoBaoActivity extends BaseActivity {
                 addressArray.add(dicAddress);
             }
         } else if (dataType.equals("orderList")) {
-            String optionRegExp1 = "<div class=\"state\"> <div class=\"state-cont\"> <p class=\"h\">(.*?)</p>.*?module (\\d*)_1 item.*?合计:<b>￥(.*?)</b>";
-            Matcher matcher1 = Pattern.compile(optionRegExp1).matcher(html);
-            while (matcher1.find()) {
+            String optionRegExp = "<div class=\"state\"> <div class=\"state-cont\"> <p class=\"h\">(.*?)</p>.*?module (\\d*)_1 item.*?合计:<b>￥(.*?)</b>";
+            Matcher matcher = Pattern.compile(optionRegExp).matcher(html);
+            while (matcher.find()) {
                 DicOrder dicOrder = new DicOrder();
-                dicOrder.setOrderId(matcher1.group(2).substring(0, matcher1.group(2).length()-1));
-                dicOrder.setPrice(matcher1.group(3));
-                dicOrder.setState(matcher1.group(1));
+                dicOrder.setOrderId(matcher.group(2).substring(0, matcher.group(2).length()-1));
+                dicOrder.setPrice(matcher.group(3));
+                dicOrder.setState(matcher.group(1));
                 orderArray.add(dicOrder);
             }
         } else if (dataType.equals("firstOrder")) {
-            String createTimeRegExp1 = "创建时间:(.*?)</p>";
+            String createTimeRegExp = "创建时间:(.*?)</p>";
             Matcher matcher = null;
             String createTime = "";
             if(html.contains("没有该订单相关的信息")){
                 createTime = "没有订单详情";
             }else{
                 try {
-                    matcher = Pattern.compile(createTimeRegExp1).matcher(new ChangeCharset().toUTF_8(html));
+                    matcher = Pattern.compile(createTimeRegExp).matcher(new ChangeCharset().toUTF_8(html));
                 } catch (UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
