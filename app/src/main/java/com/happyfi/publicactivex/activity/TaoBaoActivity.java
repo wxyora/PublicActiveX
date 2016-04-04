@@ -163,7 +163,7 @@ public class TaoBaoActivity extends BaseActivity {
                        new Thread(new Runnable(){
                             public void run(){
                                 try {
-                                    Thread.sleep(2000);
+                                    Thread.sleep(500);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -181,7 +181,7 @@ public class TaoBaoActivity extends BaseActivity {
                         new Thread(new Runnable() {
                             public void run() {
                                 try {
-                                    Thread.sleep(2000);
+                                    Thread.sleep(1000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -326,13 +326,16 @@ public class TaoBaoActivity extends BaseActivity {
         } else if (dataType.equals("orderList")) {
             String optionRegExp = "<div class=\"state\"> <div class=\"state-cont\"> <p class=\"h\">(.*?)</p>.*?module (\\d*)_1 item.*?合计:<b>￥(.*?)</b>";
             Matcher matcher = Pattern.compile(optionRegExp).matcher(html);
-            while (matcher.find()) {
-                DicOrder dicOrder = new DicOrder();
-                dicOrder.setOrderId(matcher.group(2).substring(0, matcher.group(2).length()-1));
-                dicOrder.setPrice(matcher.group(3));
-                dicOrder.setState(matcher.group(1));
-                orderArray.add(dicOrder);
+            if(matcher.find()){
+                while (matcher.find()) {
+                    DicOrder dicOrder = new DicOrder();
+                    dicOrder.setOrderId(matcher.group(2).substring(0, matcher.group(2).length()-1));
+                    dicOrder.setPrice(matcher.group(3));
+                    dicOrder.setState(matcher.group(1));
+                    orderArray.add(dicOrder);
+                }
             }
+
         } else if (dataType.equals("firstOrder")) {
             String createTimeRegExp = "创建时间:(.*?)</p>";
             Matcher matcher = null;
