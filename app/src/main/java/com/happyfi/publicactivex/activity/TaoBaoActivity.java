@@ -1,7 +1,6 @@
 package com.happyfi.publicactivex.activity;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +12,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+
 import com.alibaba.fastjson.JSON;
 import com.happyfi.publicactivex.R;
 import com.happyfi.publicactivex.model.DicAddress;
@@ -21,13 +21,17 @@ import com.happyfi.publicactivex.model.DicUserInfo;
 import com.happyfi.publicactivex.util.ChangeCharset;
 import com.happyfi.publicactivex.util.LoadingDialog;
 import com.happyfi.publicactivex.util.UrlUtil;
+
 import org.json.JSONObject;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
+
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,6 +46,8 @@ public class TaoBaoActivity extends BaseActivity {
 
     @ViewInject(R.id.ll_progress_id)
     private LinearLayout ll_progress_id;
+
+    private Timer timer;
 
 
     private int runFlag = 0;
@@ -137,7 +143,24 @@ public class TaoBaoActivity extends BaseActivity {
                 //获取等级
                 if (view.getUrl().contains(UrlUtil.TaoBaoHostUrl.substring(7,UrlUtil.TaoBaoHostUrl.length()))) {
                     if(newProgress==100){
-                        new Thread(new Runnable(){
+
+                     /*   timer = new Timer();
+                        TimerTask task = new TimerTask() {
+                            @Override
+                            public void run() {
+
+                                Message msg = new Message();
+                                msg.what = 1;
+                                mHandler.sendMessage(msg);
+                                timer.cancel();
+                                timer.purge();
+
+                            }
+                        };
+                        timer.schedule(task,3);
+
+*/
+                       new Thread(new Runnable(){
                             public void run(){
                                 try {
                                     Thread.sleep(2000);
@@ -158,7 +181,7 @@ public class TaoBaoActivity extends BaseActivity {
                         new Thread(new Runnable() {
                             public void run() {
                                 try {
-                                    Thread.sleep(1000);
+                                    Thread.sleep(2000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -203,7 +226,7 @@ public class TaoBaoActivity extends BaseActivity {
                                     mHandler.sendMessage(msg); //告诉主线程执行任务
                                 }
                             }).start();
-                        }else{
+                        }else if(runFlag ==1){
                             new Thread(new Runnable(){
                                 public void run(){
                                     try {
