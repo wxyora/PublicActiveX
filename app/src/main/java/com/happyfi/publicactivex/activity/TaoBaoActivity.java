@@ -12,6 +12,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.happyfi.publicactivex.R;
@@ -46,6 +47,9 @@ public class TaoBaoActivity extends BaseActivity {
 
     @ViewInject(R.id.ll_progress_id)
     private LinearLayout ll_progress_id;
+
+    @ViewInject(R.id.rate_info_id)
+    private TextView rate_info_id;
 
     private Timer timer;
 
@@ -140,7 +144,7 @@ public class TaoBaoActivity extends BaseActivity {
 
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if (view.getUrl().contains(UrlUtil.TaoBaoLoginUrl.substring(7,UrlUtil.TaoBaoLoginUrl.length()))) {
+                if (view.getUrl().contains(UrlUtil.TaoBaoLoginUrl.substring(8,UrlUtil.TaoBaoLoginUrl.length()))) {
                     if(newProgress==100){
                         loadingDialog.dismiss();
                     }
@@ -241,6 +245,7 @@ public class TaoBaoActivity extends BaseActivity {
     private void findData1(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('user-nick')[0].innerHTML,'userLevel');");
         verify_progress_id.setProgress(30);
+        rate_info_id.setText("30%");
         webView.loadUrl(UrlUtil.TaoBaoAddressUrl);
     }
 
@@ -248,6 +253,7 @@ public class TaoBaoActivity extends BaseActivity {
     private void findData2(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'addressList');");
         verify_progress_id.setProgress(60);
+        rate_info_id.setText("60%");
         webView.loadUrl(UrlUtil.TaoBaoOListUrl);
     }
 
@@ -255,6 +261,7 @@ public class TaoBaoActivity extends BaseActivity {
     private void findData3(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('scroll-content')[0].innerHTML,'orderList');");
         verify_progress_id.setProgress(80);
+        rate_info_id.setText("80%");
         while (1 == 1) {
             if (orderArray.size() > 0) {
                 webView.loadUrl(UrlUtil.TaoBaoDetailUrl + orderArray.get(0).getOrderId());
@@ -269,6 +276,7 @@ public class TaoBaoActivity extends BaseActivity {
     private void findData4(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'firstOrder');");
         verify_progress_id.setProgress(90);
+        rate_info_id.setText("90%");
         webView.loadUrl(UrlUtil.TaoBaoDetailUrl + orderArray.get(orderArray.size() - 1).getOrderId());
     }
 
@@ -276,6 +284,7 @@ public class TaoBaoActivity extends BaseActivity {
     private void findData5(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'lastOrder');");
         verify_progress_id.setProgress(100);
+        rate_info_id.setText("100%");
     }
 
     //清理webview缓存
@@ -383,7 +392,7 @@ public class TaoBaoActivity extends BaseActivity {
     @Override
     public void initTitle() {
         setLeftBack();
-        setTitle("淘宝认证");
+        setTitle("淘宝账号授权");
     }
 
     @Override

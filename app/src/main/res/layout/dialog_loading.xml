@@ -9,13 +9,15 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:src="@drawable/ico_load_bg"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:layout_marginTop="80dp" />
 
     <ImageView
         android:id="@+id/img_front"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:src="@drawable/ico_load_front"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:layout_marginTop="80dp" />
 
 </FrameLayout>

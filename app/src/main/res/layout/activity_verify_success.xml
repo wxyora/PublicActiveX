@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/verify_result_id"
             android:layout_gravity="center_horizontal"
-            android:text="淘宝认证成功 !"
+            android:text="淘宝授权成功 !"
             android:textSize="18dp"
             android:gravity="center"
             android:layout_marginTop="60dp" />

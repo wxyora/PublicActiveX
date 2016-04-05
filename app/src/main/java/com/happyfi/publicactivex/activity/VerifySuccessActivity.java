@@ -23,15 +23,15 @@ public class VerifySuccessActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         String root = getIntent().getStringExtra("root");
         if(root.equals("taobao")){
-            verify_result_id.setText("淘宝认证成功");
+            verify_result_id.setText("淘宝授权成功");
         }else if(root.equals("jingdong")){
-            verify_result_id.setText("京东认证成功");
+            verify_result_id.setText("京东授权成功");
         }
     }
 
     @Override
     public void initTitle() {
         setLeftBack();
-        setTitle("认证结果");
+        setTitle("授权结果");
     }
 }
