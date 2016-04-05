@@ -62,11 +62,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="公积金认证"
+                android:text="......"
                 android:gravity="center_vertical" />
         </LinearLayout>
         <View  android:layout_height="2px"
             android:layout_width="match_parent"
             android:background="#66CCFF"/>
+
     </LinearLayout>
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_gravity="bottom" />
 </LinearLayout>

@@ -127,20 +127,6 @@ public class TaoBaoActivity extends BaseActivity {
             @Override
             public void onLoadResource(WebView view, String url) {
                 super.onLoadResource(view, url);
-             /*   if(url.contains("png_q9")){
-                    new Thread(new Runnable(){
-                        public void run(){
-                            try {
-                                Thread.sleep(500);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                            Message msg = new Message();
-                            msg.what = 1;
-                            mHandler.sendMessage(msg); //告诉主线程执行任务
-                        }
-                    }).start();
-                }*/
             }
 
             @Override
@@ -160,12 +146,12 @@ public class TaoBaoActivity extends BaseActivity {
                     }
                 }
                 //获取等级
-                if (view.getUrl().contains(UrlUtil.TaoBaoHostUrl.substring(7,UrlUtil.TaoBaoHostUrl.length()))) {
+                if (view.getUrl().contains(UrlUtil.TaoBaoHostUrl.substring(8,UrlUtil.TaoBaoHostUrl.length()))) {
                     if(newProgress==100&&overFlag1 ==0){
                        new Thread(new Runnable(){
                             public void run(){
                                 try {
-                                    Thread.sleep(2000);
+                                    Thread.sleep(1000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -178,13 +164,12 @@ public class TaoBaoActivity extends BaseActivity {
                     }
                 }
                 //获取收获地址
-                if (view.getUrl().contains(UrlUtil.TaoBaoAddressUrl.substring(7,UrlUtil.TaoBaoAddressUrl.length()))) {
+                if (view.getUrl().contains(UrlUtil.TaoBaoAddressUrl.substring(8,UrlUtil.TaoBaoAddressUrl.length()))) {
                     if(newProgress==100&&overFlag2 ==0) {
                         new Thread(new Runnable() {
-
                             public void run() {
                                 try {
-                                    Thread.sleep(2000);
+                                    Thread.sleep(1000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -198,13 +183,12 @@ public class TaoBaoActivity extends BaseActivity {
                 }
 
                 //获取订单列表
-                if (view.getUrl().contains(UrlUtil.TaoBaoOListUrl.substring(7, UrlUtil.TaoBaoOListUrl.length()))){
-                    System.out.println("==================================>获取订单列表"+newProgress);
+                if (view.getUrl().contains(UrlUtil.TaoBaoOListUrl.substring(8, UrlUtil.TaoBaoOListUrl.length()))){
                     if(newProgress==100&&overFlag3 ==0) {
                         new Thread(new Runnable() {
                             public void run() {
                                 try {
-                                    Thread.sleep(3000);
+                                    Thread.sleep(2000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -217,13 +201,13 @@ public class TaoBaoActivity extends BaseActivity {
                     }
                 }
 
-                if(view.getUrl().contains(UrlUtil.TaoBaoDetailUrl.substring(7,UrlUtil.TaoBaoDetailUrl.length()))){
+                if(view.getUrl().contains(UrlUtil.TaoBaoDetailUrl.substring(8,UrlUtil.TaoBaoDetailUrl.length()))){
                     if(newProgress==100){
                         if(runFlag == 0){
                             new Thread(new Runnable(){
                                 public void run(){
                                     try {
-                                        Thread.sleep(2000);
+                                        Thread.sleep(1000);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
@@ -236,7 +220,7 @@ public class TaoBaoActivity extends BaseActivity {
                             new Thread(new Runnable(){
                                 public void run(){
                                     try {
-                                        Thread.sleep(2000);
+                                        Thread.sleep(1000);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
@@ -329,7 +313,6 @@ public class TaoBaoActivity extends BaseActivity {
                 dicAddress.setAddress(address);
                 addressArray.add(dicAddress);
             }
-            System.out.println("====================================>" + addressArray.size());
         } else if (dataType.equals("orderList")) {
             String optionRegExp = "<div class=\"state\"> <div class=\"state-cont\"> <p class=\"h\">(.*?)</p>.*?module (\\d*)_1 item.*?合计:<b>￥(.*?)</b>";
             Matcher matcher = Pattern.compile(optionRegExp).matcher(html);
