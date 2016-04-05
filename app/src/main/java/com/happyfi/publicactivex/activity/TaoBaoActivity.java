@@ -12,6 +12,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.happyfi.publicactivex.R;
@@ -47,7 +48,14 @@ public class TaoBaoActivity extends BaseActivity {
     @ViewInject(R.id.ll_progress_id)
     private LinearLayout ll_progress_id;
 
+    @ViewInject(R.id.rate_info_id)
+    private TextView rate_info_id;
+
     private Timer timer;
+
+    private int overFlag1 = 0;
+    private int overFlag2 = 0;
+    private int overFlag3 = 0;
 
 
     private int runFlag = 0;
@@ -133,37 +141,21 @@ public class TaoBaoActivity extends BaseActivity {
 
         //获取订单详情中的交易时间
         webView.setWebChromeClient(new WebChromeClient(){
+
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if (view.getUrl().contains(UrlUtil.TaoBaoLoginUrl.substring(7,UrlUtil.TaoBaoLoginUrl.length()))) {
+                if (view.getUrl().contains(UrlUtil.TaoBaoLoginUrl.substring(8,UrlUtil.TaoBaoLoginUrl.length()))) {
                     if(newProgress==100){
                         loadingDialog.dismiss();
                     }
                 }
                 //获取等级
-                if (view.getUrl().contains(UrlUtil.TaoBaoHostUrl.substring(7,UrlUtil.TaoBaoHostUrl.length()))) {
-                    if(newProgress==100){
-
-                     /*   timer = new Timer();
-                        TimerTask task = new TimerTask() {
-                            @Override
-                            public void run() {
-
-                                Message msg = new Message();
-                                msg.what = 1;
-                                mHandler.sendMessage(msg);
-                                timer.cancel();
-                                timer.purge();
-
-                            }
-                        };
-                        timer.schedule(task,3);
-
-*/
+                if (view.getUrl().contains(UrlUtil.TaoBaoHostUrl.substring(8,UrlUtil.TaoBaoHostUrl.length()))) {
+                    if(newProgress==100&&overFlag1 ==0){
                        new Thread(new Runnable(){
                             public void run(){
                                 try {
-                                    Thread.sleep(500);
+                                    Thread.sleep(1000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -172,12 +164,12 @@ public class TaoBaoActivity extends BaseActivity {
                                 mHandler.sendMessage(msg); //告诉主线程执行任务
                             }
                         }).start();
+                        overFlag1 =1;
                     }
                 }
-
                 //获取收获地址
-                if (view.getUrl().contains(UrlUtil.TaoBaoAddressUrl.substring(7,UrlUtil.TaoBaoAddressUrl.length()))) {
-                    if(newProgress==100) {
+                if (view.getUrl().contains(UrlUtil.TaoBaoAddressUrl.substring(8,UrlUtil.TaoBaoAddressUrl.length()))) {
+                    if(newProgress==100&&overFlag2 ==0) {
                         new Thread(new Runnable() {
                             public void run() {
                                 try {
@@ -190,16 +182,17 @@ public class TaoBaoActivity extends BaseActivity {
                                 mHandler.sendMessage(msg); //告诉主线程执行任务
                             }
                         }).start();
+                        overFlag2 = 1;
                     }
                 }
 
                 //获取订单列表
-                if (view.getUrl().contains(UrlUtil.TaoBaoOListUrl.substring(7, UrlUtil.TaoBaoOListUrl.length()))){
-                    if(newProgress==100) {
+                if (view.getUrl().contains(UrlUtil.TaoBaoOListUrl.substring(8, UrlUtil.TaoBaoOListUrl.length()))){
+                    if(newProgress==100&&overFlag3 ==0) {
                         new Thread(new Runnable() {
                             public void run() {
                                 try {
-                                    Thread.sleep(3000);
+                                    Thread.sleep(2000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -208,10 +201,11 @@ public class TaoBaoActivity extends BaseActivity {
                                 mHandler.sendMessage(msg); //告诉主线程执行任务
                             }
                         }).start();
+                        overFlag3 =1;
                     }
                 }
 
-                if(view.getUrl().contains(UrlUtil.TaoBaoDetailUrl.substring(7,UrlUtil.TaoBaoDetailUrl.length()))){
+                if(view.getUrl().contains(UrlUtil.TaoBaoDetailUrl.substring(8,UrlUtil.TaoBaoDetailUrl.length()))){
                     if(newProgress==100){
                         if(runFlag == 0){
                             new Thread(new Runnable(){
@@ -251,6 +245,7 @@ public class TaoBaoActivity extends BaseActivity {
     private void findData1(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('user-nick')[0].innerHTML,'userLevel');");
         verify_progress_id.setProgress(30);
+        rate_info_id.setText("30%");
         webView.loadUrl(UrlUtil.TaoBaoAddressUrl);
     }
 
@@ -258,6 +253,7 @@ public class TaoBaoActivity extends BaseActivity {
     private void findData2(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'addressList');");
         verify_progress_id.setProgress(60);
+        rate_info_id.setText("60%");
         webView.loadUrl(UrlUtil.TaoBaoOListUrl);
     }
 
@@ -265,6 +261,7 @@ public class TaoBaoActivity extends BaseActivity {
     private void findData3(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('scroll-content')[0].innerHTML,'orderList');");
         verify_progress_id.setProgress(80);
+        rate_info_id.setText("80%");
         while (1 == 1) {
             if (orderArray.size() > 0) {
                 webView.loadUrl(UrlUtil.TaoBaoDetailUrl + orderArray.get(0).getOrderId());
@@ -279,6 +276,7 @@ public class TaoBaoActivity extends BaseActivity {
     private void findData4(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'firstOrder');");
         verify_progress_id.setProgress(90);
+        rate_info_id.setText("90%");
         webView.loadUrl(UrlUtil.TaoBaoDetailUrl + orderArray.get(orderArray.size() - 1).getOrderId());
     }
 
@@ -286,6 +284,7 @@ public class TaoBaoActivity extends BaseActivity {
     private void findData5(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'lastOrder');");
         verify_progress_id.setProgress(100);
+        rate_info_id.setText("100%");
     }
 
     //清理webview缓存
@@ -326,16 +325,13 @@ public class TaoBaoActivity extends BaseActivity {
         } else if (dataType.equals("orderList")) {
             String optionRegExp = "<div class=\"state\"> <div class=\"state-cont\"> <p class=\"h\">(.*?)</p>.*?module (\\d*)_1 item.*?合计:<b>￥(.*?)</b>";
             Matcher matcher = Pattern.compile(optionRegExp).matcher(html);
-            if(matcher.find()){
-                while (matcher.find()) {
-                    DicOrder dicOrder = new DicOrder();
-                    dicOrder.setOrderId(matcher.group(2).substring(0, matcher.group(2).length()-1));
-                    dicOrder.setPrice(matcher.group(3));
-                    dicOrder.setState(matcher.group(1));
-                    orderArray.add(dicOrder);
-                }
+            while (matcher.find()) {
+                DicOrder dicOrder = new DicOrder();
+                dicOrder.setOrderId(matcher.group(2).substring(0, matcher.group(2).length()-1));
+                dicOrder.setPrice(matcher.group(3));
+                dicOrder.setState(matcher.group(1));
+                orderArray.add(dicOrder);
             }
-
         } else if (dataType.equals("firstOrder")) {
             String createTimeRegExp = "创建时间:(.*?)</p>";
             Matcher matcher = null;
@@ -396,7 +392,7 @@ public class TaoBaoActivity extends BaseActivity {
     @Override
     public void initTitle() {
         setLeftBack();
-        setTitle("淘宝认证");
+        setTitle("淘宝账号授权");
     }
 
     @Override

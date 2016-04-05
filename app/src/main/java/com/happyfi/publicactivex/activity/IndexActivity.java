@@ -38,14 +38,14 @@ public class IndexActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         String transFlag =  getIntent().getStringExtra("transFlag");
         if("1".equals(transFlag)){
-            aaa.setText("淘宝已经认证成功");
+            aaa.setText("淘宝授权成功");
             aaa.setTextColor(Color.GREEN);
         }
     }
 
     @Override
     public void initTitle() {
-        setTitle("认证方式");
+        setTitle("授权方式");
     }
 
 

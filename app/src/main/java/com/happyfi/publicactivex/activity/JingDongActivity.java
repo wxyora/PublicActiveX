@@ -28,7 +28,7 @@ public class JingDongActivity extends BaseActivity {
 
     @Override
     public void initTitle() {
-        setTitle("京东认证");
+        setTitle("京东账号授权");
         setLeftBack();
     }
 
