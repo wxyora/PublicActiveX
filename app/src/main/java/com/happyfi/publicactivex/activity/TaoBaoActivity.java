@@ -49,6 +49,10 @@ public class TaoBaoActivity extends BaseActivity {
 
     private Timer timer;
 
+    private int overFlag1 = 0;
+    private int overFlag2 = 0;
+    private int overFlag3 = 0;
+
 
     private int runFlag = 0;
     private LoadingDialog loadingDialog;
@@ -123,6 +127,20 @@ public class TaoBaoActivity extends BaseActivity {
             @Override
             public void onLoadResource(WebView view, String url) {
                 super.onLoadResource(view, url);
+             /*   if(url.contains("png_q9")){
+                    new Thread(new Runnable(){
+                        public void run(){
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            Message msg = new Message();
+                            msg.what = 1;
+                            mHandler.sendMessage(msg); //告诉主线程执行任务
+                        }
+                    }).start();
+                }*/
             }
 
             @Override
@@ -133,6 +151,7 @@ public class TaoBaoActivity extends BaseActivity {
 
         //获取订单详情中的交易时间
         webView.setWebChromeClient(new WebChromeClient(){
+
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 if (view.getUrl().contains(UrlUtil.TaoBaoLoginUrl.substring(7,UrlUtil.TaoBaoLoginUrl.length()))) {
@@ -142,24 +161,7 @@ public class TaoBaoActivity extends BaseActivity {
                 }
                 //获取等级
                 if (view.getUrl().contains(UrlUtil.TaoBaoHostUrl.substring(7,UrlUtil.TaoBaoHostUrl.length()))) {
-                    if(newProgress==100){
-
-                     /*   timer = new Timer();
-                        TimerTask task = new TimerTask() {
-                            @Override
-                            public void run() {
-
-                                Message msg = new Message();
-                                msg.what = 1;
-                                mHandler.sendMessage(msg);
-                                timer.cancel();
-                                timer.purge();
-
-                            }
-                        };
-                        timer.schedule(task,3);
-
-*/
+                    if(newProgress==100&&overFlag1 ==0){
                        new Thread(new Runnable(){
                             public void run(){
                                 try {
@@ -172,13 +174,14 @@ public class TaoBaoActivity extends BaseActivity {
                                 mHandler.sendMessage(msg); //告诉主线程执行任务
                             }
                         }).start();
+                        overFlag1 =1;
                     }
                 }
-
                 //获取收获地址
                 if (view.getUrl().contains(UrlUtil.TaoBaoAddressUrl.substring(7,UrlUtil.TaoBaoAddressUrl.length()))) {
-                    if(newProgress==100) {
+                    if(newProgress==100&&overFlag2 ==0) {
                         new Thread(new Runnable() {
+
                             public void run() {
                                 try {
                                     Thread.sleep(2000);
@@ -190,12 +193,14 @@ public class TaoBaoActivity extends BaseActivity {
                                 mHandler.sendMessage(msg); //告诉主线程执行任务
                             }
                         }).start();
+                        overFlag2 = 1;
                     }
                 }
 
                 //获取订单列表
                 if (view.getUrl().contains(UrlUtil.TaoBaoOListUrl.substring(7, UrlUtil.TaoBaoOListUrl.length()))){
-                    if(newProgress==100) {
+                    System.out.println("==================================>获取订单列表"+newProgress);
+                    if(newProgress==100&&overFlag3 ==0) {
                         new Thread(new Runnable() {
                             public void run() {
                                 try {
@@ -208,6 +213,7 @@ public class TaoBaoActivity extends BaseActivity {
                                 mHandler.sendMessage(msg); //告诉主线程执行任务
                             }
                         }).start();
+                        overFlag3 =1;
                     }
                 }
 
@@ -217,7 +223,7 @@ public class TaoBaoActivity extends BaseActivity {
                             new Thread(new Runnable(){
                                 public void run(){
                                     try {
-                                        Thread.sleep(1000);
+                                        Thread.sleep(2000);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
@@ -230,7 +236,7 @@ public class TaoBaoActivity extends BaseActivity {
                             new Thread(new Runnable(){
                                 public void run(){
                                     try {
-                                        Thread.sleep(1000);
+                                        Thread.sleep(2000);
                                     } catch (InterruptedException e) {
                                         e.printStackTrace();
                                     }
@@ -323,6 +329,7 @@ public class TaoBaoActivity extends BaseActivity {
                 dicAddress.setAddress(address);
                 addressArray.add(dicAddress);
             }
+            System.out.println("====================================>" + addressArray.size());
         } else if (dataType.equals("orderList")) {
             String optionRegExp = "<div class=\"state\"> <div class=\"state-cont\"> <p class=\"h\">(.*?)</p>.*?module (\\d*)_1 item.*?合计:<b>￥(.*?)</b>";
             Matcher matcher = Pattern.compile(optionRegExp).matcher(html);
