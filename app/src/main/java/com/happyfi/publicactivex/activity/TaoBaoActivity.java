@@ -51,8 +51,6 @@ public class TaoBaoActivity extends BaseActivity {
     @ViewInject(R.id.rate_info_id)
     private TextView rate_info_id;
 
-    private Timer timer;
-
     private int overFlag1 = 0;
     private int overFlag2 = 0;
     private int overFlag3 = 0;
@@ -108,7 +106,7 @@ public class TaoBaoActivity extends BaseActivity {
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setSupportZoom(true);
         webView.getSettings().setBuiltInZoomControls(true);
-        webView.loadUrl(UrlUtil.TaoBaoLoginUrl);
+        webView.loadUrl(UrlUtil.TBLoginUrl);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -139,18 +137,17 @@ public class TaoBaoActivity extends BaseActivity {
             }
         });
 
-        //获取订单详情中的交易时间
         webView.setWebChromeClient(new WebChromeClient(){
 
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if (view.getUrl().contains(UrlUtil.TaoBaoLoginUrl.substring(8,UrlUtil.TaoBaoLoginUrl.length()))) {
+                if (view.getUrl().contains(UrlUtil.TBLoginUrl.substring(8,UrlUtil.TBLoginUrl.length()))) {
                     if(newProgress==100){
                         loadingDialog.dismiss();
                     }
                 }
                 //获取等级
-                if (view.getUrl().contains(UrlUtil.TaoBaoHostUrl.substring(8,UrlUtil.TaoBaoHostUrl.length()))) {
+                if (view.getUrl().contains(UrlUtil.TBHostUrl.substring(8,UrlUtil.TBHostUrl.length()))) {
                     if(newProgress==100&&overFlag1 ==0){
                        new Thread(new Runnable(){
                             public void run(){
@@ -168,7 +165,7 @@ public class TaoBaoActivity extends BaseActivity {
                     }
                 }
                 //获取收获地址
-                if (view.getUrl().contains(UrlUtil.TaoBaoAddressUrl.substring(8,UrlUtil.TaoBaoAddressUrl.length()))) {
+                if (view.getUrl().contains(UrlUtil.TBAddressUrl.substring(8,UrlUtil.TBAddressUrl.length()))) {
                     if(newProgress==100&&overFlag2 ==0) {
                         new Thread(new Runnable() {
                             public void run() {
@@ -187,7 +184,7 @@ public class TaoBaoActivity extends BaseActivity {
                 }
 
                 //获取订单列表
-                if (view.getUrl().contains(UrlUtil.TaoBaoOListUrl.substring(8, UrlUtil.TaoBaoOListUrl.length()))){
+                if (view.getUrl().contains(UrlUtil.TBOListUrl.substring(8, UrlUtil.TBOListUrl.length()))){
                     if(newProgress==100&&overFlag3 ==0) {
                         new Thread(new Runnable() {
                             public void run() {
@@ -205,7 +202,7 @@ public class TaoBaoActivity extends BaseActivity {
                     }
                 }
 
-                if(view.getUrl().contains(UrlUtil.TaoBaoDetailUrl.substring(8,UrlUtil.TaoBaoDetailUrl.length()))){
+                if(view.getUrl().contains(UrlUtil.TBDetailUrl.substring(8,UrlUtil.TBDetailUrl.length()))){
                     if(newProgress==100){
                         if(runFlag == 0){
                             new Thread(new Runnable(){
@@ -246,7 +243,7 @@ public class TaoBaoActivity extends BaseActivity {
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('user-nick')[0].innerHTML,'userLevel');");
         verify_progress_id.setProgress(30);
         rate_info_id.setText("30%");
-        webView.loadUrl(UrlUtil.TaoBaoAddressUrl);
+        webView.loadUrl(UrlUtil.TBAddressUrl);
     }
 
     //获取收货地址
@@ -254,7 +251,7 @@ public class TaoBaoActivity extends BaseActivity {
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'addressList');");
         verify_progress_id.setProgress(60);
         rate_info_id.setText("60%");
-        webView.loadUrl(UrlUtil.TaoBaoOListUrl);
+        webView.loadUrl(UrlUtil.TBOListUrl);
     }
 
     //获取订单列表
@@ -264,7 +261,7 @@ public class TaoBaoActivity extends BaseActivity {
         rate_info_id.setText("80%");
         while (1 == 1) {
             if (orderArray.size() > 0) {
-                webView.loadUrl(UrlUtil.TaoBaoDetailUrl + orderArray.get(0).getOrderId());
+                webView.loadUrl(UrlUtil.TBDetailUrl + orderArray.get(0).getOrderId());
                 break;
             } else {
                 continue;
@@ -277,7 +274,7 @@ public class TaoBaoActivity extends BaseActivity {
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'firstOrder');");
         verify_progress_id.setProgress(90);
         rate_info_id.setText("90%");
-        webView.loadUrl(UrlUtil.TaoBaoDetailUrl + orderArray.get(orderArray.size() - 1).getOrderId());
+        webView.loadUrl(UrlUtil.TBDetailUrl + orderArray.get(orderArray.size() - 1).getOrderId());
     }
 
     //获取最后一单详情
