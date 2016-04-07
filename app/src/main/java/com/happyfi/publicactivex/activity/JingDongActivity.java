@@ -14,16 +14,20 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.happyfi.publicactivex.R;
 import com.happyfi.publicactivex.model.DicAddress;
 import com.happyfi.publicactivex.model.DicOrder;
 import com.happyfi.publicactivex.model.DicUserInfo;
+import com.happyfi.publicactivex.util.ChangeCharset;
 import com.happyfi.publicactivex.util.LoadingDialog;
 import com.happyfi.publicactivex.util.UrlUtil;
 
+import org.json.JSONObject;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +52,7 @@ public class JingDongActivity extends BaseActivity {
     private int overFlag2 = 0;
     private int overFlag3 = 0;
     private int overFlag4 = 0;
+    private int overFlag5 = 0;
 
     private int runFlag = 0;
     private LoadingDialog loadingDialog;
@@ -58,7 +63,7 @@ public class JingDongActivity extends BaseActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
-                    findData1();
+                    //findData1();
                     break;
                 case 2:
                     findData2();
@@ -70,7 +75,7 @@ public class JingDongActivity extends BaseActivity {
                     findData4();
                     break;
                 case 5:
-                    //findData5();
+                    findData5();
                     break;
                 case 6:
                     //cleanCache();
@@ -90,7 +95,6 @@ public class JingDongActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //webView.clearCache(true);
         dicUserInfo = new DicUserInfo();
         addressArray = new ArrayList<>();
         orderArray = new ArrayList<>();
@@ -123,7 +127,6 @@ public class JingDongActivity extends BaseActivity {
             }
         });
 
-
         webView.setWebChromeClient(new WebChromeClient() {
 
             @Override
@@ -136,7 +139,7 @@ public class JingDongActivity extends BaseActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('head-img')[0].innerHTML);");
+                                webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('head-img')[0].innerHTML,'userLevel');");
                                 verify_progress_id.setProgress(30);
                                 rate_info_id.setText("30%");
                                 webView.loadUrl(UrlUtil.JDAddressUrl);
@@ -151,14 +154,15 @@ public class JingDongActivity extends BaseActivity {
                     if (newProgress == 100&&overFlag2==0) {
                         new Thread(new Runnable() {
                             public void run() {
-                                try {
+                               /* try {
                                     Thread.sleep(1000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
-                                }
+                                }*/
                                 Message msg = new Message();
                                 msg.what = 2;
-                                mHandler.sendMessage(msg); //告诉主线程执行任务
+                                // mHandler.sendMessage(msg); //告诉主线程执行任务
+                                mHandler.sendMessageDelayed(msg,1000);
                             }
                         }).start();
                         overFlag2++;
@@ -185,12 +189,12 @@ public class JingDongActivity extends BaseActivity {
 
                 }
 
-                if (view.getUrl().contains(UrlUtil.JDDetailUrl.substring(8, UrlUtil.JDOListUrl.length()))) {
+                if (view.getUrl().contains(UrlUtil.JDDetailUrl.substring(8, UrlUtil.JDDetailUrl.length()))) {
                     if (newProgress == 100&&overFlag4==0) {
                         new Thread(new Runnable() {
                             public void run() {
                                 try {
-                                    Thread.sleep(3000);
+                                    Thread.sleep(2000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -201,44 +205,39 @@ public class JingDongActivity extends BaseActivity {
                         }).start();
                         overFlag4++;
                     }
-
                 }
 
-
-
-
-              /*  //获取等级
-                if (view.getUrl().contains(UrlUtil.JingDongHostUrl.substring(8, UrlUtil.JingDongHostUrl.length()))) {
-                    if(newProgress==100&&overFlag1 ==0){
-                        new Thread(new Runnable(){
-                            public void run(){
+                if (view.getUrl().contains(UrlUtil.JDDetailUrl.substring(8, UrlUtil.JDDetailUrl.length()))) {
+                    if (newProgress == 100&&overFlag5==0) {
+                        new Thread(new Runnable() {
+                            public void run() {
                                 try {
-                                    Thread.sleep(1000);
+                                    Thread.sleep(2000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
                                 Message msg = new Message();
-                                msg.what = 1;
+                                msg.what = 5;
                                 mHandler.sendMessage(msg); //告诉主线程执行任务
                             }
                         }).start();
-                        overFlag1 =1;
+                        overFlag5++;
                     }
-                }*/
+                }
             }
         });
     }
-    //获取用户等级
+   /* //获取用户等级
     private void findData1(){
-        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('head-img')[0].innerHTML);");
+        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('head-img')[0].innerHTML,'userLevel');");
         verify_progress_id.setProgress(30);
         rate_info_id.setText("30%");
         //webView.loadUrl(UrlUtil.TaoBaoAddressUrl);
-    }
+    }*/
 
     //获取收货地址
     private void findData2() {
-        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('new-addr')[0].innerHTML);");
+        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('new-addr')[0].innerHTML,'addressList');");
         verify_progress_id.setProgress(60);
         rate_info_id.setText("60%");
         webView.loadUrl(UrlUtil.JDOListUrl);
@@ -246,63 +245,129 @@ public class JingDongActivity extends BaseActivity {
 
     //获取订单列表
     private void findData3(){
-        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementById('allOrders').innerHTML);");
+        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementById('allOrders').innerHTML,'orderList');");
         verify_progress_id.setProgress(80);
         rate_info_id.setText("80%");
-        webView.loadUrl(UrlUtil.JDLoginUrl + "/newAllOrders/queryOrderDetailInfo.action?orderId=12283623729&amp;from=newUserAllOrderList&amp;passKey=e2e690c32e45202c2f188de32a0a6485&amp;sid=4ee3001783c636bc4c040db9943315a9");
-
-       /* while (1 == 1) {
+        while (1 == 1) {
             if (orderArray.size() > 0) {
-                webView.loadUrl(UrlUtil.TBDetailUrl + orderArray.get(0).getOrderId());
+                webView.loadUrl(UrlUtil.JDLoginUrl + orderArray.get(0).getOrderId().replace("amp;",""));
                 break;
             } else {
                 continue;
             }
-        }*/
+        }
     }
     //获取首单详情
     private void findData4(){
-        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('s5-sum')[0].innerHTML);");
+        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('s5-sum')[0].innerHTML,'firstOrder');");
         verify_progress_id.setProgress(90);
         rate_info_id.setText("90%");
-       // webView.loadUrl(UrlUtil.TBDetailUrl + orderArray.get(orderArray.size() - 1).getOrderId());
+        webView.loadUrl(UrlUtil.JDLoginUrl + orderArray.get(orderArray.size()-1).getOrderId().replace("amp;", ""));
     }
+
+
+    //获取最后一单详情
+    private void findData5(){
+        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('s5-sum')[0].innerHTML,'lastOrder');");
+        verify_progress_id.setProgress(100);
+        rate_info_id.setText("100%");
+    }
+
 
     final class InJavaScriptLocalObj {
         @JavascriptInterface
-        public void showSource(String html) {
-            System.out.println("记录数据" + html);
+        public void showSource(String html, String dataType) {
+            getParaValue(html, dataType);
         }
     }
-
-    public List<HashMap<String, String>> getParaValue(String source) {
-        List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-        String optionRegExp1 = "<li data-username=\"(.*?)\" data-address=\"(.*?)\".*?<label name=\"phone-num\" style=\"float: right\">(.*?)</label>";
-        Matcher matcher1 = Pattern.compile(optionRegExp1).matcher(source);
-
-        while (matcher1.find()) {
-            HashMap<String, String> map = new HashMap<String, String>();
-            String name = matcher1.group(1);
-            String address = matcher1.group(2);
-            String phone = matcher1.group(3);
-            map.put("name", name);
-            map.put("address", address);
-            map.put("phone", phone);
-            list.add(map);
-        }
-        return list;
-    }
-
 
     public void getParaValue(String html, String dataType) {
         if (dataType.equals("userLevel")) {
-            String optionRegExp = "<p class=\"(.*?)\" id=\"J_myNick\">(.*?)</p> <p class=\"(.*?)\"></p>";
+            String optionRegExp = "<p>(.*?)会员</p>";
             Matcher matcher = Pattern.compile(optionRegExp).matcher(html);
-            System.out.println(html);
-          /*  while (matcher.find()) {
-                String level = matcher.group(3);
-            }*/
+            while (matcher.find()) {
+                String level = matcher.group(1);
+                dicUserInfo.setLevel(level);
+                dicUserInfo.setUserId("230125198802393894");
+            }
+        } else if (dataType.equals("addressList")) {
+            String optionRegExp = "<span class=\"new-txt\">(.*?)</span>[\\s\\S]*?<span class=\"new-txt-rd2\">(.*?)</span>[\\s\\S]*?</span>(.*?)</span>";
+            Matcher matcher = Pattern.compile(optionRegExp).matcher(html);
+            while (matcher.find()) {
+                HashMap<String, String> map = new HashMap<String, String>();
+                String name = matcher.group(1);
+                String address = matcher.group(2);
+                String phone = matcher.group(3);
+                DicAddress dicAddress = new DicAddress();
+                dicAddress.setName(name);
+                dicAddress.setPhone(phone);
+                dicAddress.setAddress(address);
+                addressArray.add(dicAddress);
+            }
+        } else if (dataType.equals("orderList")) {
+            String optionRegExp = "<a sign=\"orderDetail\" href=\"(.*?)\">[\\s\\S]*?<span class=\"imb-num\">(.*?)</span>[\\s\\S]*?<a href=\"javascript:;\" class=\"(.*?)\"";
+            Matcher matcher = Pattern.compile(optionRegExp).matcher(html);
+            while (matcher.find()) {
+                DicOrder dicOrder = new DicOrder();
+                dicOrder.setOrderId(matcher.group(1).substring(0, matcher.group(1).length()));
+                dicOrder.setPrice(matcher.group(2).substring(1, matcher.group(2).length()));
+                dicOrder.setState(matcher.group(3));
+                orderArray.add(dicOrder);
+            }
+        } else if (dataType.equals("firstOrder")) {
+            String createTimeRegExp = "下单时间:(.*?)</p>";
+            Matcher matcher = null;
+            String createTime = "";
+            if(html.contains("没有该订单相关的信息")){
+                createTime = "没有订单详情";
+            }else{
+                try {
+                    matcher = Pattern.compile(createTimeRegExp).matcher(new ChangeCharset().toUTF_8(html));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                while (matcher.find()) {
+                    createTime = matcher.group(1);
+                }
+            }
+            orderArray.get(0).setCreateTime(createTime);
+        }else if (dataType.equals("lastOrder")) {
+            String createTimeRegExp1 = "下单时间:(.*?)</p>";
+            Matcher matcher = null;
+            String createTime = "";
+            if(html.contains("没有该订单相关的信息")){
+                createTime = "没有订单详情";
+            }else{
+                try {
+                    matcher = Pattern.compile(createTimeRegExp1).matcher(new ChangeCharset().toUTF_8(html));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+                while (matcher.find()) {
+                    createTime = matcher.group(1);
+                }
+            }
+            orderArray.get(orderArray.size()-1).setCreateTime(createTime);
+            dicUserInfo.setAddressArray(addressArray);
+            dicUserInfo.setOrderArray(orderArray);
+            JSONObject json = new  JSONObject();
+            String dicUserInfoJson = JSON.toJSONString(dicUserInfo, true);
+            //调用网络接口上传数据
+            System.out.println("****************************************************");
+            System.out.println(dicUserInfoJson);
+            System.out.println("****************************************************");
+            //根据接口返回数据进行路由
+            Intent i = new Intent(JingDongActivity.this, IndexActivity.class);
+            i.putExtra("transFlag", "1");
+            startActivity(i);
+            new Thread(new Runnable(){
+                public void run(){
+                    Message msg = new Message();
+                    msg.what = 6;
+                    mHandler.sendMessage(msg); //告诉主线程执行任务
+                }
+            }).start();
+            finish();
         }
-
     }
 }
