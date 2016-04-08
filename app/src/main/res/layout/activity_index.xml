@@ -70,6 +70,20 @@
             android:layout_width="match_parent"
             android:background="#66CCFF"/>
 
+        <Button
+            android:layout_width="150px"
+            android:layout_height="wrap_content"
+            android:text="New Button"
+            android:id="@+id/button"
+            android:layout_weight="0.07" />
+
+        <Button
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:text="New Button"
+            android:id="@+id/button2"
+            android:layout_weight="0.07" />
+
     </LinearLayout>
 
     <ProgressBar

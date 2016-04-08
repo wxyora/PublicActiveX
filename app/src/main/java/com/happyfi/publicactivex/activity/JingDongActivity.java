@@ -162,7 +162,7 @@ public class JingDongActivity extends BaseActivity {
                                 Message msg = new Message();
                                 msg.what = 2;
                                 // mHandler.sendMessage(msg); //告诉主线程执行任务
-                                mHandler.sendMessageDelayed(msg,1000);
+                                mHandler.sendMessageDelayed(msg, 1000);
                             }
                         }).start();
                         overFlag2++;
@@ -204,11 +204,9 @@ public class JingDongActivity extends BaseActivity {
                             }
                         }).start();
                         overFlag4++;
-                    }
-                }
+                        }
 
-                if (view.getUrl().contains(UrlUtil.JDDetailUrl.substring(8, UrlUtil.JDDetailUrl.length()))) {
-                    if (newProgress == 100&&overFlag5==0) {
+                    if(newProgress == 100&&overFlag5==1) {
                         new Thread(new Runnable() {
                             public void run() {
                                 try {
@@ -224,6 +222,24 @@ public class JingDongActivity extends BaseActivity {
                         overFlag5++;
                     }
                 }
+
+               /* if (view.getUrl().contains(UrlUtil.JDDetailUrl.substring(8, UrlUtil.JDDetailUrl.length()))) {
+                    if (newProgress == 100&&overFlag5==0) {
+                        new Thread(new Runnable() {
+                            public void run() {
+                                try {
+                                    Thread.sleep(2000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                Message msg = new Message();
+                                msg.what = 5;
+                                mHandler.sendMessage(msg); //告诉主线程执行任务
+                            }
+                        }).start();
+                        overFlag5++;
+                    }
+                }*/
             }
         });
     }
@@ -262,6 +278,7 @@ public class JingDongActivity extends BaseActivity {
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('s5-sum')[0].innerHTML,'firstOrder');");
         verify_progress_id.setProgress(90);
         rate_info_id.setText("90%");
+        overFlag5 ++;
         webView.loadUrl(UrlUtil.JDLoginUrl + orderArray.get(orderArray.size()-1).getOrderId().replace("amp;", ""));
     }
 

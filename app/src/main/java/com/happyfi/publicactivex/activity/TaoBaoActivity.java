@@ -13,6 +13,7 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.happyfi.publicactivex.R;
@@ -21,6 +22,7 @@ import com.happyfi.publicactivex.model.DicOrder;
 import com.happyfi.publicactivex.model.DicUserInfo;
 import com.happyfi.publicactivex.util.ChangeCharset;
 import com.happyfi.publicactivex.util.LoadingDialog;
+import com.happyfi.publicactivex.util.ToastUtils;
 import com.happyfi.publicactivex.util.UrlUtil;
 
 import org.json.JSONObject;
@@ -90,6 +92,11 @@ public class TaoBaoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        float i = getResources().getDisplayMetrics().density;
+        int l = getResources().getDisplayMetrics().densityDpi;
+        int w = getResources().getDisplayMetrics().widthPixels;
+        int h = getResources().getDisplayMetrics().heightPixels;
+        new ToastUtils().showToastLong(String.valueOf(i));
         dicUserInfo = new DicUserInfo();
         addressArray = new ArrayList<>();
         orderArray = new ArrayList<>();
