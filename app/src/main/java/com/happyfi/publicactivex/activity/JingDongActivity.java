@@ -116,7 +116,6 @@ public class JingDongActivity extends BaseActivity {
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setSupportZoom(true);
         webView.getSettings().setBuiltInZoomControls(true);
-        cleanCookies(JingDongActivity.this);
         webView.loadUrl(UrlUtil.JDLoginUrl);
         webView.setWebViewClient(new WebViewClient() {
 
@@ -294,7 +293,6 @@ public class JingDongActivity extends BaseActivity {
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('s5-sum')[0].innerHTML,'lastOrder');");
         verify_progress_id.setProgress(100);
         rate_info_id.setText("100%");
-        cleanCookies(JingDongActivity.this);
     }
 
 
@@ -400,13 +398,4 @@ public class JingDongActivity extends BaseActivity {
         super.setLeftBack();
     }
 
-    /**
-     * 同步一下cookie
-     */
-    public  void cleanCookies(Context context) {
-        CookieSyncManager.createInstance(context);
-        CookieManager cookieManager = CookieManager.getInstance();
-        cookieManager.removeSessionCookie();//移除
-        CookieSyncManager.getInstance().sync();
-    }
 }
