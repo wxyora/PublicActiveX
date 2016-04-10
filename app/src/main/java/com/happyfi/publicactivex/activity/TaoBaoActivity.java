@@ -90,10 +90,6 @@ public class TaoBaoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         float i = getResources().getDisplayMetrics().density;
-        int l = getResources().getDisplayMetrics().densityDpi;
-        int w = getResources().getDisplayMetrics().widthPixels;
-        int h = getResources().getDisplayMetrics().heightPixels;
-        new ToastUtils().showToastLong(String.valueOf(i));
         dicUserInfo = new DicUserInfo();
         addressArray = new ArrayList<>();
         orderArray = new ArrayList<>();
