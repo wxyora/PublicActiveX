@@ -36,8 +36,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
 
     public void netWorkError() {
-       // progressDialog.dismiss();
-       // HFToast.showTips(this, mResources.getString(R.string.net_work_error));
+        // progressDialog.dismiss();
+        // HFToast.showTips(this, mResources.getString(R.string.net_work_error));
     }
 
     private void initActionBar() {

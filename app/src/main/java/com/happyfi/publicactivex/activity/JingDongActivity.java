@@ -1,19 +1,13 @@
 package com.happyfi.publicactivex.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.view.View;
-import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -33,7 +27,6 @@ import org.xutils.view.annotation.ViewInject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -284,7 +277,7 @@ public class JingDongActivity extends BaseActivity {
         verify_progress_id.setProgress(90);
         rate_info_id.setText("90%");
         overFlag5 ++;
-        webView.loadUrl(UrlUtil.JDLoginUrl + orderArray.get(orderArray.size()-1).getOrderId().replace("amp;", ""));
+        webView.loadUrl(UrlUtil.JDLoginUrl + orderArray.get(orderArray.size() - 1).getOrderId().replace("amp;", ""));
     }
 
 

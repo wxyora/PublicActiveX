@@ -13,7 +13,6 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.happyfi.publicactivex.R;
@@ -33,8 +32,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -156,7 +153,7 @@ public class TaoBaoActivity extends BaseActivity {
                 //获取等级
                 if (view.getUrl().contains(UrlUtil.TBHostUrl.substring(8,UrlUtil.TBHostUrl.length()))) {
                     if(newProgress==100&&overFlag1 ==0){
-                       new Thread(new Runnable(){
+                        new Thread(new Runnable(){
                             public void run(){
                                 try {
                                     Thread.sleep(1000);
