@@ -1,15 +1,19 @@
 package com.happyfi.publicactivex.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -29,6 +33,7 @@ import org.xutils.view.annotation.ViewInject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -47,6 +52,7 @@ public class JingDongActivity extends BaseActivity {
 
     @ViewInject(R.id.rate_info_id)
     private TextView rate_info_id;
+
 
     private int overFlag1 = 0;
     private int overFlag2 = 0;
@@ -100,7 +106,7 @@ public class JingDongActivity extends BaseActivity {
         orderArray = new ArrayList<>();
         loadingDialog = new LoadingDialog(JingDongActivity.this);
         loadingDialog.setCanceledOnTouchOutside(false);
-        loadingDialog.show();
+        //loadingDialog.show();
         webView.getSettings().setJavaScriptEnabled(true);
         webView.addJavascriptInterface(new InJavaScriptLocalObj(), "local_obj");
         webView.getSettings().setSupportZoom(true);
@@ -110,8 +116,8 @@ public class JingDongActivity extends BaseActivity {
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setSupportZoom(true);
         webView.getSettings().setBuiltInZoomControls(true);
+        cleanCookies(JingDongActivity.this);
         webView.loadUrl(UrlUtil.JDLoginUrl);
-
         webView.setWebViewClient(new WebViewClient() {
 
             @Override
@@ -131,7 +137,7 @@ public class JingDongActivity extends BaseActivity {
 
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if (view.getUrl().contains(UrlUtil.JDLoginUrl.substring(8, UrlUtil.JDLoginUrl.length()))) {
+                if (view.getUrl().contains(UrlUtil.JDHostUrl.substring(8, UrlUtil.JDHostUrl.length()))) {
                     //view.setVisibility(View.INVISIBLE);
                     //ll_progress_id.setVisibility(View.VISIBLE);
                     if (newProgress == 100&&overFlag1==0) {
@@ -162,7 +168,7 @@ public class JingDongActivity extends BaseActivity {
                                 Message msg = new Message();
                                 msg.what = 2;
                                 // mHandler.sendMessage(msg); //告诉主线程执行任务
-                                mHandler.sendMessageDelayed(msg, 1000);
+                                mHandler.sendMessageDelayed(msg, 2000);
                             }
                         }).start();
                         overFlag2++;
@@ -175,7 +181,7 @@ public class JingDongActivity extends BaseActivity {
                         new Thread(new Runnable() {
                             public void run() {
                                 try {
-                                    Thread.sleep(1000);
+                                    Thread.sleep(3000);
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
@@ -204,7 +210,7 @@ public class JingDongActivity extends BaseActivity {
                             }
                         }).start();
                         overFlag4++;
-                        }
+                    }
 
                     if(newProgress == 100&&overFlag5==1) {
                         new Thread(new Runnable() {
@@ -288,6 +294,7 @@ public class JingDongActivity extends BaseActivity {
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('s5-sum')[0].innerHTML,'lastOrder');");
         verify_progress_id.setProgress(100);
         rate_info_id.setText("100%");
+        cleanCookies(JingDongActivity.this);
     }
 
 
@@ -386,5 +393,20 @@ public class JingDongActivity extends BaseActivity {
             }).start();
             finish();
         }
+    }
+
+    @Override
+    public void setLeftBack() {
+        super.setLeftBack();
+    }
+
+    /**
+     * 同步一下cookie
+     */
+    public  void cleanCookies(Context context) {
+        CookieSyncManager.createInstance(context);
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.removeSessionCookie();//移除
+        CookieSyncManager.getInstance().sync();
     }
 }
