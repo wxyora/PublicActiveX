@@ -14,9 +14,6 @@ import com.happyfi.publicactivex.R;
 
 import org.xutils.x;
 
-/**
- * Created by wyouflf on 15/11/4.
- */
 public abstract class BaseActivity extends AppCompatActivity {
 
     protected Resources mResources;

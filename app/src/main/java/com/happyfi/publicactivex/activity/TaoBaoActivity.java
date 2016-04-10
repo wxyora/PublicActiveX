@@ -24,6 +24,7 @@ import com.happyfi.publicactivex.util.LoadingDialog;
 import com.happyfi.publicactivex.util.ToastUtils;
 import com.happyfi.publicactivex.util.UrlUtil;
 
+import org.androidannotations.annotations.EActivity;
 import org.json.JSONObject;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
