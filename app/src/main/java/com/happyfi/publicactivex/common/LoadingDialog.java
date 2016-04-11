@@ -1,4 +1,4 @@
-package com.happyfi.publicactivex.util;
+package com.happyfi.publicactivex.common;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
@@ -9,6 +9,7 @@ import android.os.Message;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
+
 
 import com.happyfi.publicactivex.R;
 

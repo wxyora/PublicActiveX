@@ -1,0 +1,123 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/happyfi_bg_gray">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/happyfi_activity_vertical_margin"
+        android:paddingLeft="@dimen/happyfi_activity_horizontal_margin"
+        android:paddingRight="@dimen/happyfi_activity_horizontal_margin"
+        android:paddingTop="@dimen/happyfi_activity_vertical_margin">
+
+        <EditText
+            android:id="@+id/login_name_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:hint="@string/happyfi_login_name"
+            android:singleLine="true"
+            android:textSize="@dimen/happyfi_font_common" />
+
+        <EditText
+            android:id="@+id/login_pw_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dip"
+            android:hint="@string/happyfi_login_pw"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:textSize="@dimen/happyfi_font_common" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/happyfi_divider"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/login_verify_code_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="请输入右图的验证码"
+                android:singleLine="true"
+                android:textSize="@dimen/happyfi_font_common" />
+
+            <ImageView
+                android:id="@+id/login_verify_code_source"
+                android:layout_width="100dp"
+                android:layout_height="50dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/happyfi_standardX2"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/login_login_btn"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:background="@drawable/happyfi_button_full_gray"
+                android:text="@string/happyfi_login_login_btn"
+                android:textColor="@color/happyfi_white"
+                android:textSize="@dimen/happyfi_font_larger" />
+
+            <Button
+                android:id="@+id/login_register_btn"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="@dimen/happyfi_activity_vertical_margin"
+                android:background="@drawable/happyfi_button_full"
+                android:text="@string/happyfi_login_register_btn"
+                android:textColor="@color/happyfi_white"
+                android:textSize="@dimen/happyfi_font_larger" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/happyfi_happyfi"
+                android:textColor="@color/happyfi_text_declare"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="@string/happyfi_tecnology"
+                android:textColor="@color/happyfi_text_declare"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/happyfi_net_address"
+            android:textColor="@color/happyfi_text_declare"
+            android:textSize="12sp" />
+    </LinearLayout>
+</RelativeLayout>

@@ -61,10 +61,11 @@
             android:layout_weight="0.07">
 
             <TextView
+                android:id="@+id/xinyongbaogao_shouquan"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="......"
+                android:text="信用报告授权"
                 android:gravity="center_vertical" />
         </LinearLayout>
         <View  android:layout_height="2px"

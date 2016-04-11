@@ -13,18 +13,14 @@
 
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".activity.GrantActivity_"
+            android:name=".activity.GrantActivityTemp"
             android:label="@string/title_activity_index" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.VerifySuccessActivity"
-            android:label="@string/title_activity_verify_success"
-            android:theme="@style/AppTheme" >
-        </activity>
+
         <activity
             android:name=".activity.TaoBaoActivity"
             android:configChanges="orientation|screenSize"
@@ -35,6 +31,47 @@
             android:name=".activity.JingDongActivity"
             android:configChanges="orientation|screenSize">
         </activity>
+
+
+        <activity
+            android:name="com.happyfi.publicactivex.activity.LoginActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="com.happyfi.publicactivex.activity.RegUserInfoActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.RegUserDetailActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.AnswerQActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.LoginToAnswerActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.GetPbocPreCheckActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.ViewPbocContentActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.CompleteQuestionActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.CompleteSubmitActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.AskHavedIdentityVer"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.NotHaveVerificationPromptActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".activity.HasReportPromptActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".common.StartPbocActivity"
+            android:screenOrientation="portrait"></activity>
 
     </application>
 

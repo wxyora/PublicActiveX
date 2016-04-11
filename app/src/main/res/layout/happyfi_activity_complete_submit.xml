@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/happyfi_activity_horizontal_margin"
+    android:paddingRight="@dimen/happyfi_activity_horizontal_margin"
+    android:paddingTop="@dimen/happyfi_activity_vertical_margin"
+    android:paddingBottom="@dimen/happyfi_activity_vertical_margin"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context="com.happyfi.allinfi.Activity.CompleteSubmitActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/happyfi_step_3"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/happyfi_standardX3"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/happyfi_duigou"
+            android:layout_marginRight="@dimen/happyfi_activity_vertical_margin"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/happyfi_font_larger"
+            android:text="@string/happyfi_submit_success"/>
+   </LinearLayout>
+
+    <Button
+        android:id="@+id/secure_check"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/happyfi_standardX2"
+        android:text="@string/happyfi_next_verify_safe"
+        android:textSize="@dimen/happyfi_font_larger"
+        android:background="@drawable/happyfi_button_full"
+        android:textColor="@color/happyfi_white"/>
+
+</LinearLayout>

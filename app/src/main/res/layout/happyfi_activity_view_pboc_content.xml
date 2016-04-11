@@ -1,0 +1,28 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/happyfi_white"
+    android:orientation="vertical"
+    tools:context="com.happyfi.allinfi.Activity.ViewPbocContentActivity">
+
+    <WebView
+        android:id="@+id/pboc_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/submit_hf_bt"
+        android:layout_marginTop="@dimen/happyfi_divider"
+        android:layout_marginLeft="@dimen/happyfi_activity_horizontal_margin"
+        android:layout_marginRight="@dimen/happyfi_activity_horizontal_margin"
+        android:layout_marginBottom="@dimen/happyfi_divider"
+        android:textSize="@dimen/happyfi_font_larger"
+        android:text="@string/happyfi_upload_service"
+        android:background="@drawable/happyfi_button_full"
+        android:textColor="@color/happyfi_white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

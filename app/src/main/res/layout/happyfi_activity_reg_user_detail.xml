@@ -1,0 +1,190 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/happyfi_activity_vertical_margin"
+    android:paddingLeft="@dimen/happyfi_activity_horizontal_margin"
+    android:paddingRight="@dimen/happyfi_activity_horizontal_margin"
+    android:paddingTop="@dimen/happyfi_activity_vertical_margin"
+    tools:context="com.happyfi.allinfi.Activity.RegUserDetailActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/happyfi_step_2" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/happyfi_divider"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/happyfi_pading"
+            android:gravity="right"
+            android:text="@string/happyfi_reg_login_name"
+            android:textSize="@dimen/happyfi_font_middle" />
+
+        <EditText
+            android:id="@+id/reg_detail_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/happyfi_login_name_hint"
+            android:singleLine="true"
+            android:textColor="@color/happyfi_black"
+            android:textColorHint="@color/happyfi_hint_color"
+            android:textSize="@dimen/happyfi_font_middle" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/happyfi_divider"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/happyfi_pading"
+            android:gravity="right"
+            android:text="@string/happyfi_pw"
+            android:textSize="@dimen/happyfi_font_middle" />
+
+        <EditText
+            android:id="@+id/reg_detail_user_pw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/happyfi_login_password_hint"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:textColor="@color/happyfi_black"
+            android:textColorHint="@color/happyfi_hint_color"
+            android:textSize="@dimen/happyfi_font_middle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/happyfi_divider"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/happyfi_pading"
+            android:gravity="right"
+            android:text="@string/happyfi_reg_login_pw_again"
+            android:textSize="@dimen/happyfi_font_middle" />
+
+        <EditText
+            android:id="@+id/reg_detail_user_pw_again"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="textPassword"
+            android:singleLine="true"
+            android:textSize="@dimen/happyfi_font_middle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/happyfi_divider"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/happyfi_pading"
+            android:gravity="right"
+            android:text="@string/happyfi_reg_mail"
+            android:textSize="@dimen/happyfi_font_middle" />
+
+        <EditText
+            android:id="@+id/reg_detail_user_mail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:textSize="@dimen/happyfi_font_middle" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/happyfi_divider"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/happyfi_pading"
+            android:gravity="right"
+            android:text="@string/happyfi_reg_mobile_no"
+            android:textSize="@dimen/happyfi_font_middle" />
+
+        <EditText
+            android:id="@+id/reg_detail_user_mobile_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:textSize="@dimen/happyfi_font_middle"
+            android:maxLength="11"/>
+
+        <Button
+            android:id="@+id/reg_get_mobile_code"
+            android:layout_width="100dp"
+            android:layout_height="@dimen/happyfi_little_button_heigh"
+            android:background="@drawable/happyfi_button_full_gray"
+            android:text="@string/happyfi_reg_get_active_code"
+            android:textColor="@color/happyfi_white" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/happyfi_divider"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/happyfi_pading"
+            android:gravity="right"
+            android:text="@string/happyfi_reg_mobile_verify_code"
+            android:textSize="@dimen/happyfi_font_middle" />
+
+        <EditText
+            android:id="@+id/reg_detail_user_mobile_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:textSize="@dimen/happyfi_font_middle" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/submit_all_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/happyfi_standardX2"
+        android:background="@drawable/happyfi_button_full"
+        android:text="@string/happyfi_reg_submit"
+        android:textColor="@color/happyfi_white"
+        android:textSize="@dimen/happyfi_font_larger" />
+
+
+</LinearLayout>

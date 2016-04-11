@@ -1,6 +1,5 @@
 package com.happyfi.publicactivex.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,18 +15,16 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.happyfi.publicactivex.R;
+import com.happyfi.publicactivex.common.BaseActivity;
 import com.happyfi.publicactivex.model.DicAddress;
 import com.happyfi.publicactivex.model.DicOrder;
 import com.happyfi.publicactivex.model.DicUserInfo;
 import com.happyfi.publicactivex.util.ChangeCharset;
-import com.happyfi.publicactivex.util.LoadingDialog;
-import com.happyfi.publicactivex.util.ToastUtils;
+import com.happyfi.publicactivex.common.LoadingDialog;
+import com.happyfi.publicactivex.util.Constants;
 import com.happyfi.publicactivex.util.UrlUtil;
 
-import org.androidannotations.annotations.EActivity;
 import org.json.JSONObject;
-import org.xutils.view.annotation.ContentView;
-import org.xutils.view.annotation.ViewInject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -36,20 +33,15 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@ContentView(R.layout.activity_taobao)
 public class TaoBaoActivity extends BaseActivity {
 
-    @ViewInject(R.id.taobao_web_view)
-    private WebView webView;
+    WebView webView;
 
-    @ViewInject(R.id.verify_progress_id)
-    private ProgressBar verify_progress_id;
+    ProgressBar verify_progress_id;
 
-    @ViewInject(R.id.ll_progress_id)
-    private LinearLayout ll_progress_id;
+    LinearLayout ll_progress_id;
 
-    @ViewInject(R.id.rate_info_id)
-    private TextView rate_info_id;
+    TextView rate_info_id;
 
     private int overFlag1 = 0;
     private int overFlag2 = 0;
@@ -90,6 +82,12 @@ public class TaoBaoActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_taobao);
+        webView = (WebView) findViewById(R.id.taobao_web_view);
+        verify_progress_id = (ProgressBar) findViewById(R.id.verify_progress_id);
+        ll_progress_id = (LinearLayout) findViewById(R.id.ll_progress_id);
+        rate_info_id = (TextView) findViewById(R.id.rate_info_id);
+
         float i = getResources().getDisplayMetrics().density;
         dicUserInfo = new DicUserInfo();
         addressArray = new ArrayList<>();
@@ -107,7 +105,7 @@ public class TaoBaoActivity extends BaseActivity {
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setSupportZoom(true);
         webView.getSettings().setBuiltInZoomControls(true);
-        webView.loadUrl(UrlUtil.TBLoginUrl);
+        webView.loadUrl(Constants.TBLoginUrl);
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -142,13 +140,13 @@ public class TaoBaoActivity extends BaseActivity {
 
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if (view.getUrl().contains(UrlUtil.TBLoginUrl.substring(8,UrlUtil.TBLoginUrl.length()))) {
+                if (view.getUrl().contains(Constants.TBLoginUrl.substring(8,Constants.TBLoginUrl.length()))) {
                     if(newProgress==100){
                         loadingDialog.dismiss();
                     }
                 }
                 //获取等级
-                if (view.getUrl().contains(UrlUtil.TBHostUrl.substring(8,UrlUtil.TBHostUrl.length()))) {
+                if (view.getUrl().contains(Constants.TBHostUrl.substring(8,Constants.TBHostUrl.length()))) {
                     if(newProgress==100&&overFlag1 ==0){
                         new Thread(new Runnable(){
                             public void run(){
@@ -166,7 +164,7 @@ public class TaoBaoActivity extends BaseActivity {
                     }
                 }
                 //获取收获地址
-                if (view.getUrl().contains(UrlUtil.TBAddressUrl.substring(8,UrlUtil.TBAddressUrl.length()))) {
+                if (view.getUrl().contains(Constants.TBAddressUrl.substring(8,Constants.TBAddressUrl.length()))) {
                     if(newProgress==100&&overFlag2 ==0) {
                         new Thread(new Runnable() {
                             public void run() {
@@ -185,7 +183,7 @@ public class TaoBaoActivity extends BaseActivity {
                 }
 
                 //获取订单列表
-                if (view.getUrl().contains(UrlUtil.TBOListUrl.substring(8, UrlUtil.TBOListUrl.length()))){
+                if (view.getUrl().contains(Constants.TBOListUrl.substring(8, Constants.TBOListUrl.length()))){
                     if(newProgress==100&&overFlag3 ==0) {
                         new Thread(new Runnable() {
                             public void run() {
@@ -203,7 +201,7 @@ public class TaoBaoActivity extends BaseActivity {
                     }
                 }
 
-                if(view.getUrl().contains(UrlUtil.TBDetailUrl.substring(8,UrlUtil.TBDetailUrl.length()))){
+                if(view.getUrl().contains(Constants.TBDetailUrl.substring(8,Constants.TBDetailUrl.length()))){
                     if(newProgress==100){
                         if(runFlag == 0){
                             new Thread(new Runnable(){
@@ -244,7 +242,7 @@ public class TaoBaoActivity extends BaseActivity {
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('user-nick')[0].innerHTML,'userLevel');");
         verify_progress_id.setProgress(30);
         rate_info_id.setText("30%");
-        webView.loadUrl(UrlUtil.TBAddressUrl);
+        webView.loadUrl(Constants.TBAddressUrl);
     }
 
     //获取收货地址
@@ -252,7 +250,7 @@ public class TaoBaoActivity extends BaseActivity {
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'addressList');");
         verify_progress_id.setProgress(60);
         rate_info_id.setText("60%");
-        webView.loadUrl(UrlUtil.TBOListUrl);
+        webView.loadUrl(Constants.TBOListUrl);
     }
 
     //获取订单列表
@@ -262,7 +260,7 @@ public class TaoBaoActivity extends BaseActivity {
         rate_info_id.setText("80%");
         while (1 == 1) {
             if (orderArray.size() > 0) {
-                webView.loadUrl(UrlUtil.TBDetailUrl + orderArray.get(0).getOrderId());
+                webView.loadUrl(Constants.TBDetailUrl + orderArray.get(0).getOrderId());
                 break;
             } else {
                 continue;
@@ -275,7 +273,7 @@ public class TaoBaoActivity extends BaseActivity {
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'firstOrder');");
         verify_progress_id.setProgress(90);
         rate_info_id.setText("90%");
-        webView.loadUrl(UrlUtil.TBDetailUrl + orderArray.get(orderArray.size() - 1).getOrderId());
+        webView.loadUrl(Constants.TBDetailUrl + orderArray.get(orderArray.size() - 1).getOrderId());
     }
 
     //获取最后一单详情
@@ -373,9 +371,9 @@ public class TaoBaoActivity extends BaseActivity {
             System.out.println(dicUserInfoJson);
             System.out.println("****************************************************");
             //根据接口返回数据进行路由
-            Intent i = new Intent(TaoBaoActivity.this, GrantActivity_.class);
+           /* Intent i = new Intent(TaoBaoActivity.this, GrantActivityTemp.class);
             i.putExtra("transFlag", "1");
-            startActivity(i);
+            startActivity(i);*/
             new Thread(new Runnable(){
                 public void run(){
                     Message msg = new Message();
@@ -396,13 +394,13 @@ public class TaoBaoActivity extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        webView.clearCache(true);
+       // webView.clearCache(true);
     }
 
 
     @Override
     public void setLeftBack() {
         super.setLeftBack();
-        cleanCache();
+       // cleanCache();
     }
 }

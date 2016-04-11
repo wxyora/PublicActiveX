@@ -22,4 +22,16 @@
     <color name="line_gray">#e5e5e5</color>
     <color name="text_black">#333333</color>
     <color name="text_blue">#0099fc</color>
+
+    <color name="happyfi_black_overlay">#66000000</color>
+    <color name="happyfi_gray_blue">#c6d3db</color>
+    <color name="happyfi_white">#FFFFFF</color>
+    <color name="happyfi_black">#000000</color>
+    <color name="happyfi_orange">#ff7400</color>
+    <color name="happyfi_hint_color">#B3B3B3</color>
+    <color name="happyfi_text_gray1">#999999</color>
+    <color name="happyfi_bg_gray">#f6f6f6</color>
+    <color name="happyfi_text_gray2">#6e7a8c</color>
+    <color name="happyfi_bg_blue">#00a7ea</color>
+    <color name="happyfi_text_declare">#bbbbbb</color>
 </resources>

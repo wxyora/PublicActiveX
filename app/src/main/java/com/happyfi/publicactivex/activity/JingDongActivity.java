@@ -1,6 +1,5 @@
 package com.happyfi.publicactivex.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,16 +14,16 @@ import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
 import com.happyfi.publicactivex.R;
+import com.happyfi.publicactivex.common.BaseActivity;
 import com.happyfi.publicactivex.model.DicAddress;
 import com.happyfi.publicactivex.model.DicOrder;
 import com.happyfi.publicactivex.model.DicUserInfo;
 import com.happyfi.publicactivex.util.ChangeCharset;
-import com.happyfi.publicactivex.util.LoadingDialog;
+import com.happyfi.publicactivex.common.LoadingDialog;
+import com.happyfi.publicactivex.util.Constants;
 import com.happyfi.publicactivex.util.UrlUtil;
 
 import org.json.JSONObject;
-import org.xutils.view.annotation.ContentView;
-import org.xutils.view.annotation.ViewInject;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -33,21 +32,12 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@ContentView(R.layout.activity_jing_dong)
 public class JingDongActivity extends BaseActivity {
 
-    @ViewInject(R.id.jingdong_web_view)
-    private WebView webView;
-    @ViewInject(R.id.verify_progress_id)
-    private ProgressBar verify_progress_id;
-
-    @ViewInject(R.id.ll_progress_id)
-    private LinearLayout ll_progress_id;
-
-    @ViewInject(R.id.rate_info_id)
-    private TextView rate_info_id;
-
-
+    WebView webView;
+    ProgressBar verify_progress_id;
+    LinearLayout ll_progress_id;
+    TextView rate_info_id;
     private int overFlag1 = 0;
     private int overFlag2 = 0;
     private int overFlag3 = 0;
@@ -95,6 +85,19 @@ public class JingDongActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_jing_dong);
+
+
+
+
+        webView = (WebView) findViewById(R.id.jingdong_web_view);
+        verify_progress_id = (ProgressBar) findViewById(R.id.verify_progress_id);
+        ll_progress_id = (LinearLayout) findViewById(R.id.ll_progress_id);
+        rate_info_id = (TextView) findViewById(R.id.rate_info_id);
+
+
+
+
         dicUserInfo = new DicUserInfo();
         addressArray = new ArrayList<>();
         orderArray = new ArrayList<>();
@@ -110,7 +113,7 @@ public class JingDongActivity extends BaseActivity {
         webView.getSettings().setLoadWithOverviewMode(true);
         webView.getSettings().setSupportZoom(true);
         webView.getSettings().setBuiltInZoomControls(true);
-        webView.loadUrl(UrlUtil.JDLoginUrl);
+        webView.loadUrl(Constants.JDLoginUrl);
         webView.setWebViewClient(new WebViewClient() {
 
             @Override
@@ -130,7 +133,7 @@ public class JingDongActivity extends BaseActivity {
 
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if (view.getUrl().contains(UrlUtil.JDLoginUrl.substring(8, UrlUtil.JDLoginUrl.length()))) {
+                if (view.getUrl().contains(Constants.JDLoginUrl.substring(8, Constants.JDLoginUrl.length()))) {
                     view.setVisibility(View.INVISIBLE);
                     ll_progress_id.setVisibility(View.VISIBLE);
                     if (newProgress == 100&&overFlag1==0) {
@@ -141,7 +144,7 @@ public class JingDongActivity extends BaseActivity {
                                 webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('head-img')[0].innerHTML,'userLevel');");
                                 verify_progress_id.setProgress(30);
                                 rate_info_id.setText("30%");
-                                webView.loadUrl(UrlUtil.JDAddressUrl);
+                                webView.loadUrl(Constants.JDAddressUrl);
                             }
                         });
                         overFlag1++;
@@ -149,7 +152,7 @@ public class JingDongActivity extends BaseActivity {
 
                 }
 
-                if (view.getUrl().contains(UrlUtil.JDAddressUrl.substring(8, UrlUtil.JDAddressUrl.length()))) {
+                if (view.getUrl().contains(Constants.JDAddressUrl.substring(8, Constants.JDAddressUrl.length()))) {
                     if (newProgress == 100&&overFlag2==0) {
                         new Thread(new Runnable() {
                             public void run() {
@@ -169,7 +172,7 @@ public class JingDongActivity extends BaseActivity {
 
                 }
 
-                if (view.getUrl().contains(UrlUtil.JDOListUrl.substring(8, UrlUtil.JDOListUrl.length()))) {
+                if (view.getUrl().contains(Constants.JDOListUrl.substring(8, Constants.JDOListUrl.length()))) {
                     if (newProgress == 100&&overFlag3==0) {
                         new Thread(new Runnable() {
                             public void run() {
@@ -188,7 +191,7 @@ public class JingDongActivity extends BaseActivity {
 
                 }
 
-                if (view.getUrl().contains(UrlUtil.JDDetailUrl.substring(8, UrlUtil.JDDetailUrl.length()))) {
+                if (view.getUrl().contains(Constants.JDDetailUrl.substring(8, Constants.JDDetailUrl.length()))) {
                     if (newProgress == 100&&overFlag4==0) {
                         new Thread(new Runnable() {
                             public void run() {
@@ -255,7 +258,7 @@ public class JingDongActivity extends BaseActivity {
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('new-addr')[0].innerHTML,'addressList');");
         verify_progress_id.setProgress(60);
         rate_info_id.setText("60%");
-        webView.loadUrl(UrlUtil.JDOListUrl);
+        webView.loadUrl(Constants.JDOListUrl);
     }
 
     //获取订单列表
@@ -265,7 +268,7 @@ public class JingDongActivity extends BaseActivity {
         rate_info_id.setText("80%");
         while (1 == 1) {
             if (orderArray.size() > 0) {
-                webView.loadUrl(UrlUtil.JDLoginUrl + orderArray.get(0).getOrderId().replace("amp;",""));
+                webView.loadUrl(Constants.JDLoginUrl + orderArray.get(0).getOrderId().replace("amp;",""));
                 break;
             } else {
                 continue;
@@ -278,7 +281,7 @@ public class JingDongActivity extends BaseActivity {
         verify_progress_id.setProgress(90);
         rate_info_id.setText("90%");
         overFlag5 ++;
-        webView.loadUrl(UrlUtil.JDLoginUrl + orderArray.get(orderArray.size() - 1).getOrderId().replace("amp;", ""));
+        webView.loadUrl(Constants.JDLoginUrl + orderArray.get(orderArray.size() - 1).getOrderId().replace("amp;", ""));
     }
 
 
@@ -373,9 +376,9 @@ public class JingDongActivity extends BaseActivity {
             System.out.println(dicUserInfoJson);
             System.out.println("****************************************************");
             //根据接口返回数据进行路由
-            Intent i = new Intent(JingDongActivity.this, GrantActivity_.class);
+           /* Intent i = new Intent(JingDongActivity.this, GrantActivityTemp.class);
             i.putExtra("transFlag", "2");
-            startActivity(i);
+            startActivity(i);*/
             new Thread(new Runnable(){
                 public void run(){
                     Message msg = new Message();

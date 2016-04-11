@@ -1,0 +1,73 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/happyfi_activity_vertical_margin"
+    android:paddingLeft="@dimen/happyfi_activity_horizontal_margin"
+    android:paddingRight="@dimen/happyfi_activity_horizontal_margin"
+    android:paddingTop="@dimen/happyfi_activity_vertical_margin"
+    tools:context="com.happyfi.allinfi.Activity.GetPbocPreCheckActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/happyfi_pading"
+            android:text="@string/happyfi_id_card_verify_code"
+            android:textSize="@dimen/happyfi_font_middle" />
+
+        <EditText
+            android:id="@+id/pre_checkcode"
+            android:layout_width="fill_parent"
+            android:layout_height="40dip"
+            android:layout_marginTop="10dip"
+            android:layout_weight="1"
+            android:singleLine="true"
+            android:text=""/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/happyfi_divider"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/happyfi_pading"
+            android:text="@string/happyfi_upload_mobile"
+            android:textSize="@dimen/happyfi_font_middle" />
+
+        <EditText
+            android:id="@+id/mobile_no_for_report"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:singleLine="true" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/submit_pboc_pre_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/happyfi_standardX2"
+        android:background="@drawable/happyfi_button_full"
+        android:text="@string/happyfi_reg_submit"
+        android:textColor="@color/happyfi_white"
+        android:textSize="@dimen/happyfi_font_larger" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/happyfi_pading"
+        android:text="@string/happyfi_id_verify_tip"
+        android:textSize="@dimen/happyfi_font_min" />
+
+</LinearLayout>

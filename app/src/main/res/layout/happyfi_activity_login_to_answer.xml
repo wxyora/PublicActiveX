@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/happyfi_activity_horizontal_margin"
+    android:paddingRight="@dimen/happyfi_activity_horizontal_margin"
+    android:paddingTop="@dimen/happyfi_activity_vertical_margin"
+    android:paddingBottom="@dimen/happyfi_activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="com.happyfi.allinfi.Activity.LoginToAnswerActivity">
+
+    <Button
+        android:id="@+id/ltoq_answer_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/happyfi_activity_horizontal_margin"
+        android:background="@drawable/happyfi_button_empty_middle"
+        android:textColor="@color/happyfi_orange"
+        android:textSize="@dimen/happyfi_font_larger"
+        android:text="首次或重新获取个人信用报告" />
+
+    <Button
+        android:id="@+id/ltoq_review_credit_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/happyfi_button_empty_middle"
+        android:textColor="@color/happyfi_orange"
+        android:textSize="@dimen/happyfi_font_larger"
+        android:layout_marginTop="@dimen/happyfi_standardX3"
+        android:text="我已收到人行身份验证码" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="请确认身份验证码在7天有效期内，过期请重新获取。"
+        android:textColor="@color/happyfi_text_gray1"
+        android:textSize="12sp"/>
+</LinearLayout>

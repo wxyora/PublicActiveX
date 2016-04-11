@@ -1,21 +1,71 @@
+
 package com.happyfi.publicactivex.util;
 
+import android.text.TextUtils;
+
 /**
- * Created by Acer-002 on 2016/3/24.
+ * Created by wanglijuan on 15/7/2.
  */
-public class UrlUtil {
+public enum UrlUtil {
 
-    public static String TBLoginUrl = "https://login.m.taobao.com/login.htm";
-    public static String TBHostUrl = "https://h5.m.taobao.com/mlapp/mytaobao.html";
-    public static String TBAddressUrl = "https://h5.m.taobao.com/mtb/address.html";
-    public static String TBOListUrl = "https://h5.m.taobao.com/mlapp/olist.html";
-    public static String TBDetailUrl = "https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId=";
+    SAVE_PBOC(UrlUtil.getServerFloderName() + "credit-reports"),
 
+    VERIFY_USER("/hfloan/verifyAccount");
 
-    public static String JDLoginUrl = "http://home.m.jd.com";
-    public static String JDHostUrl = "https://home.m.jd.com/myJd/home.action";
-    public static String JDAddressUrl = "http://home.m.jd.com/address/addressList.action";
-    public static String JDOListUrl = "http://home.m.jd.com/newAllOrders/newAllOrders.action";
-    public static String JDDetailUrl = "http://home.m.jd.com/newAllOrders/queryOrderDetailInfo.action?orderId=";
+    public static String HOST;
+    private String url;
 
+    UrlUtil(String url) {
+        this.url = url;
+    }
+
+    public String getUrl() {
+        return getHOST() + url;
+    }
+
+    public String getUrl(String host) {
+        if (!TextUtils.isEmpty(host)) {
+            return host + url;
+        }
+        return null;
+    }
+
+    public static String getHOST() {
+        if (Config.environment == Config.Environment.TEST) {
+            //HOST = "http://192.168.0.88:8088";
+            //HOST = "http://192.168.0.194";
+            //HOST = "http://192.168.1.194";
+            HOST = "http://220.248.117.178:8088";
+            //HOST = "http://192.168.0.151";
+        } else if (Config.environment == Config.Environment.PROD) {
+            HOST = "https://www.happyfi.com";
+        } else {
+            HOST = "https://www.happyfi.com";
+        }
+        return HOST;
+    }
+
+    public static String getH5FloderName() {
+        String h5FloderName;
+        if (Config.environment == Config.Environment.TEST) {
+            h5FloderName = "/app/";
+        } else if (Config.environment == Config.Environment.PROD) {
+            h5FloderName = "/thposapp/";
+        } else {
+            h5FloderName = "/thposapp/";
+        }
+        return h5FloderName;
+    }
+
+    public static String getServerFloderName() {
+        String serverFloderName;
+        if (Config.environment == Config.Environment.TEST) {
+            serverFloderName = "/csp/";
+        } else if (Config.environment == Config.Environment.PROD) {
+            serverFloderName = "/csp/";
+        } else {
+            serverFloderName = "/csp/";
+        }
+        return serverFloderName;
+    }
 }

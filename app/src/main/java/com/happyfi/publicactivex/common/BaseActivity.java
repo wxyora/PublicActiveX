@@ -1,4 +1,4 @@
-package com.happyfi.publicactivex.activity;
+package com.happyfi.publicactivex.common;
 
 import android.app.ProgressDialog;
 import android.content.res.Configuration;
@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.happyfi.publicactivex.R;
+import com.happyfi.publicactivex.util.ResourceUtil;
 
 import org.xutils.x;
 
@@ -92,6 +93,22 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
         });
     }
+
+    public void setLeftBack(final View.OnClickListener listener) {
+        View view = actionBar.getCustomView();
+        ImageView ivLeft = (ImageView) view.findViewById(ResourceUtil.getId(this, "iv_left"));
+        ivLeft.setVisibility(View.VISIBLE);
+        ivLeft.setImageResource(ResourceUtil.getDrawableId(this, "ic_back"));
+        ivLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (listener != null) {
+                    listener.onClick(v);
+                }
+            }
+        });
+    }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {

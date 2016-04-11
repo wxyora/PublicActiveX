@@ -8,4 +8,17 @@
     <dimen name="font_middle">16sp</dimen>
     <dimen name="font_common">14sp</dimen>
     <dimen name="font_min">12sp</dimen>
+
+    <dimen name="happyfi_activity_horizontal_margin">16dp</dimen>
+    <dimen name="happyfi_activity_vertical_margin">16dp</dimen>
+    <dimen name="happyfi_standardX2">32dp</dimen>
+    <dimen name="happyfi_standardX3">48dp</dimen>
+    <dimen name="happyfi_little_button_heigh">36dp</dimen>
+    <dimen name="happyfi_pading">6dp</dimen>
+    <dimen name="happyfi_divider">9dp</dimen>
+    <dimen name="happyfi_font_larger">18sp</dimen>
+    <dimen name="happyfi_font_middle">16sp</dimen>
+    <dimen name="happyfi_font_common">14sp</dimen>
+    <dimen name="happyfi_font_min">12sp</dimen>
+
 </resources>
