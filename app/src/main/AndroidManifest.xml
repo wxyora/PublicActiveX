@@ -8,13 +8,13 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
+        android:label="@string/happyfi_app_name"
         android:supportsRtl="true"
 
         android:theme="@style/AppTheme" >
         <activity
             android:name=".activity.GrantActivityTemp"
-            android:label="@string/title_activity_index" >
+            android:label="@string/happyfi_title_activity_index" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -24,7 +24,7 @@
         <activity
             android:name=".activity.TaoBaoActivity"
             android:configChanges="orientation|screenSize"
-            android:label="@string/title_activity_taobao"
+            android:label="@string/happyfi_title_activity_taobao"
             android:theme="@style/AppTheme" >
         </activity>
         <activity

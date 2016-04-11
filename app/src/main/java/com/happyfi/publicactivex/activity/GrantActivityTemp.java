@@ -26,7 +26,7 @@ public class GrantActivityTemp extends BaseActivity {
         setContentView(R.layout.activity_grant);
         taobao_shouquan = (TextView) findViewById(R.id.taobao_shouquan);
         jingdong_shouquan = (TextView) findViewById(R.id.jingdong_shouquan);
-        xinyongbaogao_shouquan = (TextView) findViewById(R.id.xinyongbaogao_shouquan);
+        xinyongbaogao_shouquan = (TextView) findViewById(R.id.xinyongbaoga_shouquan);
 
 
         String transFlag =  getIntent().getStringExtra("transFlag");

@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/colorPrimary">
+    android:background="@color/happyfi_colorPrimary">
 
     <ImageView
         android:id="@+id/iv_left"
@@ -22,8 +22,8 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:text=""
-        android:textColor="@color/white"
-        android:textSize="@dimen/font_larger" />
+        android:textColor="@color/happyfi_white"
+        android:textSize="@dimen/happyfi_font_larger" />
 
     <TextView
         android:id="@+id/tv_right_title"
@@ -33,8 +33,8 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="15dp"
         android:text=""
-        android:textColor="@color/white"
-        android:textSize="@dimen/font_middle"
+        android:textColor="@color/happyfi_white"
+        android:textSize="@dimen/happyfi_font_middle"
         android:visibility="gone" />
 
 </RelativeLayout>

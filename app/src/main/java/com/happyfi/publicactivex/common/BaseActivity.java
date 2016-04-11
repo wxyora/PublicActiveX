@@ -29,7 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         initTitle();
         mResources = getResources();
         progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage(mResources.getString(R.string.loading_data));
+        progressDialog.setMessage(mResources.getString(R.string.happyfi_loading_data));
     }
 
 
