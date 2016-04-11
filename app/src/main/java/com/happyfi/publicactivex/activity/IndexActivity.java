@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.happyfi.publicactivex.R;
+
+import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
@@ -17,8 +19,24 @@ public class IndexActivity extends BaseActivity {
     @ViewById(R.id.taobao_verify_id)
     public LinearLayout taobao_verify_id;
 
-    @ViewById(R.id.aaa)
-    public TextView aaa;
+    @ViewById(R.id.taobao_shouquan)
+    TextView taobao_shouquan;
+
+    @ViewById(R.id.jingdong_shouquan)
+    TextView jingdong_shouquan;
+
+
+    @AfterViews
+    public void setTextView() {
+        String transFlag =  getIntent().getStringExtra("transFlag");
+        if("1".equals(transFlag)){
+            taobao_shouquan.setText("淘宝授权成功");
+            taobao_shouquan.setTextColor(Color.GREEN);
+        }else if("2".equals(transFlag)){
+            jingdong_shouquan.setText("京东授权成功");
+            jingdong_shouquan.setTextColor(Color.GREEN);
+        }
+    }
 
     @Click(R.id.taobao_verify_id)
     public void TaoBaoOnClick(View view) {
@@ -33,11 +51,7 @@ public class IndexActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        String transFlag =  getIntent().getStringExtra("transFlag");
-        if("1".equals(transFlag)){
-            aaa.setText("淘宝授权成功");
-            aaa.setTextColor(Color.GREEN);
-        }
+
     }
 
     @Override

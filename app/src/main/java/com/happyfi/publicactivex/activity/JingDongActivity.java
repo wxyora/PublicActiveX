@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -129,9 +130,9 @@ public class JingDongActivity extends BaseActivity {
 
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if (view.getUrl().contains(UrlUtil.JDHostUrl.substring(8, UrlUtil.JDHostUrl.length()))) {
-                    //view.setVisibility(View.INVISIBLE);
-                    //ll_progress_id.setVisibility(View.VISIBLE);
+                if (view.getUrl().contains(UrlUtil.JDLoginUrl.substring(8, UrlUtil.JDLoginUrl.length()))) {
+                    view.setVisibility(View.INVISIBLE);
+                    ll_progress_id.setVisibility(View.VISIBLE);
                     if (newProgress == 100&&overFlag1==0) {
                         loadingDialog.dismiss();
                         runOnUiThread(new Runnable() {
@@ -372,8 +373,8 @@ public class JingDongActivity extends BaseActivity {
             System.out.println(dicUserInfoJson);
             System.out.println("****************************************************");
             //根据接口返回数据进行路由
-            Intent i = new Intent(JingDongActivity.this, IndexActivity.class);
-            i.putExtra("transFlag", "1");
+            Intent i = new Intent(JingDongActivity.this, IndexActivity_.class);
+            i.putExtra("transFlag", "2");
             startActivity(i);
             new Thread(new Runnable(){
                 public void run(){

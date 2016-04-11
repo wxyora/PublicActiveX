@@ -24,7 +24,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:id="@+id/aaa"
+                android:id="@+id/taobao_shouquan"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="淘宝账号授权"
                 android:gravity="center_vertical" />
@@ -42,6 +42,7 @@
             android:layout_weight="0.07">
 
             <TextView
+                android:id="@+id/jingdong_shouquan"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceLarge"
