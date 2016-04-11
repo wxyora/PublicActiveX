@@ -373,7 +373,7 @@ public class JingDongActivity extends BaseActivity {
             System.out.println(dicUserInfoJson);
             System.out.println("****************************************************");
             //根据接口返回数据进行路由
-            Intent i = new Intent(JingDongActivity.this, IndexActivity_.class);
+            Intent i = new Intent(JingDongActivity.this, GrantActivity_.class);
             i.putExtra("transFlag", "2");
             startActivity(i);
             new Thread(new Runnable(){

@@ -13,8 +13,8 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
-@EActivity(R.layout.activity_index)
-public class IndexActivity extends BaseActivity {
+@EActivity(R.layout.activity_grant)
+public class GrantActivity extends BaseActivity {
 
     @ViewById(R.id.taobao_verify_id)
     public LinearLayout taobao_verify_id;
@@ -40,12 +40,12 @@ public class IndexActivity extends BaseActivity {
 
     @Click(R.id.taobao_verify_id)
     public void TaoBaoOnClick(View view) {
-        startActivity(new Intent(IndexActivity.this, TaoBaoActivity.class));
+        startActivity(new Intent(GrantActivity.this, TaoBaoActivity.class));
     }
 
     @Click(R.id.jingdong_verify_id)
     public void JingDongOnClick(View view) {
-        startActivity(new Intent(IndexActivity.this,JingDongActivity.class));
+        startActivity(new Intent(GrantActivity.this,JingDongActivity.class));
     }
 
     @Override

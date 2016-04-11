@@ -13,7 +13,7 @@
 
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".activity.IndexActivity_"
+            android:name=".activity.GrantActivity_"
             android:label="@string/title_activity_index" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
