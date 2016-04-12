@@ -86,18 +86,10 @@ public class JingDongActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jing_dong);
-
-
-
-
         webView = (WebView) findViewById(R.id.jingdong_web_view);
         verify_progress_id = (ProgressBar) findViewById(R.id.verify_progress_id);
         ll_progress_id = (LinearLayout) findViewById(R.id.ll_progress_id);
         rate_info_id = (TextView) findViewById(R.id.rate_info_id);
-
-
-
-
         dicUserInfo = new DicUserInfo();
         addressArray = new ArrayList<>();
         orderArray = new ArrayList<>();
@@ -133,7 +125,7 @@ public class JingDongActivity extends BaseActivity {
 
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if (view.getUrl().contains(Constants.JDLoginUrl.substring(8, Constants.JDLoginUrl.length()))) {
+                if (view.getUrl().contains(Constants.JDHostUrl.substring(8, Constants.JDHostUrl.length()))) {
                     view.setVisibility(View.INVISIBLE);
                     ll_progress_id.setVisibility(View.VISIBLE);
                     if (newProgress == 100&&overFlag1==0) {

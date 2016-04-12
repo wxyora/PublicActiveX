@@ -22,7 +22,7 @@ public class Constants {
     public static String TBDetailUrl = "https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId=";
 
 
-    public static String JDLoginUrl = "https://home.m.jd.com";
+    public static String JDLoginUrl = "http://home.m.jd.com";
     public static String JDHostUrl = "https://home.m.jd.com/myJd/home.action";
     public static String JDAddressUrl = "http://home.m.jd.com/address/addressList.action";
     public static String JDOListUrl = "http://home.m.jd.com/newAllOrders/newAllOrders.action";
