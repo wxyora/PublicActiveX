@@ -448,7 +448,7 @@ public class TaoBaoActivity extends BaseActivity {
                 super.onSuccess(statusCode, headers, response);
                 try {
                     String code = response.getString("code");
-                    String message = response.getString("messsage");
+                    String message = response.getString("message");
                     if("1".equals(code)){
                         Log.d("message", message);
                         Message m = new Message();
