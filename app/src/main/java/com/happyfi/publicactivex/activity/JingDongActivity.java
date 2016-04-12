@@ -159,14 +159,8 @@ public class JingDongActivity extends BaseActivity {
                     if (newProgress == 100&&overFlag2==0) {
                         new Thread(new Runnable() {
                             public void run() {
-                               /* try {
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }*/
                                 Message msg = new Message();
                                 msg.what = 2;
-                                // mHandler.sendMessage(msg); //告诉主线程执行任务
                                 mHandler.sendMessageDelayed(msg, 2000);
                             }
                         }).start();
