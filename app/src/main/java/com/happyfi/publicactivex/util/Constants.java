@@ -21,7 +21,7 @@ public class Constants {
     public static String TBOListUrl = "https://h5.m.taobao.com/mlapp/olist.html";
     public static String TBDetailUrl = "https://h5.m.taobao.com/mlapp/odetail.html?bizOrderId=";
 
-//taobao,jingdong,contactlist,zxreport
+    //taobao,jingdong,contactlist,zxreport
 
     public static String JDLoginUrl = "http://home.m.jd.com";
     public static String JDHostUrl = "https://home.m.jd.com/myJd/home.action";
