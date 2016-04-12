@@ -3,26 +3,18 @@ package com.happyfi.publicactivex.util;
 
 import android.text.TextUtils;
 
-/**
- * Created by wanglijuan on 15/7/2.
- */
 public enum UrlUtil {
 
     SAVE_PBOC(UrlUtil.getServerFloderName() + "credit-reports"),
-
     VERIFY_USER("/hfloan/verifyAccount");
-
     public static String HOST;
     private String url;
-
     UrlUtil(String url) {
         this.url = url;
     }
-
     public String getUrl() {
         return getHOST() + url;
     }
-
     public String getUrl(String host) {
         if (!TextUtils.isEmpty(host)) {
             return host + url;
@@ -30,13 +22,21 @@ public enum UrlUtil {
         return null;
     }
 
+
+    public static String getSDKHOST() {
+        if (Config.environment == Config.Environment.TEST) {
+            HOST = "http://192.168.0.88:8088";
+        } else if (Config.environment == Config.Environment.PROD) {
+            HOST = "http://192.168.0.88:8088";
+        } else {
+            HOST = "https://www.happyfi.com";
+        }
+        return HOST;
+    }
+
     public static String getHOST() {
         if (Config.environment == Config.Environment.TEST) {
-            //HOST = "http://192.168.0.88:8088";
-            //HOST = "http://192.168.0.194";
-            //HOST = "http://192.168.1.194";
             HOST = "http://220.248.117.178:8088";
-            //HOST = "http://192.168.0.151";
         } else if (Config.environment == Config.Environment.PROD) {
             HOST = "https://www.happyfi.com";
         } else {

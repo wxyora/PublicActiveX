@@ -1,8 +1,12 @@
 package com.happyfi.publicactivex.activity;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -23,8 +27,14 @@ import com.happyfi.publicactivex.model.DicUserInfo;
 import com.happyfi.publicactivex.util.ChangeCharset;
 import com.happyfi.publicactivex.common.LoadingDialog;
 import com.happyfi.publicactivex.util.Constants;
+import com.happyfi.publicactivex.util.SharePrefUtil;
 import com.happyfi.publicactivex.util.UrlUtil;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -33,6 +43,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import cz.msebera.android.httpclient.Header;
 
 public class TaoBaoActivity extends BaseActivity {
 
@@ -78,7 +90,9 @@ public class TaoBaoActivity extends BaseActivity {
                 case 6:
                     cleanCache();
                     break;
-
+                case 7:
+                    findData7();
+                    break;
             }
         };
     };
@@ -259,16 +273,16 @@ public class TaoBaoActivity extends BaseActivity {
     //获取收货地址
     private void findData2(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'addressList');");
-        verify_progress_id.setProgress(60);
-        rate_info_id.setText("60%");
+        verify_progress_id.setProgress(50);
+        rate_info_id.setText("50%");
         webView.loadUrl(Constants.TBOListUrl);
     }
 
     //获取订单列表
     private void findData3(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('scroll-content')[0].innerHTML,'orderList');");
-        verify_progress_id.setProgress(80);
-        rate_info_id.setText("80%");
+        verify_progress_id.setProgress(70);
+        rate_info_id.setText("70%");
         while (1 == 1) {
             if (orderArray.size() > 0) {
                 webView.loadUrl(Constants.TBDetailUrl + orderArray.get(0).getOrderId());
@@ -282,21 +296,26 @@ public class TaoBaoActivity extends BaseActivity {
     //获取首单详情
     private void findData4(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'firstOrder');");
-        verify_progress_id.setProgress(90);
-        rate_info_id.setText("90%");
+        verify_progress_id.setProgress(80);
+        rate_info_id.setText("80%");
         webView.loadUrl(Constants.TBDetailUrl + orderArray.get(orderArray.size() - 1).getOrderId());
     }
 
     //获取最后一单详情
     private void findData5(){
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'lastOrder');");
-        verify_progress_id.setProgress(100);
-        rate_info_id.setText("100%");
+        verify_progress_id.setProgress(90);
+        rate_info_id.setText("90%");
     }
 
     //清理webview缓存
     private void cleanCache(){
         webView.clearCache(true);
+    }
+    private void findData7(){
+        verify_progress_id.setProgress(100);
+        rate_info_id.setText("100%");
+        finish();
     }
 
     final class InJavaScriptLocalObj {
@@ -377,17 +396,7 @@ public class TaoBaoActivity extends BaseActivity {
             dicUserInfo.setOrderArray(orderArray);
             JSONObject json = new  JSONObject();
             String dicUserInfoJson = JSON.toJSONString(dicUserInfo,true);
-            //调用网络接口上传数据
-            System.out.println("****************************************************");
-            System.out.println(dicUserInfoJson);
-            System.out.println("****************************************************");
-            //根据接口返回数据进行路由
-           /* ivLeft.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    finish();
-                }
-            });*/
+            uploadTBData("230112412412412", Constants.TAO_BAO, Constants.APP_NAME,Constants.PLAT_FORM, dicUserInfoJson);
             new Thread(new Runnable(){
                 public void run(){
                     Message msg = new Message();
@@ -395,7 +404,6 @@ public class TaoBaoActivity extends BaseActivity {
                     mHandler.sendMessage(msg); //告诉主线程执行任务
                 }
             }).start();
-            finish();
         }
     }
 
@@ -408,7 +416,6 @@ public class TaoBaoActivity extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        // webView.clearCache(true);
     }
 
 
@@ -423,5 +430,45 @@ public class TaoBaoActivity extends BaseActivity {
                 finish();
             }
         });
+    }
+
+    public void uploadTBData(String userId,String type,String appName,String source,String data) {
+        AsyncHttpClient client = new AsyncHttpClient();
+        String url = UrlUtil.getSDKHOST()+"/pp/sdkUpload";
+        RequestParams params = new RequestParams();
+        params.put("userId", userId);
+        params.put("type",type);
+        params.put("appName", appName);
+        params.put("source", source);
+        params.put("data",data);
+
+        client.post(url,params,new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                try {
+                    String code = response.getString("code");
+                    String message = response.getString("messsage");
+                    if("1".equals(code)){
+                        Log.d("message", message);
+                        Message m = new Message();
+                        m.what = 7;
+                        mHandler.sendMessage(m);
+                    }else{
+                        //弹出对话框提示上传失败，请尝试。
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+             /*   mProcessing.dismiss();
+                networkError();*/
+            }
+        });
+
     }
 }

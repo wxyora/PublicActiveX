@@ -3,6 +3,7 @@ package com.happyfi.publicactivex.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
@@ -16,14 +17,19 @@ import android.widget.TextView;
 import com.alibaba.fastjson.JSON;
 import com.happyfi.publicactivex.R;
 import com.happyfi.publicactivex.common.BaseActivity;
+import com.happyfi.publicactivex.common.LoadingDialog;
 import com.happyfi.publicactivex.model.DicAddress;
 import com.happyfi.publicactivex.model.DicOrder;
 import com.happyfi.publicactivex.model.DicUserInfo;
 import com.happyfi.publicactivex.util.ChangeCharset;
-import com.happyfi.publicactivex.common.LoadingDialog;
 import com.happyfi.publicactivex.util.Constants;
 import com.happyfi.publicactivex.util.UrlUtil;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -32,6 +38,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import cz.msebera.android.httpclient.Header;
 
 public class JingDongActivity extends BaseActivity {
 
@@ -54,7 +62,7 @@ public class JingDongActivity extends BaseActivity {
     private DicUserInfo dicUserInfo;
     private List<DicAddress> addressArray;
     private List<DicOrder> orderArray;
-    private Handler mHandler = new Handler(){
+    private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case 1:
@@ -75,9 +83,13 @@ public class JingDongActivity extends BaseActivity {
                 case 6:
                     //cleanCache();
                     break;
-
+                case 7:
+                    findData7();
+                    break;
             }
-        };
+        }
+
+        ;
     };
 
 
@@ -139,7 +151,7 @@ public class JingDongActivity extends BaseActivity {
 
                         }
                     });
-                    if (newProgress == 100&&overFlag1==0) {
+                    if (newProgress == 100 && overFlag1 == 0) {
                         loadingDialog.dismiss();
                         runOnUiThread(new Runnable() {
                             @Override
@@ -156,7 +168,7 @@ public class JingDongActivity extends BaseActivity {
                 }
 
                 if (view.getUrl().contains(Constants.JDAddressUrl.substring(8, Constants.JDAddressUrl.length()))) {
-                    if (newProgress == 100&&overFlag2==0) {
+                    if (newProgress == 100 && overFlag2 == 0) {
                         new Thread(new Runnable() {
                             public void run() {
                                 Message msg = new Message();
@@ -170,7 +182,7 @@ public class JingDongActivity extends BaseActivity {
                 }
 
                 if (view.getUrl().contains(Constants.JDOListUrl.substring(8, Constants.JDOListUrl.length()))) {
-                    if (newProgress == 100&&overFlag3==0) {
+                    if (newProgress == 100 && overFlag3 == 0) {
                         new Thread(new Runnable() {
                             public void run() {
                                 try {
@@ -189,7 +201,7 @@ public class JingDongActivity extends BaseActivity {
                 }
 
                 if (view.getUrl().contains(Constants.JDDetailUrl.substring(8, Constants.JDDetailUrl.length()))) {
-                    if (newProgress == 100&&overFlag4==0) {
+                    if (newProgress == 100 && overFlag4 == 0) {
                         new Thread(new Runnable() {
                             public void run() {
                                 try {
@@ -205,7 +217,7 @@ public class JingDongActivity extends BaseActivity {
                         overFlag4++;
                     }
 
-                    if(newProgress == 100&&overFlag5==1) {
+                    if (newProgress == 100 && overFlag5 == 1) {
                         new Thread(new Runnable() {
                             public void run() {
                                 try {
@@ -222,34 +234,10 @@ public class JingDongActivity extends BaseActivity {
                     }
                 }
 
-               /* if (view.getUrl().contains(UrlUtil.JDDetailUrl.substring(8, UrlUtil.JDDetailUrl.length()))) {
-                    if (newProgress == 100&&overFlag5==0) {
-                        new Thread(new Runnable() {
-                            public void run() {
-                                try {
-                                    Thread.sleep(2000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                Message msg = new Message();
-                                msg.what = 5;
-                                mHandler.sendMessage(msg); //告诉主线程执行任务
-                            }
-                        }).start();
-                        overFlag5++;
-                    }
-                }*/
+
             }
         });
     }
-   /* //获取用户等级
-    private void findData1(){
-        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('head-img')[0].innerHTML,'userLevel');");
-        verify_progress_id.setProgress(30);
-        rate_info_id.setText("30%");
-        //webView.loadUrl(UrlUtil.TaoBaoAddressUrl);
-    }*/
-
     //获取收货地址
     private void findData2() {
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('new-addr')[0].innerHTML,'addressList');");
@@ -259,34 +247,42 @@ public class JingDongActivity extends BaseActivity {
     }
 
     //获取订单列表
-    private void findData3(){
+    private void findData3() {
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementById('allOrders').innerHTML,'orderList');");
         verify_progress_id.setProgress(80);
         rate_info_id.setText("80%");
         while (1 == 1) {
             if (orderArray.size() > 0) {
-                webView.loadUrl(Constants.JDLoginUrl + orderArray.get(0).getOrderId().replace("amp;",""));
+                webView.loadUrl(Constants.JDLoginUrl + orderArray.get(0).getOrderId().replace("amp;", ""));
                 break;
             } else {
                 continue;
             }
         }
     }
+
     //获取首单详情
-    private void findData4(){
+    private void findData4() {
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('s5-sum')[0].innerHTML,'firstOrder');");
         verify_progress_id.setProgress(90);
         rate_info_id.setText("90%");
-        overFlag5 ++;
+        overFlag5++;
         webView.loadUrl(Constants.JDLoginUrl + orderArray.get(orderArray.size() - 1).getOrderId().replace("amp;", ""));
     }
 
 
     //获取最后一单详情
-    private void findData5(){
+    private void findData5() {
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('s5-sum')[0].innerHTML,'lastOrder');");
         verify_progress_id.setProgress(100);
         rate_info_id.setText("100%");
+    }
+
+
+    private void findData7(){
+        verify_progress_id.setProgress(100);
+        rate_info_id.setText("100%");
+        finish();
     }
 
 
@@ -334,9 +330,9 @@ public class JingDongActivity extends BaseActivity {
             String createTimeRegExp = "下单时间:(.*?)</p>";
             Matcher matcher = null;
             String createTime = "";
-            if(html.contains("没有该订单相关的信息")){
+            if (html.contains("没有该订单相关的信息")) {
                 createTime = "没有订单详情";
-            }else{
+            } else {
                 try {
                     matcher = Pattern.compile(createTimeRegExp).matcher(new ChangeCharset().toUTF_8(html));
                 } catch (UnsupportedEncodingException e) {
@@ -347,13 +343,13 @@ public class JingDongActivity extends BaseActivity {
                 }
             }
             orderArray.get(0).setCreateTime(createTime);
-        }else if (dataType.equals("lastOrder")) {
+        } else if (dataType.equals("lastOrder")) {
             String createTimeRegExp1 = "下单时间:(.*?)</p>";
             Matcher matcher = null;
             String createTime = "";
-            if(html.contains("没有该订单相关的信息")){
+            if (html.contains("没有该订单相关的信息")) {
                 createTime = "没有订单详情";
-            }else{
+            } else {
                 try {
                     matcher = Pattern.compile(createTimeRegExp1).matcher(new ChangeCharset().toUTF_8(html));
                 } catch (UnsupportedEncodingException e) {
@@ -363,21 +359,14 @@ public class JingDongActivity extends BaseActivity {
                     createTime = matcher.group(1);
                 }
             }
-            orderArray.get(orderArray.size()-1).setCreateTime(createTime);
+            orderArray.get(orderArray.size() - 1).setCreateTime(createTime);
             dicUserInfo.setAddressArray(addressArray);
             dicUserInfo.setOrderArray(orderArray);
-            JSONObject json = new  JSONObject();
+            JSONObject json = new JSONObject();
             String dicUserInfoJson = JSON.toJSONString(dicUserInfo, true);
-            //调用网络接口上传数据
-            System.out.println("****************************************************");
-            System.out.println(dicUserInfoJson);
-            System.out.println("****************************************************");
-            //根据接口返回数据进行路由
-           /* Intent i = new Intent(JingDongActivity.this, GrantActivityTemp.class);
-            i.putExtra("transFlag", "2");
-            startActivity(i);*/
-            new Thread(new Runnable(){
-                public void run(){
+            uploadTBData("230112412412412",Constants.JING_DONG, Constants.APP_NAME,Constants.PLAT_FORM, dicUserInfoJson);
+            new Thread(new Runnable() {
+                public void run() {
                     Message msg = new Message();
                     msg.what = 6;
                     mHandler.sendMessage(msg); //告诉主线程执行任务
@@ -400,4 +389,43 @@ public class JingDongActivity extends BaseActivity {
         });
     }
 
+    public void uploadTBData(String userId, String type, String appName, String source, String data) {
+        AsyncHttpClient client = new AsyncHttpClient(); // 创建异步请求的客户端对象
+        String url = UrlUtil.getSDKHOST()+"/pp/sdkUpload"; // 定义请求的地址
+        RequestParams params = new RequestParams();
+        params.put("userId", userId);
+        params.put("type", type);
+        params.put("appName", appName);
+        params.put("source", source);
+        params.put("data", data);
+
+        client.post(url, params, new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                try {
+                    String code = response.getString("code");
+                    String message = response.getString("messsage");
+                    if("1".equals(code)){
+                        Log.d("message", message);
+                        Message m = new Message();
+                        m.what = 7;
+                        mHandler.sendMessage(m);
+                    }else{
+                        //弹出对话框提示上传失败，请尝试。
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+             /*   mProcessing.dismiss();
+                networkError();*/
+            }
+        });
+
+    }
 }
