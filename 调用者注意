@@ -1,0 +1,2 @@
+1 登陆成功后存储SharePrefrence(userInfo) 字段userId 到本地
+2 数据采集成功后直接finish();

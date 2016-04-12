@@ -396,7 +396,7 @@ public class TaoBaoActivity extends BaseActivity {
             dicUserInfo.setOrderArray(orderArray);
             JSONObject json = new  JSONObject();
             String dicUserInfoJson = JSON.toJSONString(dicUserInfo,true);
-            uploadTBData("230112412412412", Constants.TAO_BAO, Constants.APP_NAME,Constants.PLAT_FORM, dicUserInfoJson);
+            uploadTBData(SharePrefUtil.getUserInfo(TaoBaoActivity.this).getUserId(), Constants.TAO_BAO, Constants.APP_NAME,Constants.PLAT_FORM, dicUserInfoJson);
             new Thread(new Runnable(){
                 public void run(){
                     Message msg = new Message();

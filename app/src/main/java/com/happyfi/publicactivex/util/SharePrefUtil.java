@@ -3,6 +3,8 @@ package com.happyfi.publicactivex.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.happyfi.publicactivex.model.UserInfo;
+
 
 /**
  * Created by waylon on 15/11/20.
@@ -10,17 +12,15 @@ import android.content.SharedPreferences;
 public class SharePrefUtil {
 
 
- /*   public static UserInfo getUserInfo(Context çontext){
-
+    public static UserInfo getUserInfo(Context çontext){
         SharedPreferences userInfoPreferences =çontext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         UserInfo userInfo = new UserInfo();
-        userInfo.setToken(userInfoPreferences.getString("token", null));
-        userInfo.setMobile(userInfoPreferences.getString("mobile",null));
+        userInfo.setUserId(userInfoPreferences.getString("userId", null));
         return userInfo;
     }
 
 
-    public static void updateUserInfo(Context çontext,UserInfo userInfo){
+   /* public static void updateUserInfo(Context çontext,UserInfo userInfo){
 
         SharedPreferences userInfoPreferences =çontext.getSharedPreferences("userInfo", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = userInfoPreferences.edit();

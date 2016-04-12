@@ -23,6 +23,7 @@ import com.happyfi.publicactivex.model.DicOrder;
 import com.happyfi.publicactivex.model.DicUserInfo;
 import com.happyfi.publicactivex.util.ChangeCharset;
 import com.happyfi.publicactivex.util.Constants;
+import com.happyfi.publicactivex.util.SharePrefUtil;
 import com.happyfi.publicactivex.util.UrlUtil;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -364,7 +365,7 @@ public class JingDongActivity extends BaseActivity {
             dicUserInfo.setOrderArray(orderArray);
             JSONObject json = new JSONObject();
             String dicUserInfoJson = JSON.toJSONString(dicUserInfo, true);
-            uploadTBData("230112412412412",Constants.JING_DONG, Constants.APP_NAME,Constants.PLAT_FORM, dicUserInfoJson);
+            uploadTBData(SharePrefUtil.getUserInfo(JingDongActivity.this).getUserId(),Constants.JING_DONG, Constants.APP_NAME,Constants.PLAT_FORM, dicUserInfoJson);
             new Thread(new Runnable() {
                 public void run() {
                     Message msg = new Message();
