@@ -84,6 +84,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void setLeftBack() {
         View view = actionBar.getCustomView();
         ImageView ivLeft = (ImageView) view.findViewById(R.id.iv_left);
+
         ivLeft.setVisibility(View.VISIBLE);
         ivLeft.setImageResource(R.drawable.ic_back);
         ivLeft.setOnClickListener(new View.OnClickListener() {

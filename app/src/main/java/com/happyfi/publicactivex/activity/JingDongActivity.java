@@ -8,6 +8,7 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -38,6 +39,10 @@ public class JingDongActivity extends BaseActivity {
     ProgressBar verify_progress_id;
     LinearLayout ll_progress_id;
     TextView rate_info_id;
+
+    View view;
+    ImageView ivLeft;
+
     private int overFlag1 = 0;
     private int overFlag2 = 0;
     private int overFlag3 = 0;
@@ -128,6 +133,12 @@ public class JingDongActivity extends BaseActivity {
                 if (view.getUrl().contains(Constants.JDHostUrl.substring(8, Constants.JDHostUrl.length()))) {
                     view.setVisibility(View.INVISIBLE);
                     ll_progress_id.setVisibility(View.VISIBLE);
+                    ivLeft.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
                     if (newProgress == 100&&overFlag1==0) {
                         loadingDialog.dismiss();
                         runOnUiThread(new Runnable() {
@@ -382,9 +393,17 @@ public class JingDongActivity extends BaseActivity {
         }
     }
 
-    @Override
     public void setLeftBack() {
-        super.setLeftBack();
+        view = actionBar.getCustomView();
+        ivLeft = (ImageView) view.findViewById(R.id.iv_left);
+        ivLeft.setVisibility(View.VISIBLE);
+        ivLeft.setImageResource(R.drawable.ic_back);
+        ivLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
 }

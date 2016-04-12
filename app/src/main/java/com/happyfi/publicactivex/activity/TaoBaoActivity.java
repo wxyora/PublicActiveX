@@ -9,6 +9,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -42,6 +43,9 @@ public class TaoBaoActivity extends BaseActivity {
     LinearLayout ll_progress_id;
 
     TextView rate_info_id;
+
+    View view;
+    ImageView ivLeft;
 
     private int overFlag1 = 0;
     private int overFlag2 = 0;
@@ -112,6 +116,12 @@ public class TaoBaoActivity extends BaseActivity {
                 if (url.contains("login.m.etao.com/j.sso")) {
                     view.setVisibility(View.INVISIBLE);
                     ll_progress_id.setVisibility(View.VISIBLE);
+                    ivLeft.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                        }
+                    });
                 }
                 if (!url.contains("taobao://h5.m.taobao.com/awp")) {
                     view.loadUrl(url);
@@ -147,6 +157,7 @@ public class TaoBaoActivity extends BaseActivity {
                 }
                 //获取等级
                 if (view.getUrl().contains(Constants.TBHostUrl.substring(8,Constants.TBHostUrl.length()))) {
+
                     if(newProgress==100&&overFlag1 ==0){
                         new Thread(new Runnable(){
                             public void run(){
@@ -371,9 +382,12 @@ public class TaoBaoActivity extends BaseActivity {
             System.out.println(dicUserInfoJson);
             System.out.println("****************************************************");
             //根据接口返回数据进行路由
-           /* Intent i = new Intent(TaoBaoActivity.this, GrantActivityTemp.class);
-            i.putExtra("transFlag", "1");
-            startActivity(i);*/
+           /* ivLeft.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    finish();
+                }
+            });*/
             new Thread(new Runnable(){
                 public void run(){
                     Message msg = new Message();
@@ -394,13 +408,20 @@ public class TaoBaoActivity extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
-       // webView.clearCache(true);
+        // webView.clearCache(true);
     }
 
 
-    @Override
     public void setLeftBack() {
-        super.setLeftBack();
-       // cleanCache();
+        view = actionBar.getCustomView();
+        ivLeft = (ImageView) view.findViewById(R.id.iv_left);
+        ivLeft.setVisibility(View.VISIBLE);
+        ivLeft.setImageResource(R.drawable.ic_back);
+        ivLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 }
