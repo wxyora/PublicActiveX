@@ -381,7 +381,7 @@ public class JingDongActivity extends BaseActivity {
         view = actionBar.getCustomView();
         ivLeft = (ImageView) view.findViewById(R.id.iv_left);
         ivLeft.setVisibility(View.VISIBLE);
-        ivLeft.setImageResource(R.drawable.ic_back);
+        ivLeft.setImageResource(R.drawable.happyfi_ic_back);
         ivLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

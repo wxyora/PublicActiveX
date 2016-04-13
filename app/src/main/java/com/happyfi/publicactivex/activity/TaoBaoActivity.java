@@ -1,11 +1,8 @@
 package com.happyfi.publicactivex.activity;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -423,7 +420,7 @@ public class TaoBaoActivity extends BaseActivity {
         view = actionBar.getCustomView();
         ivLeft = (ImageView) view.findViewById(R.id.iv_left);
         ivLeft.setVisibility(View.VISIBLE);
-        ivLeft.setImageResource(R.drawable.ic_back);
+        ivLeft.setImageResource(R.drawable.happyfi_ic_back);
         ivLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

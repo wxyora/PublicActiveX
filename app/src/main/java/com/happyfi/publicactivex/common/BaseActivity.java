@@ -5,7 +5,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,7 +15,7 @@ import com.happyfi.publicactivex.util.ResourceUtil;
 
 import org.xutils.x;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends ActionBarActivity {
 
     protected Resources mResources;
     protected ActionBar actionBar;
@@ -86,7 +86,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         ImageView ivLeft = (ImageView) view.findViewById(R.id.iv_left);
 
         ivLeft.setVisibility(View.VISIBLE);
-        ivLeft.setImageResource(R.drawable.ic_back);
+        ivLeft.setImageResource(R.drawable.happyfi_ic_back);
         ivLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +99,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         View view = actionBar.getCustomView();
         ImageView ivLeft = (ImageView) view.findViewById(ResourceUtil.getId(this, "iv_left"));
         ivLeft.setVisibility(View.VISIBLE);
-        ivLeft.setImageResource(ResourceUtil.getDrawableId(this, "ic_back"));
+        ivLeft.setImageResource(ResourceUtil.getDrawableId(this, "happyfi_ic_back"));
         ivLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
