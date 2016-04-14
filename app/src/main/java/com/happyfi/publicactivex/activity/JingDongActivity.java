@@ -5,6 +5,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -100,11 +102,14 @@ public class JingDongActivity extends BaseActivity {
         setLeftBack();
     }
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jing_dong);
         webView = (WebView) findViewById(R.id.jingdong_web_view);
+        removeAllCookie();
         verify_progress_id = (ProgressBar) findViewById(R.id.verify_progress_id);
         ll_progress_id = (LinearLayout) findViewById(R.id.ll_progress_id);
         rate_info_id = (TextView) findViewById(R.id.rate_info_id);
@@ -116,6 +121,7 @@ public class JingDongActivity extends BaseActivity {
         //loadingDialog.show();
         webView.getSettings().setJavaScriptEnabled(true);
         webView.addJavascriptInterface(new InJavaScriptLocalObj(), "local_obj");
+        //webView.getSettings().setAppCacheEnabled(false);
         webView.getSettings().setSupportZoom(true);
         webView.getSettings().setDomStorageEnabled(true);
         webView.requestFocus();
@@ -138,6 +144,9 @@ public class JingDongActivity extends BaseActivity {
 
             }
         });
+
+
+
 
         webView.setWebChromeClient(new WebChromeClient() {
 
@@ -239,6 +248,16 @@ public class JingDongActivity extends BaseActivity {
             }
         });
     }
+
+    //清除所有cookie
+    private void removeAllCookie(){
+        CookieSyncManager cookieSyncManager = CookieSyncManager.createInstance(webView.getContext());
+        CookieManager cookieManager = CookieManager.getInstance();
+        cookieManager.setAcceptCookie(true);
+        cookieManager.removeSessionCookie();
+        cookieManager.removeAllCookie();
+        cookieSyncManager.sync();
+    }
     //获取收货地址
     private void findData2() {
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('new-addr')[0].innerHTML,'addressList');");
@@ -277,6 +296,7 @@ public class JingDongActivity extends BaseActivity {
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('s5-sum')[0].innerHTML,'lastOrder');");
         verify_progress_id.setProgress(100);
         rate_info_id.setText("100%");
+       // webView.loadUrl("about:blank");
     }
 
 
