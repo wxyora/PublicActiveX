@@ -329,7 +329,7 @@ public class TaoBaoActivity extends BaseActivity {
             while (matcher.find()) {
                 String level = matcher.group(3);
                 dicUserInfo.setLevel(level.substring(6, level.length()));
-                dicUserInfo.setUserId("230125198802393894");
+                dicUserInfo.setUserId(SharePrefUtil.getUserInfo(TaoBaoActivity.this).getUserId());
             }
         } else if (dataType.equals("addressList")) {
             String optionRegExp = "<li data-username=\"(.*?)\" data-address=\"(.*?)\".*?<label name=\"phone-num\" style=\"float: right\">(.*?)</label>";
@@ -448,6 +448,7 @@ public class TaoBaoActivity extends BaseActivity {
                     String message = response.getString("message");
                     if("1".equals(code)){
                         Log.d("message", message);
+                        Log.d("d","淘宝认证成功");
                         Message m = new Message();
                         m.what = 7;
                         mHandler.sendMessage(m);

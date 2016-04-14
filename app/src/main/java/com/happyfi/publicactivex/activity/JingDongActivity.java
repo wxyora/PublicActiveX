@@ -301,7 +301,7 @@ public class JingDongActivity extends BaseActivity {
             while (matcher.find()) {
                 String level = matcher.group(1);
                 dicUserInfo.setLevel(level);
-                dicUserInfo.setUserId("230125198802393894");
+                dicUserInfo.setUserId(SharePrefUtil.getUserInfo(JingDongActivity.this).getUserId());
             }
         } else if (dataType.equals("addressList")) {
             String optionRegExp = "<span class=\"new-txt\">(.*?)</span>[\\s\\S]*?<span class=\"new-txt-rd2\">(.*?)</span>[\\s\\S]*?</span>(.*?)</span>";
@@ -409,6 +409,7 @@ public class JingDongActivity extends BaseActivity {
                     String message = response.getString("message");
                     if("1".equals(code)){
                         Log.d("message", message);
+                        Log.d("d","京东认证成功");
                         Message m = new Message();
                         m.what = 7;
                         mHandler.sendMessage(m);
