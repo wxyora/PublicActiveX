@@ -1,5 +1,7 @@
 package com.happyfi.publicactivex.activity;
 
+import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,7 +26,9 @@ import com.happyfi.publicactivex.model.DicUserInfo;
 import com.happyfi.publicactivex.util.ChangeCharset;
 import com.happyfi.publicactivex.common.LoadingDialog;
 import com.happyfi.publicactivex.util.Constants;
+import com.happyfi.publicactivex.util.ResourceUtil;
 import com.happyfi.publicactivex.util.SharePrefUtil;
+import com.happyfi.publicactivex.util.ToastUtils;
 import com.happyfi.publicactivex.util.UrlUtil;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -38,6 +42,8 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -55,10 +61,19 @@ public class TaoBaoActivity extends BaseActivity {
 
     View view;
     ImageView ivLeft;
+    private ProgressDialog mProcessing;
+
+
+    Timer mTimer;
+    private TimerTask mTimerTask;
+    private final int TIMEOUT = 20000;
+    private final int TIMEOUT_ERROR = 9527;
 
     private int overFlag1 = 0;
     private int overFlag2 = 0;
     private int overFlag3 = 0;
+
+    private Boolean over = false;
 
 
     private int runFlag = 0;
@@ -66,6 +81,7 @@ public class TaoBaoActivity extends BaseActivity {
     private DicUserInfo dicUserInfo;
     private List<DicAddress> addressArray;
     private List<DicOrder> orderArray;
+    private Timer timer;
     private Handler mHandler = new Handler(){
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -90,6 +106,10 @@ public class TaoBaoActivity extends BaseActivity {
                 case 7:
                     findData7();
                     break;
+                case 9527:
+                    dealError();
+                    break;
+
             }
         };
     };
@@ -98,6 +118,10 @@ public class TaoBaoActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_taobao);
+        mProcessing = new ProgressDialog(this);
+        mProcessing.setMessage(mResources.getString(ResourceUtil.getStringId(this, "happyfi_loading_data")));
+        mProcessing.setCancelable(false);
+        mProcessing.show();
         webView = (WebView) findViewById(R.id.taobao_web_view);
         verify_progress_id = (ProgressBar) findViewById(R.id.verify_progress_id);
         ll_progress_id = (LinearLayout) findViewById(R.id.ll_progress_id);
@@ -109,7 +133,7 @@ public class TaoBaoActivity extends BaseActivity {
         orderArray = new ArrayList<>();
         loadingDialog = new LoadingDialog(TaoBaoActivity.this);
         loadingDialog.setCanceledOnTouchOutside(false);
-        loadingDialog.show();
+        //loadingDialog.show();
         webView.getSettings().setJavaScriptEnabled(true);
         webView.addJavascriptInterface(new InJavaScriptLocalObj(), "local_obj");
         webView.getSettings().setSupportZoom(true);
@@ -155,6 +179,14 @@ public class TaoBaoActivity extends BaseActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
             }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                if(url.contains(Constants.TBHostUrl.substring(8, Constants.TBHostUrl.length()))){
+
+                }
+            }
         });
 
         webView.setWebChromeClient(new WebChromeClient(){
@@ -162,24 +194,68 @@ public class TaoBaoActivity extends BaseActivity {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 if (view.getUrl().contains(Constants.TBLoginUrl.substring(8,Constants.TBLoginUrl.length()))) {
+
+/*
+
+                    mTimer = new Timer();
+                    mTimerTask = new TimerTask() {
+                        @Override
+                        public void run() {
+                            System.out.println("======> mWebView.getProgress()="+ webView.getProgress());
+                            if (webView.getProgress() < 100) {
+                                Message msg = new Message();
+                                msg.what = TIMEOUT_ERROR;
+                                mHandler.sendMessage(msg);
+                                if (mTimer != null) {
+                                    mTimer.cancel();
+                                    mTimer.purge();
+                                }
+                            }
+                            if (webView.getProgress() == 100) {
+                                System.out.println("======> 未超时");
+                                if (mTimer != null) {
+                                    mTimer.cancel();
+                                    mTimer.purge();
+                                }
+                            }
+                        }
+                    };
+                    mTimer.schedule(mTimerTask, TIMEOUT, 1);*/
                     if(newProgress==100){
-                        loadingDialog.dismiss();
+                        mProcessing.dismiss();
                     }
                 }
                 //获取等级
                 if (view.getUrl().contains(Constants.TBHostUrl.substring(8,Constants.TBHostUrl.length()))) {
+                   /* mTimer = new Timer();
+                    mTimerTask = new TimerTask() {
+                        @Override
+                        public void run() {
+                            if(!over){
+                                    Message msg = new Message();
+                                    msg.what = TIMEOUT_ERROR;
+                                    mHandler.sendMessage(msg);
+                                    if (mTimer != null) {
+                                        mTimer.cancel();
+                                        mTimer.purge();
+                                    }
+                            }else{
+                                if (mTimer != null) {
+                                    mTimer.cancel();
+                                    mTimer.purge();
+                                }
+                            }
+                        }
+                    };
+                    mTimer.schedule(mTimerTask, TIMEOUT, 1);*/
 
                     if(newProgress==100&&overFlag1 ==0){
                         new Thread(new Runnable(){
                             public void run(){
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
+
                                 Message msg = new Message();
                                 msg.what = 1;
-                                mHandler.sendMessage(msg); //告诉主线程执行任务
+                                mHandler.sendMessageDelayed(msg,1000); //告诉主线程执行任务
                             }
                         }).start();
                         overFlag1 =1;
@@ -190,14 +266,10 @@ public class TaoBaoActivity extends BaseActivity {
                     if(newProgress==100&&overFlag2 ==0) {
                         new Thread(new Runnable() {
                             public void run() {
-                                try {
-                                    Thread.sleep(1000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
+
                                 Message msg = new Message();
                                 msg.what = 2;
-                                mHandler.sendMessage(msg); //告诉主线程执行任务
+                                mHandler.sendMessageDelayed(msg,1000); //告诉主线程执行任务
                             }
                         }).start();
                         overFlag2 = 1;
@@ -209,14 +281,9 @@ public class TaoBaoActivity extends BaseActivity {
                     if(newProgress==100&&overFlag3 ==0) {
                         new Thread(new Runnable() {
                             public void run() {
-                                try {
-                                    Thread.sleep(2000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
                                 Message msg = new Message();
                                 msg.what = 3;
-                                mHandler.sendMessage(msg); //告诉主线程执行任务
+                                mHandler.sendMessageDelayed(msg, 1000); //告诉主线程执行任务
                             }
                         }).start();
                         overFlag3 =1;
@@ -228,27 +295,17 @@ public class TaoBaoActivity extends BaseActivity {
                         if(runFlag == 0){
                             new Thread(new Runnable(){
                                 public void run(){
-                                    try {
-                                        Thread.sleep(1000);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
                                     Message msg = new Message();
                                     msg.what = 4;
-                                    mHandler.sendMessage(msg); //告诉主线程执行任务
+                                    mHandler.sendMessageDelayed(msg, 1000);//告诉主线程执行任务
                                 }
                             }).start();
                         }else if(runFlag ==1){
                             new Thread(new Runnable(){
                                 public void run(){
-                                    try {
-                                        Thread.sleep(1000);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
                                     Message msg = new Message();
                                     msg.what = 5;
-                                    mHandler.sendMessage(msg); //告诉主线程执行任务
+                                    mHandler.sendMessageDelayed(msg,1000); //告诉主线程执行任务
                                 }
                             }).start();
                         }
@@ -277,7 +334,12 @@ public class TaoBaoActivity extends BaseActivity {
 
     //获取订单列表
     private void findData3(){
-        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'orderList');");
+        try{
+            webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('scroll-content')[0].innerHTML,'orderList');");
+        }catch (Exception e){
+            e.getStackTrace();
+        }
+
         verify_progress_id.setProgress(70);
         rate_info_id.setText("70%");
         while (1 == 1) {
@@ -312,7 +374,17 @@ public class TaoBaoActivity extends BaseActivity {
     private void findData7(){
         verify_progress_id.setProgress(100);
         rate_info_id.setText("100%");
+        if (mTimer != null) {
+            mTimer.cancel();
+            mTimer.purge();
+        }
+        over = true;
         finish();
+    }
+
+    private void dealError(){
+
+        new ToastUtils(this).showToastLong("严重超时请重试");
     }
 
     final class InJavaScriptLocalObj {
@@ -347,14 +419,23 @@ public class TaoBaoActivity extends BaseActivity {
             }
         } else if (dataType.equals("orderList")) {
             String optionRegExp = "<div class=\"state\"> <div class=\"state-cont\"> <p class=\"h\">(.*?)</p>.*?module (\\d*)_1 item.*?合计:<b>￥(.*?)</b>";
-            Matcher matcher = Pattern.compile(optionRegExp).matcher(html);
-            while (matcher.find()) {
-                DicOrder dicOrder = new DicOrder();
-                dicOrder.setOrderId(matcher.group(2).substring(0, matcher.group(2).length()-1));
-                dicOrder.setPrice(matcher.group(3));
-                dicOrder.setState(matcher.group(1));
-                orderArray.add(dicOrder);
+            try{
+                Matcher matcher = Pattern.compile(optionRegExp).matcher(html);
+                if(matcher.find()){
+                    while (matcher.find()) {
+                        DicOrder dicOrder = new DicOrder();
+                        dicOrder.setOrderId(matcher.group(2).substring(0, matcher.group(2).length()-1));
+                        dicOrder.setPrice(matcher.group(3));
+                        dicOrder.setState(matcher.group(1));
+                        orderArray.add(dicOrder);
+                    }
+                }else{
+                    new ToastUtils(this).showToastLong("没有捕获");
+                }
+            }catch (Exception e){
+                e.getStackTrace();
             }
+
         } else if (dataType.equals("firstOrder")) {
             String createTimeRegExp = "创建时间:(.*?)</p>";
             Matcher matcher = null;

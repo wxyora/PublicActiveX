@@ -1,5 +1,6 @@
 package com.happyfi.publicactivex.activity;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -25,6 +26,7 @@ import com.happyfi.publicactivex.model.DicOrder;
 import com.happyfi.publicactivex.model.DicUserInfo;
 import com.happyfi.publicactivex.util.ChangeCharset;
 import com.happyfi.publicactivex.util.Constants;
+import com.happyfi.publicactivex.util.ResourceUtil;
 import com.happyfi.publicactivex.util.SharePrefUtil;
 import com.happyfi.publicactivex.util.UrlUtil;
 import com.loopj.android.http.AsyncHttpClient;
@@ -65,6 +67,7 @@ public class JingDongActivity extends BaseActivity {
     private DicUserInfo dicUserInfo;
     private List<DicAddress> addressArray;
     private List<DicOrder> orderArray;
+    private ProgressDialog mProcessing;
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -110,6 +113,10 @@ public class JingDongActivity extends BaseActivity {
         setContentView(R.layout.activity_jing_dong);
         webView = (WebView) findViewById(R.id.jingdong_web_view);
         removeAllCookie();
+        mProcessing = new ProgressDialog(this);
+        mProcessing.setMessage(mResources.getString(ResourceUtil.getStringId(this, "happyfi_loading_data")));
+        mProcessing.setCancelable(false);
+        mProcessing.show();
         verify_progress_id = (ProgressBar) findViewById(R.id.verify_progress_id);
         ll_progress_id = (LinearLayout) findViewById(R.id.ll_progress_id);
         rate_info_id = (TextView) findViewById(R.id.rate_info_id);
@@ -141,7 +148,9 @@ public class JingDongActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-
+                if(url.contains("plogin.m.jd.com/user/login.action")){
+                    mProcessing.dismiss();
+                }
             }
         });
 
@@ -152,13 +161,19 @@ public class JingDongActivity extends BaseActivity {
 
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
+
+              /*  if (view.getUrl().contains(Constants.JDLoginUrl.substring(8, Constants.JDLoginUrl.length()))) {
+                    if (newProgress == 100) {
+                        mProcessing.dismiss();
+                    }
+                }
+*/
                 if (view.getUrl().contains(Constants.JDHostUrl.substring(8, Constants.JDHostUrl.length()))) {
                     view.setVisibility(View.INVISIBLE);
                     ll_progress_id.setVisibility(View.VISIBLE);
                     ivLeft.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-
                         }
                     });
                     if (newProgress == 100 && overFlag1 == 0) {
@@ -195,14 +210,9 @@ public class JingDongActivity extends BaseActivity {
                     if (newProgress == 100 && overFlag3 == 0) {
                         new Thread(new Runnable() {
                             public void run() {
-                                try {
-                                    Thread.sleep(3000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
                                 Message msg = new Message();
                                 msg.what = 3;
-                                mHandler.sendMessage(msg); //告诉主线程执行任务
+                                mHandler.sendMessageDelayed(msg, 3000); //告诉主线程执行任务
                             }
                         }).start();
                         overFlag3++;
@@ -214,14 +224,9 @@ public class JingDongActivity extends BaseActivity {
                     if (newProgress == 100 && overFlag4 == 0) {
                         new Thread(new Runnable() {
                             public void run() {
-                                try {
-                                    Thread.sleep(2000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
                                 Message msg = new Message();
                                 msg.what = 4;
-                                mHandler.sendMessage(msg); //告诉主线程执行任务
+                                mHandler.sendMessageDelayed(msg, 2000); //告诉主线程执行任务
                             }
                         }).start();
                         overFlag4++;
@@ -296,7 +301,7 @@ public class JingDongActivity extends BaseActivity {
         webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'lastOrder');");
         verify_progress_id.setProgress(100);
         rate_info_id.setText("100%");
-       // webView.loadUrl("about:blank");
+        // webView.loadUrl("about:blank");
     }
 
 
