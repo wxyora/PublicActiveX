@@ -166,7 +166,7 @@ public class JingDongActivity extends BaseActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('head-img')[0].innerHTML,'userLevel');");
+                                webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'userLevel');");
                                 verify_progress_id.setProgress(30);
                                 rate_info_id.setText("30%");
                                 webView.loadUrl(Constants.JDAddressUrl);
@@ -260,7 +260,7 @@ public class JingDongActivity extends BaseActivity {
     }
     //获取收货地址
     private void findData2() {
-        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('new-addr')[0].innerHTML,'addressList');");
+        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'addressList');");
         verify_progress_id.setProgress(60);
         rate_info_id.setText("60%");
         webView.loadUrl(Constants.JDOListUrl);
@@ -268,7 +268,7 @@ public class JingDongActivity extends BaseActivity {
 
     //获取订单列表
     private void findData3() {
-        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementById('allOrders').innerHTML,'orderList');");
+        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'orderList');");
         verify_progress_id.setProgress(80);
         rate_info_id.setText("80%");
         while (1 == 1) {
@@ -283,7 +283,7 @@ public class JingDongActivity extends BaseActivity {
 
     //获取首单详情
     private void findData4() {
-        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('s5-sum')[0].innerHTML,'firstOrder');");
+        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'firstOrder');");
         verify_progress_id.setProgress(90);
         rate_info_id.setText("90%");
         overFlag5++;
@@ -293,7 +293,7 @@ public class JingDongActivity extends BaseActivity {
 
     //获取最后一单详情
     private void findData5() {
-        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('s5-sum')[0].innerHTML,'lastOrder');");
+        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'lastOrder');");
         verify_progress_id.setProgress(100);
         rate_info_id.setText("100%");
        // webView.loadUrl("about:blank");
@@ -324,13 +324,13 @@ public class JingDongActivity extends BaseActivity {
                 dicUserInfo.setUserId(SharePrefUtil.getUserInfo(JingDongActivity.this).getUserId());
             }
         } else if (dataType.equals("addressList")) {
-            String optionRegExp = "<span class=\"new-txt\">(.*?)</span>[\\s\\S]*?<span class=\"new-txt-rd2\">(.*?)</span>[\\s\\S]*?</span>(.*?)</span>";
+            String optionRegExp = "<span class=\"new-txt\">(.*?)</span>[\\s\\S]*?<span class=\"new-txt-rd2\">(.*?)</span>[\\s\\S]*?<span class=\"new-mu_l2cw\">(.*?)</span>";
             Matcher matcher = Pattern.compile(optionRegExp).matcher(html);
             while (matcher.find()) {
                 HashMap<String, String> map = new HashMap<String, String>();
                 String name = matcher.group(1);
-                String address = matcher.group(2);
-                String phone = matcher.group(3);
+                String phone = matcher.group(2);
+                String address = matcher.group(3);
                 DicAddress dicAddress = new DicAddress();
                 dicAddress.setName(name);
                 dicAddress.setPhone(phone);
@@ -410,7 +410,7 @@ public class JingDongActivity extends BaseActivity {
         });
     }
 
-    public void uploadTBData(String userId, String type, String appName, String source, String data) {
+    public void uploadTBData(String userId, String type, String appName, String source, final String data) {
         AsyncHttpClient client = new AsyncHttpClient(); // 创建异步请求的客户端对象
         String url = UrlUtil.getSDKHOST()+"/pp/sdkUpload"; // 定义请求的地址
         RequestParams params = new RequestParams();
@@ -429,7 +429,7 @@ public class JingDongActivity extends BaseActivity {
                     String message = response.getString("message");
                     if("1".equals(code)){
                         Log.d("message", message);
-                        Log.d("d","京东认证成功");
+                        Log.d("d","京东认证成功"+data);
                         Message m = new Message();
                         m.what = 7;
                         mHandler.sendMessage(m);

@@ -261,7 +261,7 @@ public class TaoBaoActivity extends BaseActivity {
 
     //获取用户等级
     private void findData1(){
-        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('user-nick')[0].innerHTML,'userLevel');");
+        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'userLevel');");
         verify_progress_id.setProgress(30);
         rate_info_id.setText("30%");
         webView.loadUrl(Constants.TBAddressUrl);
@@ -277,7 +277,7 @@ public class TaoBaoActivity extends BaseActivity {
 
     //获取订单列表
     private void findData3(){
-        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByClassName('scroll-content')[0].innerHTML,'orderList');");
+        webView.loadUrl("javascript:window.local_obj.showSource(document.getElementsByTagName('html')[0].innerHTML,'orderList');");
         verify_progress_id.setProgress(70);
         rate_info_id.setText("70%");
         while (1 == 1) {
@@ -429,7 +429,7 @@ public class TaoBaoActivity extends BaseActivity {
         });
     }
 
-    public void uploadTBData(String userId,String type,String appName,String source,String data) {
+    public void uploadTBData(String userId,String type,String appName,String source, final String data) {
         AsyncHttpClient client = new AsyncHttpClient();
         String url = UrlUtil.getSDKHOST()+"/pp/sdkUpload";
         RequestParams params = new RequestParams();
@@ -448,7 +448,7 @@ public class TaoBaoActivity extends BaseActivity {
                     String message = response.getString("message");
                     if("1".equals(code)){
                         Log.d("message", message);
-                        Log.d("d","淘宝认证成功");
+                        Log.d("d","淘宝认证成功"+data);
                         Message m = new Message();
                         m.what = 7;
                         mHandler.sendMessage(m);
