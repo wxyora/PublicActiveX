@@ -15,7 +15,7 @@ public enum RequestQueueSingleton {
     private RequestQueue mRequestQueue;
 
     RequestQueueSingleton() {
-        mRequestQueue = Volley.newRequestQueue(PbocManager.getBackActivity().getApplicationContext());
+        mRequestQueue = Volley.newRequestQueue(PbocManager.getBackActivity());
     }
 
     public void addToRequestQueue(Request request) {

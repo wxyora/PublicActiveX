@@ -8,6 +8,7 @@ import android.os.Message;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -166,6 +167,17 @@ public class LoginActivity extends BaseActivity implements GetVerifyCode.GetVeri
     public void onStop() {
         super.onStop();
         exitFlag = true;
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK )
+        {
+            finish();
+        }
+        return true;
     }
 
     @Override
