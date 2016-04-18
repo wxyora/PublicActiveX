@@ -1,10 +1,12 @@
 package com.happyfi.publicactivex.activity;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -255,7 +257,7 @@ public class TaoBaoActivity extends BaseActivity {
 
                                 Message msg = new Message();
                                 msg.what = 1;
-                                mHandler.sendMessageDelayed(msg,1000); //告诉主线程执行任务
+                                mHandler.sendMessageDelayed(msg,2000); //告诉主线程执行任务
                             }
                         }).start();
                         overFlag1 =1;
@@ -269,7 +271,7 @@ public class TaoBaoActivity extends BaseActivity {
 
                                 Message msg = new Message();
                                 msg.what = 2;
-                                mHandler.sendMessageDelayed(msg,1000); //告诉主线程执行任务
+                                mHandler.sendMessageDelayed(msg,2000); //告诉主线程执行任务
                             }
                         }).start();
                         overFlag2 = 1;
@@ -283,7 +285,7 @@ public class TaoBaoActivity extends BaseActivity {
                             public void run() {
                                 Message msg = new Message();
                                 msg.what = 3;
-                                mHandler.sendMessageDelayed(msg, 1000); //告诉主线程执行任务
+                                mHandler.sendMessageDelayed(msg, 2000); //告诉主线程执行任务
                             }
                         }).start();
                         overFlag3 =1;
@@ -474,7 +476,7 @@ public class TaoBaoActivity extends BaseActivity {
             dicUserInfo.setOrderArray(orderArray);
             JSONObject json = new  JSONObject();
             String dicUserInfoJson = JSON.toJSONString(dicUserInfo,true);
-            uploadTBData(SharePrefUtil.getUserInfo(TaoBaoActivity.this).getUserId(), Constants.TAO_BAO, Constants.APP_NAME,Constants.PLAT_FORM, dicUserInfoJson);
+            uploadTBData(SharePrefUtil.getUserInfo(TaoBaoActivity.this).getUserId(), Constants.TAO_BAO, Constants.APP_NAME, Constants.PLAT_FORM, dicUserInfoJson);
             new Thread(new Runnable(){
                 public void run(){
                     Message msg = new Message();
@@ -534,18 +536,54 @@ public class TaoBaoActivity extends BaseActivity {
                         m.what = 7;
                         mHandler.sendMessage(m);
                     }else{
-                        //弹出对话框提示上传失败，请尝试。
+                        AlertDialog.Builder builder = new AlertDialog.Builder(
+                                TaoBaoActivity.this);
+                        builder.setMessage(message);
+                        //  builder.setIcon(R.drawable.ic_launcher);
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("关闭", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                                finish();
+                            }
+                        });
+                        builder.create().show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(
+                            TaoBaoActivity.this);
+                    builder.setMessage("网络出现问题了...！");
+                    //  builder.setIcon(R.drawable.ic_launcher);
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("关闭", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                            finish();
+                        }
+                    });
+                    builder.create().show();
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
-             /*   mProcessing.dismiss();
-                networkError();*/
+                AlertDialog.Builder builder = new AlertDialog.Builder(
+                        TaoBaoActivity.this);
+                builder.setMessage("网络出现问题了...！");
+                //  builder.setIcon(R.drawable.ic_launcher);
+                builder.setCancelable(false);
+                builder.setPositiveButton("关闭", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        finish();
+                    }
+                });
+                builder.create().show();
             }
         });
 
