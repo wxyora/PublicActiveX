@@ -1,8 +1,6 @@
 
 package com.happyfi.publicactivex.util;
 
-import android.text.TextUtils;
-
 public enum UrlUtil {
 
     SAVE_PBOC(UrlUtil.getServerFloderName() + "credit-reports");
