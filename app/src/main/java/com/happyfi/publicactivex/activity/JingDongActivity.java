@@ -127,10 +127,8 @@ public class JingDongActivity extends BaseActivity {
         orderArray = new ArrayList<>();
         loadingDialog = new LoadingDialog(JingDongActivity.this);
         loadingDialog.setCanceledOnTouchOutside(false);
-        //loadingDialog.show();
         webView.getSettings().setJavaScriptEnabled(true);
         webView.addJavascriptInterface(new InJavaScriptLocalObj(), "local_obj");
-        //webView.getSettings().setAppCacheEnabled(false);
         webView.getSettings().setSupportZoom(true);
         webView.getSettings().setDomStorageEnabled(true);
         webView.requestFocus();
@@ -174,20 +172,11 @@ public class JingDongActivity extends BaseActivity {
             }
         });
 
-
-
-
         webView.setWebChromeClient(new WebChromeClient() {
 
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
 
-              /*  if (view.getUrl().contains(Constants.JDLoginUrl.substring(8, Constants.JDLoginUrl.length()))) {
-                    if (newProgress == 100) {
-                        mProcessing.dismiss();
-                    }
-                }
-*/
                 if (view.getUrl().contains(Constants.JDHostUrl.substring(8, Constants.JDHostUrl.length()))) {
                     view.setVisibility(View.INVISIBLE);
                     ll_progress_id.setVisibility(View.VISIBLE);
@@ -462,7 +451,6 @@ public class JingDongActivity extends BaseActivity {
                         AlertDialog.Builder builder = new AlertDialog.Builder(
                                 JingDongActivity.this);
                         builder.setMessage(message);
-                        //  builder.setIcon(R.drawable.ic_launcher);
                         builder.setCancelable(false);
                         builder.setPositiveButton("关闭", new DialogInterface.OnClickListener() {
                             @Override
@@ -484,7 +472,6 @@ public class JingDongActivity extends BaseActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(
                         JingDongActivity.this);
                 builder.setMessage("网络出现问题了...！");
-                //  builder.setIcon(R.drawable.ic_launcher);
                 builder.setCancelable(false);
                 builder.setPositiveButton("关闭", new DialogInterface.OnClickListener() {
                     @Override
