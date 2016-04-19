@@ -154,6 +154,24 @@ public class JingDongActivity extends BaseActivity {
                     mProcessing.dismiss();
                 }
             }
+
+            @Override
+            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+                super.onReceivedError(view, errorCode, description, failingUrl);
+                AlertDialog.Builder builder = new AlertDialog.Builder(
+                        JingDongActivity.this);
+                builder.setMessage("网络出现问题了...！");
+                //  builder.setIcon(R.drawable.ic_launcher);
+                builder.setCancelable(false);
+                builder.setPositiveButton("重试", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        finish();
+                    }
+                });
+                builder.create().show();
+            }
         });
 
 

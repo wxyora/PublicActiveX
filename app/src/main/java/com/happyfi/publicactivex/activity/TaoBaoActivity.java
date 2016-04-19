@@ -128,14 +128,11 @@ public class TaoBaoActivity extends BaseActivity {
         verify_progress_id = (ProgressBar) findViewById(R.id.verify_progress_id);
         ll_progress_id = (LinearLayout) findViewById(R.id.ll_progress_id);
         rate_info_id = (TextView) findViewById(R.id.rate_info_id);
-
-        float i = getResources().getDisplayMetrics().density;
         dicUserInfo = new DicUserInfo();
         addressArray = new ArrayList<>();
         orderArray = new ArrayList<>();
         loadingDialog = new LoadingDialog(TaoBaoActivity.this);
         loadingDialog.setCanceledOnTouchOutside(false);
-        //loadingDialog.show();
         webView.getSettings().setJavaScriptEnabled(true);
         webView.addJavascriptInterface(new InJavaScriptLocalObj(), "local_obj");
         webView.getSettings().setSupportZoom(true);
@@ -169,7 +166,20 @@ public class TaoBaoActivity extends BaseActivity {
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 super.onReceivedError(view, errorCode, description, failingUrl);
-                webView.clearCache(true);
+                mProcessing.dismiss();
+                AlertDialog.Builder builder = new AlertDialog.Builder(
+                        TaoBaoActivity.this);
+                builder.setMessage("网络出现问题了...！");
+                //  builder.setIcon(R.drawable.ic_launcher);
+                builder.setCancelable(false);
+                builder.setPositiveButton("重试", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        finish();
+                    }
+                });
+                builder.create().show();
             }
 
             @Override
@@ -196,60 +206,12 @@ public class TaoBaoActivity extends BaseActivity {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 if (view.getUrl().contains(Constants.TBLoginUrl.substring(8,Constants.TBLoginUrl.length()))) {
-
-/*
-
-                    mTimer = new Timer();
-                    mTimerTask = new TimerTask() {
-                        @Override
-                        public void run() {
-                            System.out.println("======> mWebView.getProgress()="+ webView.getProgress());
-                            if (webView.getProgress() < 100) {
-                                Message msg = new Message();
-                                msg.what = TIMEOUT_ERROR;
-                                mHandler.sendMessage(msg);
-                                if (mTimer != null) {
-                                    mTimer.cancel();
-                                    mTimer.purge();
-                                }
-                            }
-                            if (webView.getProgress() == 100) {
-                                System.out.println("======> 未超时");
-                                if (mTimer != null) {
-                                    mTimer.cancel();
-                                    mTimer.purge();
-                                }
-                            }
-                        }
-                    };
-                    mTimer.schedule(mTimerTask, TIMEOUT, 1);*/
                     if(newProgress==100){
                         mProcessing.dismiss();
                     }
                 }
                 //获取等级
                 if (view.getUrl().contains(Constants.TBHostUrl.substring(8,Constants.TBHostUrl.length()))) {
-                   /* mTimer = new Timer();
-                    mTimerTask = new TimerTask() {
-                        @Override
-                        public void run() {
-                            if(!over){
-                                    Message msg = new Message();
-                                    msg.what = TIMEOUT_ERROR;
-                                    mHandler.sendMessage(msg);
-                                    if (mTimer != null) {
-                                        mTimer.cancel();
-                                        mTimer.purge();
-                                    }
-                            }else{
-                                if (mTimer != null) {
-                                    mTimer.cancel();
-                                    mTimer.purge();
-                                }
-                            }
-                        }
-                    };
-                    mTimer.schedule(mTimerTask, TIMEOUT, 1);*/
 
                     if(newProgress==100&&overFlag1 ==0){
                         new Thread(new Runnable(){

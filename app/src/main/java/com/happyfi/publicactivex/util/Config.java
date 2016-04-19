@@ -9,7 +9,7 @@ public class Config {
         PROD;
     }
 
-    public static Environment environment = Environment.PROD;
+    public static Environment environment = Environment.TEST;
 
     public static boolean isDebug = false;
 
