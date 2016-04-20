@@ -37,7 +37,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         progressDialog.setMessage(mResources.getString(R.string.happyfi_loading_data));
     }
 
-
     public String getDeviceId(){
         TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
         String tmDevice, tmSerial, androidId;
