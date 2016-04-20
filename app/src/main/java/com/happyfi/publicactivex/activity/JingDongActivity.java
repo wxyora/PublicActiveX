@@ -288,7 +288,7 @@ public class JingDongActivity extends BaseActivity {
         rate_info_id.setText("80%");
         while (1 == 1) {
             if (orderArray.size() > 0) {
-                webView.loadUrl(Constants.JDLoginUrl + orderArray.get(0).getOrderId().replace("amp;", ""));
+                webView.loadUrl(Constants.JDLoginUrl + orderArray.get(0).getOrderUrl().replace("amp;", ""));
                 break;
             } else {
                 continue;
@@ -302,7 +302,7 @@ public class JingDongActivity extends BaseActivity {
         verify_progress_id.setProgress(90);
         rate_info_id.setText("90%");
         overFlag5++;
-        webView.loadUrl(Constants.JDLoginUrl + orderArray.get(orderArray.size() - 1).getOrderId().replace("amp;", ""));
+        webView.loadUrl(Constants.JDLoginUrl + orderArray.get(orderArray.size() - 1).getOrderUrl().replace("amp;", ""));
     }
 
 
@@ -357,9 +357,16 @@ public class JingDongActivity extends BaseActivity {
             Matcher matcher = Pattern.compile(optionRegExp).matcher(html);
             while (matcher.find()) {
                 DicOrder dicOrder = new DicOrder();
-                dicOrder.setOrderId(matcher.group(1).substring(0, matcher.group(1).length()));
+                String orderUrl = matcher.group(1).substring(0, matcher.group(1).length());
+                dicOrder.setOrderUrl(orderUrl);
+                dicOrder.setOrderId(orderUrl.substring(orderUrl.indexOf("orderId=") + 8, orderUrl.indexOf("&amp;")));
+             //   dicOrder.setOrderId(matcher.group(1).substring(0, matcher.group(1).length()));
                 dicOrder.setPrice(matcher.group(2).substring(1, matcher.group(2).length()));
-                dicOrder.setState(matcher.group(3));
+                if("i-complete".equals(matcher.group(3))){
+                    dicOrder.setState("已完成");
+                }else{
+                    dicOrder.setState(matcher.group(3));
+                }
                 orderArray.add(dicOrder);
             }
         } else if (dataType.equals("firstOrder")) {

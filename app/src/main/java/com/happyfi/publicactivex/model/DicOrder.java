@@ -6,6 +6,7 @@ package com.happyfi.publicactivex.model;
 public class DicOrder {
 
     private String orderId;
+    private String orderUrl;
     private String state;
     private String price;
     private String createTime;
@@ -40,5 +41,13 @@ public class DicOrder {
 
     public void setCreateTime(String createTime) {
         this.createTime = createTime;
+    }
+
+    public String getOrderUrl() {
+        return orderUrl;
+    }
+
+    public void setOrderUrl(String orderUrl) {
+        this.orderUrl = orderUrl;
     }
 }
