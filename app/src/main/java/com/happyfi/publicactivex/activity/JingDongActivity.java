@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +30,7 @@ import com.happyfi.publicactivex.model.DicOrder;
 import com.happyfi.publicactivex.model.DicUserInfo;
 import com.happyfi.publicactivex.util.ChangeCharset;
 import com.happyfi.publicactivex.util.Constants;
+import com.happyfi.publicactivex.util.DeviceId;
 import com.happyfi.publicactivex.util.ResourceUtil;
 import com.happyfi.publicactivex.util.SharePrefUtil;
 import com.happyfi.publicactivex.util.UrlUtil;
@@ -55,7 +57,6 @@ public class JingDongActivity extends BaseActivity {
     ProgressBar verify_progress_id;
     LinearLayout ll_progress_id;
     TextView rate_info_id;
-
     View view;
     ImageView ivLeft;
 
@@ -336,7 +337,7 @@ public class JingDongActivity extends BaseActivity {
             while (matcher.find()) {
                 String level = matcher.group(1);
                 dicUserInfo.setLevel(level);
-                dicUserInfo.setUserId(SharePrefUtil.getUserInfo(JingDongActivity.this).getUserId());
+                dicUserInfo.setUserId(deviceId);
             }
         } else if (dataType.equals("addressList")) {
             String optionRegExp = "<span class=\"new-txt\">(.*?)</span>[\\s\\S]*?<span class=\"new-txt-rd2\">(.*?)</span>[\\s\\S]*?<span class=\"new-mu_l2cw\">(.*?)</span>";

@@ -1,12 +1,15 @@
 package com.happyfi.publicactivex.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.webkit.JavascriptInterface;
@@ -29,6 +32,7 @@ import com.happyfi.publicactivex.model.DicUserInfo;
 import com.happyfi.publicactivex.util.ChangeCharset;
 import com.happyfi.publicactivex.common.LoadingDialog;
 import com.happyfi.publicactivex.util.Constants;
+import com.happyfi.publicactivex.util.DeviceId;
 import com.happyfi.publicactivex.util.ResourceUtil;
 import com.happyfi.publicactivex.util.SharePrefUtil;
 import com.happyfi.publicactivex.util.ToastUtils;
@@ -47,6 +51,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -75,7 +80,6 @@ public class TaoBaoActivity extends BaseActivity {
     private int overFlag1 = 0;
     private int overFlag2 = 0;
     private int overFlag3 = 0;
-
     private Boolean over = false;
 
 
@@ -117,10 +121,12 @@ public class TaoBaoActivity extends BaseActivity {
         };
     };
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_taobao);
+
         mProcessing = new ProgressDialog(this);
         mProcessing.setMessage(mResources.getString(ResourceUtil.getStringId(this, "happyfi_loading_data")));
         mProcessing.setCancelable(false);
@@ -366,7 +372,7 @@ public class TaoBaoActivity extends BaseActivity {
             while (matcher.find()) {
                 String level = matcher.group(3);
                 dicUserInfo.setLevel(level.substring(6, level.length()));
-                dicUserInfo.setUserId(SharePrefUtil.getUserInfo(TaoBaoActivity.this).getUserId());
+                dicUserInfo.setUserId(deviceId);
             }
         } else if (dataType.equals("addressList")) {
             String optionRegExp = "<li data-username=\"(.*?)\" data-address=\"(.*?)\".*?<label name=\"phone-num\" style=\"float: right\">(.*?)</label>";
@@ -537,7 +543,6 @@ public class TaoBaoActivity extends BaseActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(
                         TaoBaoActivity.this);
                 builder.setMessage("网络出现问题了...！");
-                //  builder.setIcon(R.drawable.ic_launcher);
                 builder.setCancelable(false);
                 builder.setPositiveButton("关闭", new DialogInterface.OnClickListener() {
                     @Override

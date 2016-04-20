@@ -1,11 +1,13 @@
 package com.happyfi.publicactivex.common;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,8 +17,10 @@ import com.happyfi.publicactivex.util.ResourceUtil;
 
 import org.xutils.x;
 
-public abstract class BaseActivity extends AppCompatActivity {
+import java.util.UUID;
 
+public abstract class BaseActivity extends AppCompatActivity {
+    public String deviceId;
     protected Resources mResources;
     protected ActionBar actionBar;
     public ProgressDialog progressDialog;
@@ -27,12 +31,23 @@ public abstract class BaseActivity extends AppCompatActivity {
         x.view().inject(this);
         initActionBar();
         initTitle();
+        deviceId = getDeviceId();
         mResources = getResources();
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(mResources.getString(R.string.happyfi_loading_data));
     }
 
 
+    public String getDeviceId(){
+        TelephonyManager tm = (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
+        String tmDevice, tmSerial, androidId;
+        tmDevice = "" + tm.getDeviceId();
+        tmSerial = "" + tm.getSimSerialNumber();
+        androidId = "" + android.provider.Settings.Secure.getString(getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+        UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
+        String deviceId = deviceUuid.toString();
+        return deviceId;
+    }
     public void netWorkError() {
         // progressDialog.dismiss();
         // HFToast.showTips(this, mResources.getString(R.string.net_work_error));
