@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.happyfi.publicactivex.R;
 import com.happyfi.publicactivex.common.BaseActivity;
 import com.happyfi.publicactivex.model.DicAddress;
@@ -436,8 +437,8 @@ public class TaoBaoActivity extends BaseActivity {
             orderArray.get(orderArray.size()-1).setCreateTime(createTime);
             dicUserInfo.setAddressArray(addressArray);
             dicUserInfo.setOrderArray(orderArray);
-            JSONObject json = new  JSONObject();
-            String dicUserInfoJson = JSON.toJSONString(dicUserInfo,true);
+            Gson gson=new Gson();
+            String dicUserInfoJson=gson.toJson(dicUserInfo);
             uploadTBData(SharePrefUtil.getUserInfo(TaoBaoActivity.this).getUserId(), Constants.TAO_BAO, Constants.APP_NAME, Constants.PLAT_FORM, dicUserInfoJson);
             new Thread(new Runnable(){
                 public void run(){

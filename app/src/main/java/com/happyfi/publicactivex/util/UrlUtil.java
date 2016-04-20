@@ -27,8 +27,8 @@ public enum UrlUtil {
 
     public static String getPBOCHOST() {
         if (Config.environment == Config.Environment.TEST) {
-            HOST = "http://220.248.117.178:8088";
         } else if (Config.environment == Config.Environment.PROD) {
+            HOST = "http://220.248.117.178:8088";
             HOST = "https://www.happyfi.com";
         } else {
             HOST = "https://www.happyfi.com";
