@@ -439,7 +439,7 @@ public class TaoBaoActivity extends BaseActivity {
             dicUserInfo.setOrderArray(orderArray);
             Gson gson=new Gson();
             String dicUserInfoJson=gson.toJson(dicUserInfo);
-            uploadTBData(SharePrefUtil.getUserInfo(TaoBaoActivity.this).getUserId(), Constants.TAO_BAO, Constants.APP_NAME, Constants.PLAT_FORM, dicUserInfoJson);
+            uploadTBData(deviceId, Constants.TAO_BAO, Constants.APP_NAME, Constants.PLAT_FORM, dicUserInfoJson);
             new Thread(new Runnable(){
                 public void run(){
                     Message msg = new Message();

@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.google.gson.JsonSyntaxException;
 import com.happyfi.publicactivex.common.BaseActivity;
+import com.happyfi.publicactivex.common.util.Constants;
 import com.happyfi.publicactivex.model.SavePbocResponse;
 import com.happyfi.publicactivex.common.CustomJsonRequest;
 import com.happyfi.publicactivex.common.PbocManager;
@@ -33,6 +34,7 @@ import com.happyfi.publicactivex.common.util.JsonUtil;
 import com.happyfi.publicactivex.common.util.LogUtil;
 import com.happyfi.publicactivex.common.util.ResourceUtil;
 import com.happyfi.publicactivex.common.util.UrlUtil;
+import com.loopj.android.http.RequestParams;
 
 
 import org.json.JSONObject;
@@ -227,6 +229,7 @@ public class ViewPbocContentActivity extends BaseActivity implements GetPbocCont
                 String covert_ = (Base64.encodeToString(pbocContent.getBytes("utf-8"), Base64.DEFAULT));
                 progressDialog.show();
                 requestData(covert_);
+                requestData2(covert_);
             } catch (Exception e) {
                 showTip(mResources.getString(ResourceUtil.getStringId(this, "happyfi_upload_conver_fail")));
             }
@@ -235,6 +238,30 @@ public class ViewPbocContentActivity extends BaseActivity implements GetPbocCont
 
     private void requestData(final String report) {
         CustomJsonRequest request = new CustomJsonRequest(UrlUtil.SAVE_PBOC.getUrl(), new Response.Listener() {
+            @Override
+            public void onResponse(Object object) {
+                parseResponse(((JSONObject) object).toString());
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                networkError();
+
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("report", report);
+                return params;
+            }
+        };
+        RequestQueueSingleton.INSTANCE.addToRequestQueue(request);
+    }
+
+    private void requestData2(final String report) {
+        CustomJsonRequest request = new CustomJsonRequest(UrlUtil.SAVE_PBOC.getSDKHOST(), new Response.Listener() {
             @Override
             public void onResponse(Object object) {
                 progressDialog.dismiss();
@@ -252,7 +279,11 @@ public class ViewPbocContentActivity extends BaseActivity implements GetPbocCont
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> params = new HashMap<>();
-                params.put("report", report);
+                params.put("userId", deviceId);
+                params.put("type",Constants.ZX_REPORT);
+                params.put("appName", Constants.APP_NAME);
+                params.put("source", Constants.PLAT_FORM);
+                params.put("data",report);
                 return params;
             }
         };
