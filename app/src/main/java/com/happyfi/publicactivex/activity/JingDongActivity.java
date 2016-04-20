@@ -449,7 +449,7 @@ public class JingDongActivity extends BaseActivity {
                     String message = response.getString("message");
                     if("1".equals(code)){
                         Log.d("message", message);
-                        Log.d("d","京东认证成功"+data);
+                        //Log.d("d","京东认证成功"+data);
                         Message m = new Message();
                         m.what = 7;
                         mHandler.sendMessage(m);
