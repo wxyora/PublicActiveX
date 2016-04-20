@@ -1,4 +1,4 @@
-package com.happyfi.publicactivex.util;
+package com.happyfi.publicactivex.common.util;
 
 import java.io.UnsupportedEncodingException;
 

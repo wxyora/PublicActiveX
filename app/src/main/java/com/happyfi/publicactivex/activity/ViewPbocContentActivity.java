@@ -27,12 +27,12 @@ import com.happyfi.publicactivex.common.StartPbocActivity;
 import com.happyfi.publicactivex.network.GetPbocContent;
 import com.happyfi.publicactivex.network.HFHandler;
 import com.happyfi.publicactivex.network.NetworkWraper;
-import com.happyfi.publicactivex.util.CodeUtil;
-import com.happyfi.publicactivex.util.HFToast;
-import com.happyfi.publicactivex.util.JsonUtil;
-import com.happyfi.publicactivex.util.LogUtil;
-import com.happyfi.publicactivex.util.ResourceUtil;
-import com.happyfi.publicactivex.util.UrlUtil;
+import com.happyfi.publicactivex.common.util.CodeUtil;
+import com.happyfi.publicactivex.common.util.HFToast;
+import com.happyfi.publicactivex.common.util.JsonUtil;
+import com.happyfi.publicactivex.common.util.LogUtil;
+import com.happyfi.publicactivex.common.util.ResourceUtil;
+import com.happyfi.publicactivex.common.util.UrlUtil;
 
 
 import org.json.JSONObject;

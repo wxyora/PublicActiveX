@@ -18,10 +18,10 @@ import com.happyfi.publicactivex.network.GetVerifyCode;
 import com.happyfi.publicactivex.network.HFHandler;
 import com.happyfi.publicactivex.network.NetworkWraper;
 import com.happyfi.publicactivex.network.VerifyUserInfo;
-import com.happyfi.publicactivex.util.CodeUtil;
-import com.happyfi.publicactivex.util.HFToast;
-import com.happyfi.publicactivex.util.LogUtil;
-import com.happyfi.publicactivex.util.ResourceUtil;
+import com.happyfi.publicactivex.common.util.CodeUtil;
+import com.happyfi.publicactivex.common.util.HFToast;
+import com.happyfi.publicactivex.common.util.LogUtil;
+import com.happyfi.publicactivex.common.util.ResourceUtil;
 
 import java.util.HashMap;
 

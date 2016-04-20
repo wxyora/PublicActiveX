@@ -1,4 +1,4 @@
-package com.happyfi.publicactivex.util;
+package com.happyfi.publicactivex.common.util;
 
 import android.app.Activity;
 import android.content.Context;

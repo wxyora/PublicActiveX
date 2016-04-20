@@ -1,8 +1,7 @@
 package com.happyfi.publicactivex.network;
 import com.happyfi.publicactivex.common.PBOCCommonHeader;
-import com.happyfi.publicactivex.common.PBOCUrlUtil;
-import com.happyfi.publicactivex.util.CodeUtil;
-import com.happyfi.publicactivex.util.LogUtil;
+import com.happyfi.publicactivex.common.util.CodeUtil;
+import com.happyfi.publicactivex.common.util.LogUtil;
 
 
 import java.util.HashMap;

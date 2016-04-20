@@ -1,4 +1,4 @@
-package com.happyfi.publicactivex.util;
+package com.happyfi.publicactivex.common.util;
 
 /**
  * Created by wanglijuan on 15/7/2.

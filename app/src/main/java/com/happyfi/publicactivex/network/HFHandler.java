@@ -11,9 +11,9 @@ import com.happyfi.publicactivex.activity.LoginToAnswerActivity;
 import com.happyfi.publicactivex.activity.RegUserDetailActivity;
 import com.happyfi.publicactivex.activity.RegUserInfoActivity;
 import com.happyfi.publicactivex.activity.ViewPbocContentActivity;
-import com.happyfi.publicactivex.util.CodeUtil;
-import com.happyfi.publicactivex.util.LogUtil;
-import com.happyfi.publicactivex.util.ResourceUtil;
+import com.happyfi.publicactivex.common.util.CodeUtil;
+import com.happyfi.publicactivex.common.util.LogUtil;
+import com.happyfi.publicactivex.common.util.ResourceUtil;
 
 
 /**

@@ -2,8 +2,8 @@ package com.happyfi.publicactivex.network;
 
 
 
-import com.happyfi.publicactivex.util.CodeUtil;
-import com.happyfi.publicactivex.util.LogUtil;
+import com.happyfi.publicactivex.common.util.CodeUtil;
+import com.happyfi.publicactivex.common.util.LogUtil;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;

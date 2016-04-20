@@ -8,7 +8,7 @@ import android.widget.Button;
 import com.happyfi.publicactivex.common.BaseActivity;
 import com.happyfi.publicactivex.common.PbocManager;
 import com.happyfi.publicactivex.common.StartPbocActivity;
-import com.happyfi.publicactivex.util.ResourceUtil;
+import com.happyfi.publicactivex.common.util.ResourceUtil;
 
 
 public class CompleteQuestionActivity extends BaseActivity implements View.OnClickListener {

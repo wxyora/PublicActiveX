@@ -1,5 +1,5 @@
 
-package com.happyfi.publicactivex.util;
+package com.happyfi.publicactivex.common.util;
 
 public enum UrlUtil {
 

@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.happyfi.publicactivex.R;
-import com.happyfi.publicactivex.util.ResourceUtil;
+import com.happyfi.publicactivex.common.util.ResourceUtil;
 
 import org.xutils.x;
 

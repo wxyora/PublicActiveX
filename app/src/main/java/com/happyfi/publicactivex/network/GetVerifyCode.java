@@ -3,11 +3,9 @@ package com.happyfi.publicactivex.network;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import com.happyfi.publicactivex.common.PBOCCommonHeader;
-import com.happyfi.publicactivex.common.PBOCUrlUtil;
-import com.happyfi.publicactivex.util.CodeUtil;
-import com.happyfi.publicactivex.util.CommonUtil;
-import com.happyfi.publicactivex.util.Constants;
-import com.happyfi.publicactivex.util.LogUtil;
+import com.happyfi.publicactivex.common.util.CodeUtil;
+import com.happyfi.publicactivex.common.util.CommonUtil;
+import com.happyfi.publicactivex.common.util.Constants;
 
 
 import java.io.ByteArrayOutputStream;

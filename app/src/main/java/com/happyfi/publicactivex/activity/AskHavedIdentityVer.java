@@ -6,7 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.happyfi.publicactivex.common.BaseActivity;
-import com.happyfi.publicactivex.util.ResourceUtil;
+import com.happyfi.publicactivex.common.util.ResourceUtil;
 
 
 /**

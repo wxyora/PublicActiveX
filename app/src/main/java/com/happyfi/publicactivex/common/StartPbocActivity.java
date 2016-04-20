@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import com.happyfi.publicactivex.util.ResourceUtil;
+import com.happyfi.publicactivex.common.util.ResourceUtil;
 
 public class StartPbocActivity extends Activity {
     private ProgressDialog progressDialog;

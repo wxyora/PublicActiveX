@@ -1,4 +1,4 @@
-package com.happyfi.publicactivex.util;
+package com.happyfi.publicactivex.common.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
